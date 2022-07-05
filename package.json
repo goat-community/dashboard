@@ -20,6 +20,8 @@
     "eslint": ">=5.16.0",
     "eslint-config-google": "^0.14.0",
     "eslint-plugin-react": "^7.30.1",
+    "eslint-plugin-unused-imports": "^2.0.0",
+    "prettier": "^2.7.1",
     "typescript": "^4.6.3",
     "vite": "^2.9.9"
   }
