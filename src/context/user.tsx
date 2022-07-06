@@ -1,29 +1,43 @@
 import { createSlice, type PayloadAction } from "@reduxjs/toolkit";
-import type { User, UserCreditionals } from "@types";
-import { getAccessToken } from "@api";
+import type { User, UserCreditionals, UserToken } from "@types";
+import { getAccessToken, getMyInfo } from "@api";
 
 /** Reducer */
-const initialState = {} as User;
+const initialState = {
+  user: {} as User
+};
 
 export const user = createSlice({
   name: "user",
   initialState,
   reducers: {
-    set: (state: User, action: PayloadAction<User>) => {
-      state = action.payload;
+    setUser: (state: typeof initialState, action: PayloadAction<User>) => {
+      state.user = action.payload;
     }
   }
 });
 
-export const { set } = user.actions;
+export const { setUser } = user.actions;
 export default user.reducer;
 
 /** Actions  */
-export function getToken(creditionals: UserCreditionals) {
+export function login(creditionals: UserCreditionals) {
   return async (dispatch: CallableFunction) => {
     const response = await getAccessToken(creditionals);
+    if (response?.access_token) {
+      // write token to local storage
+      localStorage.setItem("access_token", response.access_token);
+      // get user info with the token from local storage
+      setTimeout(() => dispatch(getMyUserInfo()), 0);
+    }
+  };
+}
+
+export function getMyUserInfo() {
+  return async (dispatch: CallableFunction) => {
+    const response = await getMyInfo();
     if (response) {
-      console.log(response);
+      dispatch(setUser(response));
     }
   };
 }
