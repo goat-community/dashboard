@@ -32,12 +32,16 @@ export default defineConfig({
         replacement: path.resolve(__dirname, "src/styles")
       },
       {
-        find: "@store",
-        replacement: path.resolve(__dirname, "src/store")
+        find: "@context",
+        replacement: path.resolve(__dirname, "src/context")
       },
       {
         find: "@api",
         replacement: path.resolve(__dirname, "src/api")
+      },
+      {
+        find: "@hooks",
+        replacement: path.resolve(__dirname, "src/hooks")
       }
     ]
   }
