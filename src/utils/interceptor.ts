@@ -2,7 +2,7 @@ import axios from "axios";
 import { baseUrl } from "./baseUrl";
 
 function getLocalAccessToken(): string | null {
-  const accessToken = localStorage.getItem("accessToken") || null;
+  const accessToken = localStorage.getItem("access_token") || null;
   return accessToken;
 }
 
