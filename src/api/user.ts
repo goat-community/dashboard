@@ -1,14 +1,22 @@
-import { instance } from "@utils";
-import type { User, RequestResult, UserCreditionals } from "@types";
+import { instance, objectToFormData } from "@utils";
+import type { UserToken, User, RequestResult, UserCreditionals } from "@types";
 
 export function getAccessToken(
   creditionals: UserCreditionals
-): RequestResult<User> {
+): RequestResult<UserToken> {
   return instance
-    .post("/login/access-token", {
-      username: creditionals.username,
-      password: creditionals.password
+    .post("/login/access-token", objectToFormData(creditionals), {
+      headers: {
+        "Content-Type": "application/x-www-form-urlencoded"
+      }
     })
+    .then((response) => response.data)
+    .catch((err) => alert(err));
+}
+
+export function getMyInfo(): RequestResult<User> {
+  return instance
+    .get("/users/me")
     .then((response) => response.data)
     .catch((err) => alert(err));
 }
