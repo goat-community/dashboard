@@ -1,15 +1,13 @@
 import { createSlice, type PayloadAction } from "@reduxjs/toolkit";
 import type { User } from "@types";
 
-const initialState = {
-  username: ""
-} as User;
+const initialState = {} as User | {};
 
 export const user = createSlice({
   name: "user",
   initialState,
   reducers: {
-    set: (state: User, action: PayloadAction<User>) => {
+    set: (state: User | {}, action: PayloadAction<User | {}>) => {
       state = action.payload;
     }
   }
