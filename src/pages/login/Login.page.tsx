@@ -1,11 +1,18 @@
-import { useAppSelector } from "@hooks/context";
+import { useAppDispatch, useAppSelector } from "@hooks/context";
+import { getToken } from "@context/user";
 
 export default function LoginPage() {
   const user = useAppSelector((state) => state.user);
+  const dispatch = useAppDispatch();
 
-  return (
-    <div>
-      <h1>{user.username}</h1>
-    </div>
-  );
+  function fakeLogin() {
+    dispatch(
+      getToken({
+        username: "",
+        password: ""
+      })
+    );
+  }
+
+  return <button onClick={fakeLogin}>Login</button>;
 }

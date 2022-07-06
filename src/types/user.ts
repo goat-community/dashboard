@@ -1,5 +1,3 @@
-import { number } from "react-admin";
-
 export interface User {
   name: string;
   surname: string;
