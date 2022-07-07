@@ -15,6 +15,9 @@ specifiers:
   eslint-plugin-unused-imports: ^2.0.0
   prettier: ^2.7.1
   ra-data-json-server: ^4.2.0
+  ra-i18n-polyglot: ^4.2.1
+  ra-language-english: ^4.2.1
+  ra-language-german: ^3.13.5
   react: ^18.0.0
   react-admin: ^4.2.0
   react-dom: ^18.0.0
@@ -28,6 +31,9 @@ dependencies:
   '@reduxjs/toolkit': 1.8.3_kkwg4cbsojnjnupd3btipussee
   axios: 0.27.2
   ra-data-json-server: 4.2.0_mispw3hkehb24qteja6ex2btne
+  ra-i18n-polyglot: 4.2.1_mispw3hkehb24qteja6ex2btne
+  ra-language-english: 4.2.1_mispw3hkehb24qteja6ex2btne
+  ra-language-german: 3.13.5
   react: 18.2.0
   react-admin: 4.2.0_htxn4kwkfgevexeqvqmeooemhe
   react-dom: 18.2.0_react@18.2.0
@@ -2425,6 +2431,36 @@ packages:
       - react-native
     dev: false
 
+  /ra-core/4.2.1_mispw3hkehb24qteja6ex2btne:
+    resolution: {integrity: sha512-4jbqYM41BwOsKskS/T3JX7ZwXehaZW5FBQk4EGSf2BVJkWf9pR+OzccV1vWLpaEZDiVDDGCpynnAGJAq/iUQTA==}
+    peerDependencies:
+      history: ^5.1.0
+      react: ^16.9.0 || ^17.0.0 || ^18.0.0
+      react-dom: ^16.9.0 || ^17.0.0 || ^18.0.0
+      react-hook-form: ^7.31.0
+      react-router: ^6.1.0
+      react-router-dom: ^6.1.0
+    dependencies:
+      clsx: 1.2.0
+      date-fns: 2.28.0
+      eventemitter3: 4.0.7
+      history: 5.3.0
+      inflection: 1.12.0
+      jsonexport: 3.2.0
+      lodash: 4.17.21
+      prop-types: 15.8.1
+      query-string: 7.1.1
+      react: 18.2.0
+      react-dom: 18.2.0_react@18.2.0
+      react-hook-form: 7.33.1_react@18.2.0
+      react-is: 17.0.2
+      react-query: 3.39.1_biqbaboplfbrettd7655fr4n2y
+      react-router: 6.3.0_react@18.2.0
+      react-router-dom: 6.3.0_biqbaboplfbrettd7655fr4n2y
+    transitivePeerDependencies:
+      - react-native
+    dev: false
+
   /ra-data-json-server/4.2.0_mispw3hkehb24qteja6ex2btne:
     resolution: {integrity: sha512-gE7aOqVaQabX6ZUQpvGNVPmJnEF54haHcqLxNT0z9AxMhJd2FEqDV0I8bq1kvcC1fswiMOM2KCQZ2x6xsBTerg==}
     dependencies:
@@ -2440,11 +2476,11 @@ packages:
       - react-router-dom
     dev: false
 
-  /ra-i18n-polyglot/4.2.0_mispw3hkehb24qteja6ex2btne:
-    resolution: {integrity: sha512-07Xw+PXIrqODiDL8C9OWefDOxnTPIUm65U45ASM1h+co2wBCSLTJ5GeervM9HYKSUNrc3xpsw5wEJ5iBmXJLMA==}
+  /ra-i18n-polyglot/4.2.1_mispw3hkehb24qteja6ex2btne:
+    resolution: {integrity: sha512-FCRsltKmPKcPwhQYov4LXklgI2iMUlSWBQGdc+x2eoMl2AfY04my45sufkDg8Ni39AjSYWZUesY3r+p0d6shoQ==}
     dependencies:
       node-polyglot: 2.4.2
-      ra-core: 4.2.0_mispw3hkehb24qteja6ex2btne
+      ra-core: 4.2.1_mispw3hkehb24qteja6ex2btne
     transitivePeerDependencies:
       - history
       - react
@@ -2455,10 +2491,10 @@ packages:
       - react-router-dom
     dev: false
 
-  /ra-language-english/4.2.0_mispw3hkehb24qteja6ex2btne:
-    resolution: {integrity: sha512-Xq66OdGyt/MPunZK/40lPct5ZU9oLCxXeRIu7yMu8+OmgksXuZglicaHU9wBP816vlsYm9uyOjV/TXPyuFZLWA==}
+  /ra-language-english/4.2.1_mispw3hkehb24qteja6ex2btne:
+    resolution: {integrity: sha512-CDIbNgv2o7krciYgLa1T7j4cYaPglKz0hnBehrkDEwXcROn24SKs+Jqu85VLIyxOwN7r0za7rgKso8LFDIK3SQ==}
     dependencies:
-      ra-core: 4.2.0_mispw3hkehb24qteja6ex2btne
+      ra-core: 4.2.1_mispw3hkehb24qteja6ex2btne
     transitivePeerDependencies:
       - history
       - react
@@ -2467,6 +2503,10 @@ packages:
       - react-native
       - react-router
       - react-router-dom
+    dev: false
+
+  /ra-language-german/3.13.5:
+    resolution: {integrity: sha512-dGWWJbIP5FUp0axoH+7sZj6011IgifEz55FLij3QSBI4ZusDdH/CL3l4oy+srUXFI+IzoXGGtQPJ7ax3p11cLQ==}
     dev: false
 
   /ra-ui-materialui/4.2.0_7ry36iznkwbw7v6sytkcwkxriu:
@@ -2517,8 +2557,8 @@ packages:
       '@mui/material': 5.8.7_h2u6a3oivtyocvjxeke7xcvlfa
       history: 5.3.0
       ra-core: 4.2.0_mispw3hkehb24qteja6ex2btne
-      ra-i18n-polyglot: 4.2.0_mispw3hkehb24qteja6ex2btne
-      ra-language-english: 4.2.0_mispw3hkehb24qteja6ex2btne
+      ra-i18n-polyglot: 4.2.1_mispw3hkehb24qteja6ex2btne
+      ra-language-english: 4.2.1_mispw3hkehb24qteja6ex2btne
       ra-ui-materialui: 4.2.0_7ry36iznkwbw7v6sytkcwkxriu
       react: 18.2.0
       react-dom: 18.2.0_react@18.2.0
