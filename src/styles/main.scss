@@ -61,3 +61,51 @@ h6 {
 .local-changer-container {
   color: white !important;
 }
+
+.loading-bar {
+  background-color: $primary;
+  height: 3px;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 999;
+  animation: loading 3s ease-in-out infinite;
+}
+
+@keyframes loading {
+  0% {
+    background-color: $primary;
+  }
+  40% {
+    background-color: $success-3;
+  }
+  80% {
+    background-color: $success-2;
+  }
+  100% {
+    background-color: $primary;
+  }
+}
+
+.network-error {
+  position: fixed;
+  top: 30px;
+  right: 30px;
+  background-color: $red;
+  color: white;
+  min-width: 200px;
+  padding: 10px;
+  border-radius: 3px;
+  font-size: 20px;
+  animation: error-alert 0.3s;
+}
+
+@keyframes error-alert {
+  0% {
+    right: 0px;
+  }
+  100% {
+    right: 30px;
+  }
+}
