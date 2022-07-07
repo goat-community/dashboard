@@ -8,6 +8,7 @@ interface PTextInputProps {
   autoFocus?: boolean;
   fullWidth?: boolean;
   validation?: any;
+  onChange?: () => object;
 }
 
 export function PTextInput(props: PTextInputProps) {
@@ -18,7 +19,8 @@ export function PTextInput(props: PTextInputProps) {
     disabled,
     autoFocus,
     fullWidth = false,
-    validation
+    validation,
+    onChange = () => {}
   } = props;
 
   return (
@@ -30,6 +32,7 @@ export function PTextInput(props: PTextInputProps) {
       disabled={disabled}
       validate={validation}
       fullWidth={fullWidth}
+      onChange={onChange}
     />
   );
 }

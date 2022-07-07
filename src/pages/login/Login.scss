@@ -10,13 +10,10 @@
   background-color: $background;
 }
 
-.login-header-container {
+.login-logo {
   position: absolute;
   top: 20px;
-  width: 95vw;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
+  left: 40px;
 }
 
 .login-wrapper {
