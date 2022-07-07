@@ -10,7 +10,11 @@
   "dependencies": {
     "@reduxjs/toolkit": "^1.8.3",
     "axios": "^0.27.2",
+    "formik": "^2.2.9",
     "ra-data-json-server": "^4.2.0",
+    "ra-i18n-polyglot": "^4.2.1",
+    "ra-language-english": "^4.2.1",
+    "ra-language-german": "^3.13.5",
     "react": "^18.0.0",
     "react-admin": "^4.2.0",
     "react-dom": "^18.0.0",
