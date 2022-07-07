@@ -1,4 +1,4 @@
-import { AxiosError } from "axios";
+import type { AxiosError } from "axios";
 import { instance, objectToFormData } from "@utils";
 import type { UserToken, User, RequestResult, UserCreditionals } from "@types";
 
@@ -13,7 +13,7 @@ export function getAccessToken(
     })
     .then((response) => response.data)
     .catch((err: AxiosError) => {
-      throw err.message;
+      throw err;
     });
 }
 
@@ -22,6 +22,6 @@ export function getMyInfo(): RequestResult<User> {
     .get("/users/me")
     .then((response) => response.data)
     .catch((err: AxiosError) => {
-      throw err.message;
+      throw err;
     });
 }

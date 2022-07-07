@@ -2,12 +2,12 @@ import { Button, CircularProgress } from "@mui/material";
 
 interface PButtonProps {
   text: string;
-  colors: "primary" | "secondary";
   loading?: boolean;
   disabled?: boolean;
+  fullWidth?: boolean;
+  colors: "primary" | "secondary";
   variant?: "contained" | "outlined" | "text";
   size?: "small" | "medium" | "large";
-  fullWidth?: boolean;
   style?: React.CSSProperties;
 
   onClick?: () => void;
@@ -19,9 +19,9 @@ export function PButton(props: PButtonProps) {
     colors,
     loading = false,
     disabled = false,
+    fullWidth = false,
     variant = "contained",
     size = "medium",
-    fullWidth = false,
     style = {},
     onClick = () => {}
   } = props;
@@ -35,8 +35,10 @@ export function PButton(props: PButtonProps) {
       size={size}
       className={`p-button ${colors} ${disabled && "disabled"}`}
     >
-      {loading && <CircularProgress size={25} thickness={2} />}
-      {text}
+      {loading && (
+        <CircularProgress size={25} thickness={6} sx={{ color: "white" }} />
+      )}
+      {!loading && text}
     </Button>
   );
 }

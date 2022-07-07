@@ -1,6 +1,8 @@
-import { TextInput, required } from "react-admin";
+import { type ChangeEvent } from "react";
+import { TextInput } from "react-admin";
 
 interface PTextInputProps {
+  value: string;
   source: string;
   label: string;
   type?: string;
@@ -8,19 +10,22 @@ interface PTextInputProps {
   autoFocus?: boolean;
   fullWidth?: boolean;
   validation?: any;
-  onChange?: () => object;
+  onChange?: (e: ChangeEvent<any>) => void;
+  onBlur?: (e: ChangeEvent<any>) => void;
 }
 
 export function PTextInput(props: PTextInputProps) {
   const {
     source,
     label,
+    value,
     type = "text",
     disabled,
     autoFocus,
     fullWidth = false,
     validation,
-    onChange = () => {}
+    onChange = () => {},
+    onBlur = () => {}
   } = props;
 
   return (
@@ -33,6 +38,8 @@ export function PTextInput(props: PTextInputProps) {
       validate={validation}
       fullWidth={fullWidth}
       onChange={onChange}
+      value={value}
+      onBlur={onBlur}
     />
   );
 }

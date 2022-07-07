@@ -41,6 +41,8 @@ export function getMyUserInfo() {
       // write user information to session storage
       localStorage.setItem("user_info", JSON.stringify(response));
       dispatch(setUser(response));
+      // redirect to the dashboard
+      window.location.reload();
     }
   };
 }
