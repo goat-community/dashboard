@@ -5,8 +5,10 @@ export function NetworkState() {
 
   return (
     <>
-      {networkReducer.loading && <div>Loading...</div>}
-      {networkReducer.error && <div>{networkReducer.error}</div>}
+      {networkReducer.loading && <div className="loading-bar" />}
+      {networkReducer.error && (
+        <div className="network-error">{networkReducer.error}</div>
+      )}
     </>
   );
 }

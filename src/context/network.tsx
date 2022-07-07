@@ -41,9 +41,25 @@ export function networkStateHandler(req: CallableFunction) {
     try {
       await req();
       dispatch(resetNetworkState());
-    } catch (err: any) {
+    } catch (error: any) {
+      // set the error state
+      let error_message = error;
       // set the error state to the error message
-      dispatch(setNetworkState({ loading: false, error: err }));
+      if (error.response) {
+        // Request made and server responded
+        error_message = error.response?.data?.detail;
+      } else if (error.request) {
+        // The request was made but no response was received
+        error_message = error.request;
+      }
+
+      dispatch(
+        setNetworkState({
+          loading: false,
+          error: error_message || error.message
+        })
+      );
+
       setTimeout(() => {
         // reset the error state
         dispatch(resetNetworkState());
