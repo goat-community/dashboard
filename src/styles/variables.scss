@@ -1,0 +1,42 @@
+@use "sass:map";
+
+$neutral-1: #fcfcfe;
+$neutral-2: #f7f7f7;
+$neutral-3: #e2e2e2;
+$neutral: $neutral-3;
+
+$primary-1: #2bb381;
+$primary-2: #283648;
+$primary: $primary-1;
+
+$success-1: #dcfcdb;
+$success-2: #b4eab2;
+$success-3: #a0e19e;
+$success: $success-3;
+
+$error-1: #f9eaed;
+$error-2: #f3d6db;
+$error-3: #edc1c9;
+$error: $error-3;
+
+$warning-1: #fff8e6;
+$warning-2: #fff1cc;
+$warning-3: #ffeab3;
+$warning: $warning-3;
+
+$info-1: #e6f7ff;
+$info-2: #bae7ff;
+$info-3: #91d5ff;
+$info: $info-3;
+
+$primary-light: #e6faf1;
+
+$background: $primary-2;
+$red: #e80057;
+$gray: #545353;
+$black: #212121;
+$gray-light: #949494;
+$lighter-gray: #acacac1a;
+$disabled: #c4c4c4f0;
+$discount: #aaa;
+$backdrop: #0000007a;

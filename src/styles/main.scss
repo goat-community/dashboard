@@ -1,3 +1,5 @@
+@import "./variables.scss";
+
 @font-face {
   font-family: "Nanum";
   src: url("@assets /fonts/NanumGothic-Regular.ttf") format("ttf");
@@ -6,5 +8,52 @@
 * {
   margin: 0;
   padding: 0;
-  font-family: "Nanum", sans-serif;
+  font-family: "Nanum", sans-serif !important;
+}
+
+h1 {
+  font-weight: lighter;
+  font-size: 35px;
+}
+
+h2 {
+  font-weight: lighter;
+  font-size: 30px;
+}
+
+h3 {
+  font-weight: lighter;
+  font-size: 25px;
+}
+
+h4 {
+  font-weight: lighter;
+  font-size: 20px;
+}
+
+h5 {
+  font-weight: lighter;
+  font-size: 16px;
+}
+
+h6 {
+  font-weight: lighter;
+  font-size: 12px;
+}
+
+.p-button {
+  font-weight: lighter !important;
+  border-radius: 5px !important;
+
+  &.primary {
+    background-color: $primary !important;
+  }
+  &.secondary {
+    background-color: $primary-2 !important;
+  }
+  &.disabled {
+    background-color: $disabled !important;
+    cursor: not-allowed !important;
+    color: white !important;
+  }
 }
