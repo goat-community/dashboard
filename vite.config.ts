@@ -12,8 +12,8 @@ export default defineConfig({
         replacement: path.resolve(__dirname, "src/types")
       },
       {
-        find: "@components",
-        replacement: path.resolve(__dirname, "src/components")
+        find: "@common",
+        replacement: path.resolve(__dirname, "src/common")
       },
       {
         find: "@assets",
