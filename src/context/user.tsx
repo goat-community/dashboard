@@ -38,6 +38,8 @@ export function getMyUserInfo() {
   return async (dispatch: CallableFunction) => {
     const response = await getMyInfo();
     if (response) {
+      // write user information to session storage
+      localStorage.setItem("user_info", JSON.stringify(response));
       dispatch(setUser(response));
     }
   };
