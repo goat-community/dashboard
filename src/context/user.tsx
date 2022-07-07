@@ -1,6 +1,7 @@
 import { createSlice, type PayloadAction } from "@reduxjs/toolkit";
-import type { User, UserCreditionals, UserToken } from "@types";
+import type { User, UserCreditionals } from "@types";
 import { getAccessToken, getMyInfo } from "@api";
+import { networkStateHandler } from "./network";
 
 /** Reducer */
 const initialState = {
@@ -22,7 +23,7 @@ export default user.reducer;
 
 /** Actions  */
 export function login(creditionals: UserCreditionals) {
-  return async (dispatch: CallableFunction) => {
+  return networkStateHandler(async (dispatch: CallableFunction) => {
     const response = await getAccessToken(creditionals);
     if (response?.access_token) {
       // write token to local storage
@@ -30,7 +31,7 @@ export function login(creditionals: UserCreditionals) {
       // get user info with the token from local storage
       setTimeout(() => dispatch(getMyUserInfo()), 0);
     }
-  };
+  });
 }
 
 export function getMyUserInfo() {
