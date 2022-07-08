@@ -16,7 +16,6 @@ specifiers:
   eslint-plugin-unused-imports: ^2.0.0
   formik: ^2.2.9
   prettier: ^2.7.1
-  ra-data-json-server: ^4.2.0
   ra-i18n-polyglot: ^4.2.1
   ra-language-english: ^4.2.1
   ra-language-german: ^3.13.5
@@ -34,7 +33,6 @@ dependencies:
   '@reduxjs/toolkit': 1.8.3_kkwg4cbsojnjnupd3btipussee
   axios: 0.27.2
   formik: 2.2.9_react@18.2.0
-  ra-data-json-server: 4.2.0_mispw3hkehb24qteja6ex2btne
   ra-i18n-polyglot: 4.2.1_mispw3hkehb24qteja6ex2btne
   ra-language-english: 4.2.1_mispw3hkehb24qteja6ex2btne
   ra-language-german: 3.13.5
@@ -2571,21 +2569,6 @@ packages:
       react-router-dom: 6.3.0_biqbaboplfbrettd7655fr4n2y
     transitivePeerDependencies:
       - react-native
-    dev: false
-
-  /ra-data-json-server/4.2.0_mispw3hkehb24qteja6ex2btne:
-    resolution: {integrity: sha512-gE7aOqVaQabX6ZUQpvGNVPmJnEF54haHcqLxNT0z9AxMhJd2FEqDV0I8bq1kvcC1fswiMOM2KCQZ2x6xsBTerg==}
-    dependencies:
-      query-string: 7.1.1
-      ra-core: 4.2.0_mispw3hkehb24qteja6ex2btne
-    transitivePeerDependencies:
-      - history
-      - react
-      - react-dom
-      - react-hook-form
-      - react-native
-      - react-router
-      - react-router-dom
     dev: false
 
   /ra-i18n-polyglot/4.2.1_mispw3hkehb24qteja6ex2btne:

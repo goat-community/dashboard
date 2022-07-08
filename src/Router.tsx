@@ -1,10 +1,9 @@
-import { Route } from "react-router-dom";
-import { Admin, CustomRoutes, Resource } from "react-admin";
+import { Admin, Resource } from "react-admin";
 /** Pages */
 import LoginPage from "@pages/login/Login";
 /** Providers */
-import { i18nProvider } from "@utils";
-import { useAuth } from "@hooks";
+import { i18nProvider } from "@utils/i18n";
+import { useAuth } from "@hooks/auth";
 
 export default function AppRouter() {
   const auth = useAuth();
