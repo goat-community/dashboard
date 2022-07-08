@@ -2,11 +2,11 @@ import { Formik } from "formik";
 import { Form } from "react-admin";
 import { Card, CardActions } from "@mui/material";
 import Box from "@mui/material/Box";
-import GoatLogo from "@assets/images/logo_green.png";
-import { PButton, PTextInput } from "@common";
 import { login } from "@context/user";
-import { useAppDispatch, useLoading } from "@hooks";
 import type { UserCreditionals } from "@types";
+import { useAppDispatch, useLoading } from "@hooks";
+import { PButton, PTextInput } from "@common";
+import GoatLogo from "@assets/images/logo_green.webp";
 import "./Login.scss";
 
 const LoginForm = () => {

@@ -1,6 +1,6 @@
 import { createSlice, type PayloadAction } from "@reduxjs/toolkit";
 import type { User, UserCreditionals } from "@types";
-import { getAccessToken, getMyInfo } from "@api";
+import { getAccessToken, getMyInfo } from "@api/user";
 import { networkStateHandler } from "./network";
 
 /** Reducer */
