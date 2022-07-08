@@ -53,34 +53,34 @@ const LoginForm = () => {
         <Form>
           <Box className="login-wrapper">
             <Card className="login-card-wrapper">
-              <img src={GoatLogo} alt="GOAT logo" width="300" />
+              <img src={GoatLogo} alt="GOAT logo" width={300} height="auto" />
               <h4>Dashboard</h4>
               <br />
               <Box sx={{ padding: "0 1em 1em 1em" }}>
-                <PTextInput
-                  autoFocus
-                  source="username"
-                  label="username"
-                  fullWidth
-                  onChange={handleChange}
-                  onBlur={handleBlur}
-                  value={values.username}
-                />
-                {errors.username && touched.username && (
-                  <h6>{errors.username}</h6>
-                )}
-                <PTextInput
-                  source="password"
-                  label="password"
-                  type="password"
-                  fullWidth
-                  onChange={handleChange}
-                  onBlur={handleBlur}
-                  value={values.password}
-                />
-                {errors.password && touched.password && (
-                  <h6>{errors.password}</h6>
-                )}
+                <Box>
+                  <PTextInput
+                    autoFocus
+                    source="username"
+                    label="username"
+                    fullWidth
+                    onChange={handleChange}
+                    onBlur={handleBlur}
+                    value={values.username}
+                    helperText={false}
+                  />
+                </Box>
+                <Box sx={{ marginTop: 2 }}>
+                  <PTextInput
+                    source="password"
+                    label="password"
+                    type="password"
+                    fullWidth
+                    onChange={handleChange}
+                    onBlur={handleBlur}
+                    value={values.password}
+                    helperText={false}
+                  />
+                </Box>
               </Box>
               <CardActions sx={{ padding: "0 1em 1em 1em" }}>
                 <PButton
@@ -93,6 +93,10 @@ const LoginForm = () => {
                   disabled={isSubmitting}
                 />
               </CardActions>
+              <Box sx={{ padding: "0 1em 1em 1em", height: 10, color: "red" }}>
+                {errors.username && touched.username && errors.username}
+                {errors.password && touched.password && errors.password}
+              </Box>
             </Card>
           </Box>
         </Form>

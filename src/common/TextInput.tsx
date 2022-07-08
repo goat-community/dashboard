@@ -4,6 +4,7 @@ import { TextInput } from "react-admin";
 interface PTextInputProps {
   value: string;
   source: string;
+  helperText?: string | false;
   label: string;
   type?: string;
   disabled?: boolean;
@@ -19,6 +20,7 @@ export function PTextInput(props: PTextInputProps) {
     source,
     label,
     value,
+    helperText = false,
     type = "text",
     disabled,
     autoFocus,
@@ -40,6 +42,7 @@ export function PTextInput(props: PTextInputProps) {
       onChange={onChange}
       value={value}
       onBlur={onBlur}
+      helperText={helperText}
     />
   );
 }

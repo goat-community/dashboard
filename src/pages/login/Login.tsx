@@ -5,7 +5,13 @@ import LoginForm from "./LoginForm";
 export default function LoginPage(): JSX.Element {
   return (
     <section className="login-container">
-      <img src={LogoLight} alt="plan4better" className="login-logo" />
+      <img
+        src={LogoLight}
+        alt="plan4better"
+        className="login-logo"
+        width={180}
+        height={41}
+      />
       <LoginForm />
     </section>
   );
