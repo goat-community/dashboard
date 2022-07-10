@@ -7,7 +7,7 @@ export function NetworkState() {
     <>
       {networkReducer.loading && <div className="loading-bar" />}
       {networkReducer.error && (
-        <div className="network-error">{networkReducer.error}</div>
+        <div className="network-error">{networkReducer.error + ""}</div>
       )}
     </>
   );
