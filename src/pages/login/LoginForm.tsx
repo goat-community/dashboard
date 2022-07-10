@@ -53,13 +53,13 @@ const LoginForm = () => {
         <Form>
           <Box className="login-wrapper">
             <Card className="login-card-wrapper">
-              <img src={GoatLogo} alt="GOAT logo" width={300} height="auto" />
+              <img src={GoatLogo} alt="GOAT logo" width={250} height="auto" />
               <h4>Dashboard</h4>
               <br />
               <Box sx={{ padding: "0 1em 1em 1em" }}>
                 <Box>
                   <PTextInput
-                    autoFocus
+                    autoFocus={false}
                     source="username"
                     label="username"
                     fullWidth
@@ -94,8 +94,12 @@ const LoginForm = () => {
                 />
               </CardActions>
               <Box sx={{ padding: "0 1em 1em 1em", height: 10, color: "red" }}>
-                {errors.username && touched.username && errors.username}
-                {errors.password && touched.password && errors.password}
+                {errors.username && touched.username && (
+                  <p>{errors.username}</p>
+                )}
+                {errors.password && touched.password && (
+                  <p>{errors.password}</p>
+                )}
               </Box>
             </Card>
           </Box>
