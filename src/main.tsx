@@ -9,12 +9,12 @@ import "@styles/main.scss";
 import { Provider } from "react-redux";
 import { store } from "@context";
 /** Another Providers */
-import { NetworkState } from "@common/NetworkState";
+import { NotifierWrapper } from "@common/Notifier";
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.StrictMode>
     <Provider store={store}>
-      <NetworkState />
+      <NotifierWrapper />
       <BrowserRouter>
         <AppRouter />
       </BrowserRouter>
