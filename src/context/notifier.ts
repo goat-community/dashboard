@@ -15,7 +15,7 @@ export const notifier = createSlice({
   name: "notifier",
   initialState,
   reducers: {
-    notify: (
+    setNotify: (
       state: typeof initialState,
       action: PayloadAction<typeof initialState>
     ) => {
@@ -29,5 +29,19 @@ export const notifier = createSlice({
   }
 });
 
-export const { notify, resetNotify } = notifier.actions;
+export const { setNotify, resetNotify } = notifier.actions;
 export default notifier.reducer;
+
+/** Actions  */
+//  This HOF will handle network state changes
+const NOTIFY_DISAPPEAR_TIME = 4000;
+export function notify(msg: string, type: NotifierState) {
+  return (dispatch: CallableFunction) => {
+    dispatch(setNotify({ msg, type }));
+
+    setTimeout(() => {
+      // reset the notify state
+      dispatch(resetNotify());
+    }, NOTIFY_DISAPPEAR_TIME);
+  };
+}

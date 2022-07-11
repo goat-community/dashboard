@@ -2,6 +2,7 @@ import { createSlice, type PayloadAction } from "@reduxjs/toolkit";
 import type { RecoverPassCreditionals, User, UserCreditionals } from "@types";
 import { getAccessToken, getMyInfo, recoverPassword } from "@api/user";
 import { networkStateHandler } from "./network";
+import { notify } from "./notifier";
 
 /** Reducer */
 const initialState = {
@@ -59,7 +60,7 @@ export function recoverWithEmail(creditionals: RecoverPassCreditionals) {
       networkStateHandler(async () => {
         const response = await recoverPassword(creditionals);
         if (response) {
-          console.log(response);
+          dispatch(notify(response.msg, "success"));
         }
       })
     );

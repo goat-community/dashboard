@@ -51,13 +51,7 @@ export function networkStateHandler(req: Function) {
         })
       );
       // notify error message
-      dispatch(
-        notify({
-          msg: error_message || error,
-          type: "error"
-        })
-      );
-
+      dispatch(notify(error_message || error, "error"));
       setTimeout(() => {
         // reset the error state
         dispatch(resetNotify());
