@@ -1,6 +1,6 @@
 import { createSlice, type PayloadAction } from "@reduxjs/toolkit";
-import type { User, UserCreditionals } from "@types";
-import { getAccessToken, getMyInfo } from "@api/user";
+import type { RecoverPassCreditionals, User, UserCreditionals } from "@types";
+import { getAccessToken, getMyInfo, recoverPassword } from "@api/user";
 import { networkStateHandler } from "./network";
 
 /** Reducer */
@@ -48,6 +48,18 @@ export function getMyUserInfo() {
           dispatch(setUser(response));
           // redirect to the dashboard
           window.location.reload();
+        }
+      })
+    );
+}
+
+export function recoverWithEmail(creditionals: RecoverPassCreditionals) {
+  return (dispatch: CallableFunction) =>
+    dispatch(
+      networkStateHandler(async () => {
+        const response = await recoverPassword(creditionals);
+        if (response) {
+          console.log(response);
         }
       })
     );
