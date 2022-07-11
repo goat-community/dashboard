@@ -32,3 +32,14 @@
     justify-content: center;
   }
 }
+
+.form-flipper {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  flex-direction: row;
+  padding: 0 20px;
+  margin-top: 10px;
+  color: $primary;
+  cursor: pointer;
+}

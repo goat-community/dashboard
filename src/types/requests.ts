@@ -6,3 +6,7 @@ export interface UserCreditionals {
   username: string;
   password: string;
 }
+
+export interface RecoverPassCreditionals {
+  email: string;
+}

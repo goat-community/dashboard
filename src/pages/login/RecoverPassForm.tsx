@@ -2,48 +2,42 @@ import { Formik } from "formik";
 import { Form } from "react-admin";
 import { Card, CardActions } from "@mui/material";
 import Box from "@mui/material/Box";
-import { login } from "@context/user";
-import type { UserCreditionals } from "@types";
+import { recoverWithEmail } from "@context/user";
+import type { RecoverPassCreditionals } from "@types";
 import { useAppDispatch, useLoading } from "@hooks";
 import { PButton, PTextInput } from "@common";
 import GoatLogo from "@assets/images/logo_green.webp";
 import "./Login.scss";
 import { FlipForm } from "./FlipForm";
 
-interface LoginFormProps {
+interface RecoverPassFormProps {
   formFliped: boolean;
   flipForm: () => void;
 }
 
-const LoginForm = (props: LoginFormProps) => {
+const RecoverPassForm = (props: RecoverPassFormProps) => {
   const loading = useLoading();
   const dispatch = useAppDispatch();
 
   return (
     <Formik
-      initialValues={{ username: "", password: "" } as UserCreditionals}
-      validate={(creditionals: UserCreditionals) => {
-        const errors = {} as UserCreditionals;
-        // username validate
-        if (!creditionals.username) {
-          errors.username = "Username is required";
+      initialValues={{ email: "" } as RecoverPassCreditionals}
+      validate={(creditionals: RecoverPassCreditionals) => {
+        const errors = {} as RecoverPassCreditionals;
+        // email validate
+        if (!creditionals.email) {
+          errors.email = "email is required";
         } else if (
-          !/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i.test(
-            creditionals.username
-          )
+          !/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i.test(creditionals.email)
         ) {
-          errors.username = "Invalid username";
-        }
-        // password validate
-        if (!creditionals.password) {
-          errors.password = "Password is required";
+          errors.email = "Invalid email";
         }
 
         return errors;
       }}
       onSubmit={(creditionals, { setSubmitting }) => {
         setSubmitting(false);
-        dispatch(login(creditionals));
+        dispatch(recoverWithEmail(creditionals));
       }}
     >
       {({
@@ -66,33 +60,16 @@ const LoginForm = (props: LoginFormProps) => {
                 <Box>
                   <PTextInput
                     autoFocus={false}
-                    source="username"
-                    label="username"
+                    source="email"
+                    label="email"
                     fullWidth
                     onChange={handleChange}
                     onBlur={handleBlur}
-                    value={values.username}
+                    value={values.email}
                     helperText={false}
                   />
                 </Box>
-                <Box sx={{ marginTop: 2 }}>
-                  <PTextInput
-                    source="password"
-                    label="password"
-                    type="password"
-                    fullWidth
-                    onChange={handleChange}
-                    onBlur={handleBlur}
-                    value={values.password}
-                    helperText={false}
-                  />
-                </Box>
-                {errors.username && touched.username && (
-                  <p>{errors.username}</p>
-                )}
-                {errors.password && touched.password && !errors.username && (
-                  <p>{errors.password}</p>
-                )}
+                {errors.email && touched.email && <p>{errors.email}</p>}
               </Box>
               <CardActions sx={{ padding: "0 1em 0 1em" }}>
                 <PButton
@@ -100,7 +77,7 @@ const LoginForm = (props: LoginFormProps) => {
                   fullWidth
                   colors="primary"
                   loading={loading}
-                  text="sign in"
+                  text="Recovery"
                   onClick={handleSubmit}
                   disabled={isSubmitting}
                 />
@@ -116,4 +93,4 @@ const LoginForm = (props: LoginFormProps) => {
     </Formik>
   );
 };
-export default LoginForm;
+export default RecoverPassForm;

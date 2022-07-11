@@ -1,12 +1,11 @@
 import { createSlice, type PayloadAction } from "@reduxjs/toolkit";
+import { notify, resetNotify } from "./notifier";
 
 /** Reducer */
 const initialState = {
-  loading: false,
-  error: null
+  loading: false
 } as {
   loading: boolean;
-  error: string | null;
 };
 
 export const network = createSlice({
@@ -18,11 +17,9 @@ export const network = createSlice({
       action: PayloadAction<typeof initialState>
     ) => {
       state.loading = action.payload.loading;
-      state.error = action.payload.error;
     },
     resetNetworkState: (state: typeof initialState) => {
       state.loading = false;
-      state.error = null;
     }
   }
 });
@@ -33,20 +30,15 @@ export default network.reducer;
 /** Actions  */
 //  This HOF will handle network state changes
 const ERROR_DISAPPEAR_TIME = 3000;
-export function networkStateHandler(req: CallableFunction) {
-  // set the loading state to true
+export function networkStateHandler(req: Function) {
   return async (dispatch: CallableFunction) => {
-    dispatch(setNetworkState({ loading: true, error: null }));
-    // make the request
+    dispatch(setNetworkState({ loading: true }));
     try {
       await req();
       dispatch(resetNetworkState());
     } catch (error: any) {
-      // set the error state
       let error_message = error;
-      // set the error state to the error message
       if (error.response) {
-        // Request made and server responded
         error_message = error.response?.data?.detail;
       } else if (error.request) {
         // The request was made but no response was received
@@ -55,14 +47,14 @@ export function networkStateHandler(req: CallableFunction) {
 
       dispatch(
         setNetworkState({
-          loading: false,
-          error: error_message || error.message
+          loading: false
         })
       );
-
+      // notify error message
+      dispatch(notify(error_message || error, "error"));
       setTimeout(() => {
         // reset the error state
-        dispatch(resetNetworkState());
+        dispatch(resetNotify());
       }, ERROR_DISAPPEAR_TIME);
     }
   };

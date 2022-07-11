@@ -88,7 +88,7 @@ h6 {
   }
 }
 
-.network-error {
+@mixin notify-wrapper {
   position: fixed;
   top: 30px;
   right: 30px;
@@ -97,11 +97,28 @@ h6 {
   min-width: 200px;
   padding: 10px;
   border-radius: 3px;
-  font-size: 20px;
+  font-size: 16px;
   animation: error-alert 0.3s;
 }
 
-@keyframes error-alert {
+.notify-success {
+  @include notify-wrapper;
+  background-color: $success;
+}
+.notify-warning {
+  @include notify-wrapper;
+  background-color: $warning;
+}
+.notify-error {
+  @include notify-wrapper;
+  background-color: $error;
+}
+.notify-info {
+  @include notify-wrapper;
+  background-color: $info;
+}
+
+@keyframes notify {
   0% {
     right: 0px;
   }
