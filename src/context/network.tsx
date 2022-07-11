@@ -33,7 +33,7 @@ export default network.reducer;
 /** Actions  */
 //  This HOF will handle network state changes
 const ERROR_DISAPPEAR_TIME = 3000;
-export function networkStateHandler(req: CallableFunction) {
+export function networkStateHandler(req: Function) {
   // set the loading state to true
   return async (dispatch: CallableFunction) => {
     dispatch(setNetworkState({ loading: true, error: null }));
