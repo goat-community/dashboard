@@ -1,6 +1,12 @@
+import type { GetListParams, GetListResult } from "react-admin";
 import { createSlice, type PayloadAction } from "@reduxjs/toolkit";
 import type { RecoverPassCreditionals, User, UserCreditionals } from "@types";
-import { getAccessToken, getMyInfo, recoverPassword } from "@api/user";
+import {
+  getAccessToken,
+  getMyInfo,
+  getUsers,
+  recoverPassword
+} from "@api/user";
 import { networkStateHandler } from "./network";
 import { notify } from "./notifier";
 
@@ -74,3 +80,18 @@ export function logout() {
     window.location.reload();
   };
 }
+
+export const UserProvider = {
+  /** Get Users List */
+  getUsersList: (params: GetListParams): Promise<GetListResult> =>
+    new Promise((resolve, reject) => {
+      getUsers(params)!
+        .then((users) =>
+          resolve({
+            data: users,
+            total: users?.length
+          })
+        )
+        .catch(() => reject());
+    })
+};

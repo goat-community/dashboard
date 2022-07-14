@@ -2,6 +2,7 @@
  * Customized layout
  * https://marmelab.com/react-admin/Admin.html#layout
  */
+import type { LayoutProps } from "react-admin";
 import { styled } from "@mui/material";
 import { Sidebar } from "./SideBar";
 
@@ -30,19 +31,18 @@ const Content = styled("div")(({ theme }) => ({
   flexDirection: "column",
   flexGrow: 2,
   padding: theme.spacing(3),
-  marginTop: "4em",
-  paddingLeft: 5
+  marginTop: 0,
+  paddingLeft: 20,
+  marginLeft: 240
 }));
 
-export function PLayout() {
+export function PLayout(props: LayoutProps) {
   return (
     <Root>
       <AppFrame>
         <ContentWithSidebar>
           <Sidebar />
-          <Content>
-            <h1>Child</h1>
-          </Content>
+          <Content>{props.children}</Content>
         </ContentWithSidebar>
       </AppFrame>
     </Root>

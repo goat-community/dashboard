@@ -1,5 +1,5 @@
 import type { AxiosError } from "axios";
-import { instance, objectToFormData } from "@utils";
+import type { GetListParams } from "react-admin";
 import type {
   UserToken,
   User,
@@ -7,6 +7,7 @@ import type {
   UserCreditionals,
   RecoverPassCreditionals
 } from "@types";
+import { instance, objectToFormData } from "@utils";
 
 export function getAccessToken(
   creditionals: UserCreditionals
@@ -37,6 +38,15 @@ export function recoverPassword(
 ): RequestResult<{ msg: string }> {
   return instance
     .post(`/password-recovery/${creditionals.email}`)
+    .then((response) => response.data)
+    .catch((err: AxiosError) => {
+      throw err;
+    });
+}
+
+export function getUsers(params: GetListParams): RequestResult<User[]> {
+  return instance
+    .get(`/users`)
     .then((response) => response.data)
     .catch((err: AxiosError) => {
       throw err;
