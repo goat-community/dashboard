@@ -1,6 +1,7 @@
 lockfileVersion: 5.4
 
 specifiers:
+  '@mui/icons-material': ^5.8.4
   '@mui/material': ^5.8.7
   '@reduxjs/toolkit': ^1.8.3
   '@types/node': ^18.0.3
@@ -29,6 +30,7 @@ specifiers:
   vite: ^2.9.9
 
 dependencies:
+  '@mui/icons-material': 5.8.4_vdnh4jyrnjwcar5vg6k35n5t6e
   '@mui/material': 5.8.7_lz3jbmm3udkengo3d7pooqwlzy
   '@reduxjs/toolkit': 1.8.3_kkwg4cbsojnjnupd3btipussee
   axios: 0.27.2
