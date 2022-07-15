@@ -19,10 +19,13 @@ export default defineConfig({
   plugins: [
     react(),
     viteCompression({
-      algorithm: "brotliCompress"
+      ext: ".br",
+      algorithm: "brotliCompress",
+      deleteOriginFile: true
     })
   ],
   build: {
+    outDir: "./dist",
     sourcemap: false,
     rollupOptions: {
       output: {
@@ -31,7 +34,11 @@ export default defineConfig({
           ...renderChunks(dependencies)
         }
       }
-    }
+    },
+    target: "es2021",
+    cssTarget: "chrome80",
+    brotliSize: false,
+    chunkSizeWarningLimit: 1000
   },
   resolve: {
     alias: [
