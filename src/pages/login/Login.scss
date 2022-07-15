@@ -1,0 +1,45 @@
+@import "@styles/variables.scss";
+
+.login-container {
+  height: 100vh;
+  width: 100vw;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  background-color: $background;
+}
+
+.login-logo {
+  position: absolute;
+  top: 20px;
+  left: 40px;
+}
+
+.login-wrapper {
+  width: 100%;
+}
+
+.login-card-wrapper {
+  padding: 30px 20px;
+
+  img {
+    margin: 60px 40px;
+  }
+
+  h4 {
+    display: flex;
+    justify-content: center;
+  }
+}
+
+.form-flipper {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  flex-direction: row;
+  padding: 0 20px;
+  margin-top: 10px;
+  color: $primary;
+  cursor: pointer;
+}

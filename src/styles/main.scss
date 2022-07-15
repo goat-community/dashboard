@@ -1,3 +1,5 @@
+@import "./variables.scss";
+
 @font-face {
   font-family: "Nanum";
   src: url("@assets /fonts/NanumGothic-Regular.ttf") format("ttf");
@@ -6,5 +8,121 @@
 * {
   margin: 0;
   padding: 0;
-  font-family: "Nanum", sans-serif;
+  font-family: "Nanum", sans-serif !important;
+}
+
+h1 {
+  font-weight: lighter;
+  font-size: 35px;
+}
+
+h2 {
+  font-weight: lighter;
+  font-size: 30px;
+}
+
+h3 {
+  font-weight: lighter;
+  font-size: 25px;
+}
+
+h4 {
+  font-weight: lighter;
+  font-size: 20px;
+}
+
+h5 {
+  font-weight: lighter;
+  font-size: 16px;
+}
+
+h6 {
+  font-weight: lighter;
+  font-size: 12px;
+}
+
+.p-button {
+  font-weight: lighter !important;
+  border-radius: 5px !important;
+
+  &.primary {
+    background-color: $primary !important;
+  }
+  &.secondary {
+    background-color: $primary-2 !important;
+  }
+  &.disabled {
+    background-color: $disabled !important;
+    cursor: not-allowed !important;
+    color: white !important;
+  }
+}
+
+.local-changer-container {
+  color: white !important;
+}
+
+.loading-bar {
+  background-color: $primary;
+  height: 3px;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 999;
+  animation: loading 3s ease-in-out infinite;
+}
+
+@keyframes loading {
+  0% {
+    background-color: $primary;
+  }
+  40% {
+    background-color: $success-3;
+  }
+  80% {
+    background-color: $success-2;
+  }
+  100% {
+    background-color: $primary;
+  }
+}
+
+@mixin notify-wrapper {
+  position: fixed;
+  top: 30px;
+  right: 30px;
+  background-color: $red;
+  color: white;
+  min-width: 200px;
+  padding: 10px;
+  border-radius: 3px;
+  font-size: 16px;
+  animation: error-alert 0.3s;
+}
+
+.notify-success {
+  @include notify-wrapper;
+  background-color: $success;
+}
+.notify-warning {
+  @include notify-wrapper;
+  background-color: $warning;
+}
+.notify-error {
+  @include notify-wrapper;
+  background-color: $error;
+}
+.notify-info {
+  @include notify-wrapper;
+  background-color: $info;
+}
+
+@keyframes notify {
+  0% {
+    right: 0px;
+  }
+  100% {
+    right: 30px;
+  }
 }

@@ -1,6 +1,12 @@
-import { AxiosError } from "axios";
+import type { AxiosError } from "axios";
 import { instance, objectToFormData } from "@utils";
-import type { UserToken, User, RequestResult, UserCreditionals } from "@types";
+import type {
+  UserToken,
+  User,
+  RequestResult,
+  UserCreditionals,
+  RecoverPassCreditionals
+} from "@types";
 
 export function getAccessToken(
   creditionals: UserCreditionals
@@ -13,7 +19,7 @@ export function getAccessToken(
     })
     .then((response) => response.data)
     .catch((err: AxiosError) => {
-      throw err.message;
+      throw err;
     });
 }
 
@@ -22,6 +28,17 @@ export function getMyInfo(): RequestResult<User> {
     .get("/users/me")
     .then((response) => response.data)
     .catch((err: AxiosError) => {
-      throw err.message;
+      throw err;
+    });
+}
+
+export function recoverPassword(
+  creditionals: RecoverPassCreditionals
+): RequestResult<{ msg: string }> {
+  return instance
+    .post(`/password-recovery/${creditionals.email}`)
+    .then((response) => response.data)
+    .catch((err: AxiosError) => {
+      throw err;
     });
 }
