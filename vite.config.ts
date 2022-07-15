@@ -20,12 +20,10 @@ export default defineConfig({
     react(),
     viteCompression({
       ext: ".br",
-      algorithm: "brotliCompress",
-      deleteOriginFile: true
+      algorithm: "brotliCompress"
     })
   ],
   build: {
-    outDir: "./dist",
     sourcemap: false,
     rollupOptions: {
       output: {
