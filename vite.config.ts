@@ -1,5 +1,6 @@
 import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react";
+import viteCompression from "vite-plugin-compression";
 import * as path from "path";
 // @ts-ignore
 import { dependencies } from "./package.json";
@@ -15,7 +16,12 @@ function renderChunks(deps: Record<string, string>) {
 
 // https://vitejs.dev/config/
 export default defineConfig({
-  plugins: [react()],
+  plugins: [
+    react(),
+    viteCompression({
+      algorithm: "brotliCompress"
+    })
+  ],
   build: {
     sourcemap: false,
     rollupOptions: {
