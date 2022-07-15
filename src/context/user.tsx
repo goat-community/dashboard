@@ -1,6 +1,13 @@
+import type { DeleteParams, DeleteResult, GetListResult } from "react-admin";
 import { createSlice, type PayloadAction } from "@reduxjs/toolkit";
 import type { RecoverPassCreditionals, User, UserCreditionals } from "@types";
-import { getAccessToken, getMyInfo, recoverPassword } from "@api/user";
+import {
+  deleteUser,
+  getAccessToken,
+  getMyInfo,
+  getUsers,
+  recoverPassword
+} from "@api/user";
 import { networkStateHandler } from "./network";
 import { notify } from "./notifier";
 
@@ -65,3 +72,37 @@ export function recoverWithEmail(creditionals: RecoverPassCreditionals) {
       })
     );
 }
+
+export function logout() {
+  return (): void => {
+    localStorage.removeItem("access_token");
+    localStorage.removeItem("user_info");
+
+    window.location.reload();
+  };
+}
+
+export const UserProvider = {
+  /** Get Users List */
+  getUsersList: (): Promise<GetListResult> =>
+    new Promise((resolve, reject) => {
+      getUsers()!
+        .then((users) =>
+          resolve({
+            data: users,
+            total: users?.length
+          })
+        )
+        .catch(() => reject());
+    }),
+
+  /** Delete a User */
+  deleteUser: (params: DeleteParams): Promise<DeleteResult> =>
+    new Promise((resolve, reject) => {
+      deleteUser(params.id as number)!
+        .then((result) => {
+          resolve({ data: result });
+        })
+        .catch(() => reject());
+    })
+};
