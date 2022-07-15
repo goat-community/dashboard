@@ -1,7 +1,8 @@
-import type { GetListParams, GetListResult } from "react-admin";
+import type { DeleteParams, DeleteResult, GetListResult } from "react-admin";
 import { createSlice, type PayloadAction } from "@reduxjs/toolkit";
 import type { RecoverPassCreditionals, User, UserCreditionals } from "@types";
 import {
+  deleteUser,
   getAccessToken,
   getMyInfo,
   getUsers,
@@ -83,15 +84,25 @@ export function logout() {
 
 export const UserProvider = {
   /** Get Users List */
-  getUsersList: (params: GetListParams): Promise<GetListResult> =>
+  getUsersList: (): Promise<GetListResult> =>
     new Promise((resolve, reject) => {
-      getUsers(params)!
+      getUsers()!
         .then((users) =>
           resolve({
             data: users,
             total: users?.length
           })
         )
+        .catch(() => reject());
+    }),
+
+  /** Delete a User */
+  deleteUser: (params: DeleteParams): Promise<DeleteResult> =>
+    new Promise((resolve, reject) => {
+      deleteUser(params.id as number)!
+        .then((result) => {
+          resolve({ data: result });
+        })
         .catch(() => reject());
     })
 };

@@ -1,11 +1,11 @@
 import type { AxiosError } from "axios";
-import type { GetListParams } from "react-admin";
 import type {
   UserToken,
   User,
   RequestResult,
   UserCreditionals,
-  RecoverPassCreditionals
+  RecoverPassCreditionals,
+  ErrorResponse
 } from "@types";
 import { instance, objectToFormData } from "@utils";
 
@@ -44,9 +44,18 @@ export function recoverPassword(
     });
 }
 
-export function getUsers(params: GetListParams): RequestResult<User[]> {
+export function getUsers(): RequestResult<User[]> {
   return instance
     .get(`/users`)
+    .then((response) => response.data)
+    .catch((err: AxiosError) => {
+      throw err;
+    });
+}
+
+export function deleteUser(id: number): RequestResult<User | ErrorResponse> {
+  return instance
+    .delete(`/users/${id}`)
     .then((response) => response.data)
     .catch((err: AxiosError) => {
       throw err;
