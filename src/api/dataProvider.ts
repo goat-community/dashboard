@@ -9,7 +9,6 @@ import { UserProvider } from "@context/user";
 
 export const dataProvider: DataProvider = {
   getList: (resource): Promise<GetListResult> => {
-    console.log("now");
     // Return promises based on the resource provided
     if (resource === "users") {
       return UserProvider.getUsersList();
