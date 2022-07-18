@@ -4,7 +4,12 @@
  * In this file we will create our custom DP
  * https://marmelab.com/react-admin/Actions.html#getting-the-dataprovider-instance
  */
-import type { DataProvider, DeleteResult, GetListResult } from "react-admin";
+import type {
+  CreateResult,
+  DataProvider,
+  DeleteResult,
+  GetListResult
+} from "react-admin";
 import { UserProvider } from "@context/user";
 
 export const dataProvider: DataProvider = {
@@ -23,7 +28,13 @@ export const dataProvider: DataProvider = {
   getManyReference: (resource): any =>
     new Promise((resolve) => resolve(resource)),
 
-  create: (resource): any => new Promise((resolve) => resolve(resource)),
+  create: (resource, params): Promise<CreateResult> => {
+    // Return promises based on the resource provided
+    if (resource === "users") {
+      return UserProvider.createUser(params);
+    }
+    return UserProvider.createUser(params);
+  },
 
   update: (resource): any => new Promise((resolve) => resolve(resource)),
 

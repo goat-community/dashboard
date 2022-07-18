@@ -1,5 +1,4 @@
 import { TableHead, TableRow, TableCell } from "@mui/material";
-import DeleteIcon from "@mui/icons-material/Delete";
 import type { DatagridHeaderProps } from "react-admin";
 
 export function DatagridHeader(props: DatagridHeaderProps) {
@@ -13,7 +12,6 @@ export function DatagridHeader(props: DatagridHeaderProps) {
             key={child.props.source + child.props.label}
             sx={{ fontSize: 18, fontWeight: "bold" }}
           >
-            <DeleteIcon />
             {child.props.source || "Action"}
           </TableCell>
         ))}
