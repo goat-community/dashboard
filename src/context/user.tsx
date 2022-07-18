@@ -1,7 +1,18 @@
-import type { DeleteParams, DeleteResult, GetListResult } from "react-admin";
+import type {
+  CreateResult,
+  DeleteParams,
+  DeleteResult,
+  GetListResult
+} from "react-admin";
 import { createSlice, type PayloadAction } from "@reduxjs/toolkit";
-import type { RecoverPassCreditionals, User, UserCreditionals } from "@types";
+import type {
+  CreateUserCreditionals,
+  RecoverPassCreditionals,
+  User,
+  UserCreditionals
+} from "@types";
 import {
+  createUser,
   deleteUser,
   getAccessToken,
   getMyInfo,
@@ -91,6 +102,18 @@ export const UserProvider = {
           resolve({
             data: users,
             total: users?.length
+          })
+        )
+        .catch(() => reject());
+    }),
+
+  /** Get Users List */
+  createUser: (user: CreateUserCreditionals): Promise<CreateResult> =>
+    new Promise((resolve, reject) => {
+      createUser(user)!
+        .then((user) =>
+          resolve({
+            data: user
           })
         )
         .catch(() => reject());

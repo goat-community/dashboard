@@ -59,6 +59,9 @@ h6 {
   &.secondary {
     background-color: $primary-2 !important;
   }
+  &.error {
+    background-color: $error !important;
+  }
   &.disabled {
     background-color: $disabled !important;
     cursor: not-allowed !important;
