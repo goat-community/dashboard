@@ -33,14 +33,16 @@ instance.interceptors.response.use(
   async (err) => {
     const originalConfig = err.config;
     if (err.response) {
-      // Access Token was expired
       if (err.response.status === 401 && !originalConfig._retry) {
-        originalConfig._retry = true;
-        return Promise.reject(err);
+        // Delete current token and redirect user to login
+        localStorage.removeItem("access_token");
+        localStorage.removeItem("user_info");
+        window.location.href = "/login";
       }
-      // Not enough permissions
       if (err.response.status === 403 && err.response.data) {
-        return Promise.reject(err.response.data);
+        localStorage.removeItem("access_token");
+        localStorage.removeItem("user_info");
+        window.location.href = "/login";
       }
     }
     return Promise.reject(err);

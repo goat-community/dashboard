@@ -45,6 +45,10 @@ h6 {
   font-size: 12px;
 }
 
+.error-text {
+  color: $error;
+}
+
 .p-button {
   font-weight: lighter !important;
   border-radius: 5px !important;
@@ -54,6 +58,9 @@ h6 {
   }
   &.secondary {
     background-color: $primary-2 !important;
+  }
+  &.error {
+    background-color: $error !important;
   }
   &.disabled {
     background-color: $disabled !important;

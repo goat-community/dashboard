@@ -1,5 +1,5 @@
+import type { User } from "@types";
 /** Network call functions arguments type */
-
 export type RequestResult<T> = Promise<T> | null;
 
 export interface UserCreditionals {
@@ -9,4 +9,8 @@ export interface UserCreditionals {
 
 export interface RecoverPassCreditionals {
   email: string;
+}
+
+export interface CreateUserCreditionals extends User {
+  password: string;
 }

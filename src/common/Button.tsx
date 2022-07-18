@@ -5,7 +5,7 @@ interface PButtonProps {
   loading?: boolean;
   disabled?: boolean;
   fullWidth?: boolean;
-  colors: "primary" | "secondary";
+  colors: "primary" | "secondary" | "error";
   variant?: "contained" | "outlined" | "text";
   size?: "small" | "medium" | "large";
   style?: React.CSSProperties;

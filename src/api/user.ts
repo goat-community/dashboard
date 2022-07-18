@@ -5,7 +5,8 @@ import type {
   RequestResult,
   UserCreditionals,
   RecoverPassCreditionals,
-  ErrorResponse
+  ErrorResponse,
+  CreateUserCreditionals
 } from "@types";
 import { instance, objectToFormData } from "@utils";
 
@@ -56,6 +57,17 @@ export function getUsers(): RequestResult<User[]> {
 export function deleteUser(id: number): RequestResult<User | ErrorResponse> {
   return instance
     .delete(`/users/${id}`)
+    .then((response) => response.data)
+    .catch((err: AxiosError) => {
+      throw err;
+    });
+}
+
+export function createUser(
+  user: CreateUserCreditionals
+): RequestResult<User | ErrorResponse> {
+  return instance
+    .post(`/users/`, user)
     .then((response) => response.data)
     .catch((err: AxiosError) => {
       throw err;
