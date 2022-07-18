@@ -8,7 +8,7 @@ export function DatagridHeader(props: any) {
         {/* empty cell to account for the select row checkbox in the body */}
         {props.children.map((child: JSX.Element) => (
           <TableCell
-            key={child.props.source}
+            key={child.props.source + child.props.label}
             sx={{ fontSize: 18, fontWeight: "bold" }}
           >
             {child.props.source || "Action"}
