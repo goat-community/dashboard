@@ -104,7 +104,7 @@ export const UserProvider = {
             total: users?.length
           })
         )
-        .catch(() => reject());
+        .catch((e) => reject(e));
     }),
 
   /** Get Users List */
@@ -116,7 +116,7 @@ export const UserProvider = {
             data: user
           })
         )
-        .catch(() => reject());
+        .catch((e) => reject(e));
     }),
 
   /** Delete a User */
@@ -126,6 +126,6 @@ export const UserProvider = {
         .then((result) => {
           resolve({ data: result });
         })
-        .catch(() => reject());
+        .catch((e) => reject(e));
     })
 };

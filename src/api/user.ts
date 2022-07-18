@@ -67,7 +67,7 @@ export function createUser(
   user: CreateUserCreditionals
 ): RequestResult<User | ErrorResponse> {
   return instance
-    .post(`/users/`, user)
+    .post(`/users`, user)
     .then((response) => response.data)
     .catch((err: AxiosError) => {
       throw err;
