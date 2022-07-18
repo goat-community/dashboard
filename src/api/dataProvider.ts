@@ -31,9 +31,9 @@ export const dataProvider: DataProvider = {
   create: (resource, params): Promise<CreateResult> => {
     // Return promises based on the resource provided
     if (resource === "users") {
-      return UserProvider.createUser(params);
+      return UserProvider.createUser(params.data);
     }
-    return UserProvider.createUser(params);
+    return UserProvider.createUser(params.data);
   },
 
   update: (resource): any => new Promise((resolve) => resolve(resource)),

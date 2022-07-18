@@ -4,11 +4,12 @@ import {
   TextInput,
   Toolbar,
   SaveButton,
-  SelectInput
+  SelectInput,
+  useRedirect,
+  useNotify
 } from "react-admin";
 import { Box, Typography } from "@mui/material";
 import { PButton } from "@common";
-import { backNavigate } from "@utils";
 
 export const validateForm = (v: Record<string, any>): Record<string, any> => {
   const errors = {} as any;
@@ -43,7 +44,38 @@ export const validateForm = (v: Record<string, any>): Record<string, any> => {
   return errors;
 };
 
+const UserCreateToolbar = () => {
+  const redirect = useRedirect();
+  const notify = useNotify();
+  return (
+    <Toolbar sx={{ display: "flex", justifyContent: "space-between" }}>
+      <PButton text="Discard" onClick={() => redirect("..")} colors="error" />
+      <SaveButton
+        icon={<></>}
+        label="Create"
+        mutationOptions={{
+          onSuccess: () => {
+            notify("User created successfully", {
+              type: "success",
+              messageArgs: { smart_count: 1 }
+            });
+            redirect("..");
+          },
+          onError(error: any) {
+            notify(error?.response?.data?.detail, { type: "error" });
+          }
+        }}
+        type="button"
+      />
+    </Toolbar>
+  );
+};
+
 export default function UsersCreate() {
+  const mlStyle = { xs: 0, sm: "0.5em" };
+  const mrStyle = { xs: 0, sm: "0.5em" };
+  const displayStyle = { xs: "block", sm: "flex", width: "100%" };
+
   return (
     <Create
       sx={{
@@ -54,28 +86,23 @@ export default function UsersCreate() {
     >
       <SimpleForm
         warnWhenUnsavedChanges
-        toolbar={
-          <Toolbar sx={{ display: "flex", justifyContent: "space-between" }}>
-            <PButton text="Discard" onClick={backNavigate} colors="error" />
-            <SaveButton label="Create" />
-          </Toolbar>
-        }
+        toolbar={<UserCreateToolbar />}
         defaultValues={{
           name: "Sina",
           surname: "Farhadi",
           email: "sina@mail.com",
           password: "password",
-          organization_id: 10,
-          active_study_area_id: "10",
-          active_data_upload_ids: [10],
+          roles: ["user"],
+          organization_id: 4,
+          active_study_area_id: 91620000,
+          active_data_upload_ids: [],
           storage: 512000,
-          limit_scenarios: 10,
+          limit_scenarios: 50,
           is_active: true,
-          roles: null,
           newsletter: true,
           occupation: "",
           domain: "test",
-          language_preference: "en"
+          language_preference: "de"
         }}
         validate={validateForm}
       >
@@ -83,39 +110,39 @@ export default function UsersCreate() {
           Creating new user
         </Typography>
 
-        <Box display={{ xs: "block", sm: "flex", width: "100%" }}>
-          <Box flex={1} mr={{ xs: 0, sm: "0.5em" }}>
+        <Box display={displayStyle}>
+          <Box flex={1} mr={mrStyle}>
             <TextInput source="name" isRequired fullWidth />
           </Box>
-          <Box flex={1} ml={{ xs: 0, sm: "0.5em" }}>
+          <Box flex={1} ml={mlStyle}>
             <TextInput source="surname" isRequired fullWidth />
           </Box>
         </Box>
 
-        <Box display={{ xs: "block", sm: "flex", width: "100%" }}>
-          <Box flex={1} mr={{ xs: 0, sm: "0.5em" }}>
+        <Box display={displayStyle}>
+          <Box flex={1} mr={mrStyle}>
             <TextInput source="email" isRequired fullWidth />
           </Box>
-          <Box flex={1} ml={{ xs: 0, sm: "0.5em" }}>
+          <Box flex={1} ml={mlStyle}>
             <TextInput source="password" isRequired fullWidth />
           </Box>
         </Box>
 
-        <Box display={{ xs: "block", sm: "flex", width: "100%" }}>
-          <Box flex={1} mr={{ xs: 0, sm: "0.5em" }}>
+        <Box display={displayStyle}>
+          <Box flex={1} mr={mrStyle}>
             <SelectInput
               source="roles"
               fullWidth
               choices={[{ id: "user", name: "User" }]}
             />
           </Box>
-          <Box flex={1} ml={{ xs: 0, sm: "0.5em" }}>
+          <Box flex={1} ml={mlStyle}>
             <TextInput source="active_study_area_id" isRequired fullWidth />
           </Box>
         </Box>
 
-        <Box display={{ xs: "block", sm: "flex", width: "100%" }}>
-          <Box flex={1} mr={{ xs: 0, sm: "0.5em" }}>
+        <Box display={displayStyle}>
+          <Box flex={1} mr={mrStyle}>
             <SelectInput
               source="newsletter"
               fullWidth
@@ -125,22 +152,22 @@ export default function UsersCreate() {
               ]}
             />
           </Box>
-          <Box flex={1} ml={{ xs: 0, sm: "0.5em" }}>
+          <Box flex={1} ml={mlStyle}>
             <TextInput source="organization_id" isRequired fullWidth />
           </Box>
         </Box>
 
-        <Box display={{ xs: "block", sm: "flex", width: "100%" }}>
-          <Box flex={1} mr={{ xs: 0, sm: "0.5em" }}>
+        <Box display={displayStyle}>
+          <Box flex={1} mr={mrStyle}>
             <TextInput source="occupation" fullWidth />
           </Box>
-          <Box flex={1} ml={{ xs: 0, sm: "0.5em" }}>
+          <Box flex={1} ml={mlStyle}>
             <TextInput source="domain" fullWidth />
           </Box>
         </Box>
 
-        <Box display={{ xs: "block", sm: "flex", width: "100%" }}>
-          <Box flex={1} mr={{ xs: 0, sm: "0.5em" }}>
+        <Box display={displayStyle}>
+          <Box flex={1} mr={mrStyle}>
             <SelectInput
               source="is_active"
               fullWidth
@@ -150,16 +177,16 @@ export default function UsersCreate() {
               ]}
             />
           </Box>
-          <Box flex={1} ml={{ xs: 0, sm: "0.5em" }}>
+          <Box flex={1} ml={mlStyle}>
             <TextInput source="storage" isRequired fullWidth />
           </Box>
         </Box>
 
-        <Box display={{ xs: "block", sm: "flex", width: "100%" }}>
-          <Box flex={1} mr={{ xs: 0, sm: "0.5em" }}>
+        <Box display={displayStyle}>
+          <Box flex={1} mr={mrStyle}>
             <TextInput source="limit_scenarios" isRequired fullWidth />
           </Box>
-          <Box flex={1} ml={{ xs: 0, sm: "0.5em" }}>
+          <Box flex={1} ml={mlStyle}>
             <SelectInput
               source="language_preference"
               fullWidth
@@ -169,7 +196,7 @@ export default function UsersCreate() {
               ]}
             />
           </Box>
-          <Box flex={1} ml={{ xs: 0, sm: "0.5em" }}>
+          <Box flex={1} ml={mlStyle}>
             <TextInput source="active_data_upload_ids" fullWidth />
           </Box>
         </Box>
