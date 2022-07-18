@@ -1,7 +1,18 @@
-import type { DeleteParams, DeleteResult, GetListResult } from "react-admin";
+import type {
+  CreateResult,
+  DeleteParams,
+  DeleteResult,
+  GetListResult
+} from "react-admin";
 import { createSlice, type PayloadAction } from "@reduxjs/toolkit";
-import type { RecoverPassCreditionals, User, UserCreditionals } from "@types";
+import type {
+  CreateUserCreditionals,
+  RecoverPassCreditionals,
+  User,
+  UserCreditionals
+} from "@types";
 import {
+  createUser,
   deleteUser,
   getAccessToken,
   getMyInfo,
@@ -78,7 +89,7 @@ export function logout() {
     localStorage.removeItem("access_token");
     localStorage.removeItem("user_info");
 
-    window.location.reload();
+    window.location.href = "/";
   };
 }
 
@@ -93,7 +104,19 @@ export const UserProvider = {
             total: users?.length
           })
         )
-        .catch(() => reject());
+        .catch((e) => reject(e));
+    }),
+
+  /** Get Users List */
+  createUser: (user: CreateUserCreditionals): Promise<CreateResult> =>
+    new Promise((resolve, reject) => {
+      createUser(user)!
+        .then((user) =>
+          resolve({
+            data: user
+          })
+        )
+        .catch((e) => reject(e));
     }),
 
   /** Delete a User */
@@ -103,6 +126,6 @@ export const UserProvider = {
         .then((result) => {
           resolve({ data: result });
         })
-        .catch(() => reject());
+        .catch((e) => reject(e));
     })
 };

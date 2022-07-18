@@ -9,15 +9,17 @@ import "@styles/main.scss";
 import { Provider } from "react-redux";
 import { store } from "@context";
 /** Another Providers */
-import { NotifierWrapper } from "@common/Notifier";
+import { NotifierWrapper, ErrorBoundary } from "@common";
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.StrictMode>
-    <Provider store={store}>
-      <NotifierWrapper />
-      <BrowserRouter>
-        <AppRouter />
-      </BrowserRouter>
-    </Provider>
+    <ErrorBoundary>
+      <Provider store={store}>
+        <NotifierWrapper />
+        <BrowserRouter>
+          <AppRouter />
+        </BrowserRouter>
+      </Provider>
+    </ErrorBoundary>
   </React.StrictMode>
 );
