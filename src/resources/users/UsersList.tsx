@@ -18,8 +18,8 @@ export function UsersList() {
         isRowSelectable={() => false}
         header={<DatagridHeader />}
       >
-        <TextField source="surname" sortable={false} />
         <TextField source="name" sortable={false} />
+        <TextField source="surname" sortable={false} />
         <TextField source="email" sortable={false} />
         <Stack spacing={1} direction="row">
           <IconButton sx={{ border: "1px solid black", padding: 1 }}>

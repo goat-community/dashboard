@@ -49,7 +49,7 @@ const UserCreateToolbar = () => {
   const notify = useNotify();
   return (
     <Toolbar sx={{ display: "flex", justifyContent: "space-between" }}>
-      <PButton text="Discard" onClick={() => redirect("..")} colors="error" />
+      <PButton text="Cancel" onClick={() => redirect("..")} colors="error" />
       <SaveButton
         icon={<></>}
         label="Create"
@@ -85,6 +85,7 @@ export default function UsersCreate() {
       }}
     >
       <SimpleForm
+        sx={{ width: 900 }}
         warnWhenUnsavedChanges
         toolbar={<UserCreateToolbar />}
         defaultValues={{
