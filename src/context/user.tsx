@@ -17,7 +17,7 @@ import type {
 import * as Api from "@api/user";
 import { networkStateHandler } from "./network";
 import { notify } from "./notifier";
-import { pagination } from "@utils";
+import { pagination, search } from "@utils";
 
 /** Reducer */
 const initialState = {
@@ -96,15 +96,23 @@ export const UserProvider = {
     new Promise((resolve, reject) => {
       Api.getUsers()!
         .then((users) => {
+          let filtered_data;
           // handle pagination
-          let paginated_data = pagination({
+          filtered_data = pagination({
             data: [...users],
             page: params.pagination.page,
             perPage: params.pagination.perPage
           });
+          // handle search
+          if (params.filter.q) {
+            filtered_data = search({
+              data: filtered_data,
+              q: params.filter.q
+            });
+          }
 
           resolve({
-            data: paginated_data,
+            data: filtered_data,
             total: users?.length
           });
         })
