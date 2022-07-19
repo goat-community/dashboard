@@ -1,7 +1,5 @@
-import { Datagrid, TextField, List } from "react-admin";
+import { Datagrid, TextField, List, EditButton } from "react-admin";
 import { Stack } from "@mui/material";
-import EditIcon from "@mui/icons-material/Edit";
-import IconButton from "@mui/material/IconButton";
 import { DeleteButton } from "./DeleteButton";
 import { DatagridHeader } from "./DatagridHeader";
 
@@ -21,10 +19,12 @@ export function UsersList() {
         <TextField source="name" sortable={false} />
         <TextField source="surname" sortable={false} />
         <TextField source="email" sortable={false} />
+        <TextField source="roles" sortable={false} />
         <Stack spacing={1} direction="row">
-          <IconButton sx={{ border: "1px solid black", padding: 1 }}>
+          {/* <IconButton sx={{ border: "1px solid black", padding: 1 }}>
             <EditIcon sx={{ fontSize: 18 }} />
-          </IconButton>
+          </IconButton> */}
+          <EditButton />
           <DeleteButton />
         </Stack>
       </Datagrid>

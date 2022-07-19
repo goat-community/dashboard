@@ -1,15 +1,12 @@
 import {
-  Create,
   SimpleForm,
   TextInput,
-  Toolbar,
-  SaveButton,
   SelectInput,
   useRedirect,
-  useNotify
+  Edit
 } from "react-admin";
-import { Box, Typography } from "@mui/material";
-import { PButton } from "@common";
+import { Box, IconButton, Typography } from "@mui/material";
+import CloseIcon from "@mui/icons-material/Close";
 
 export const validateForm = (v: Record<string, any>): Record<string, any> => {
   const errors = {} as any;
@@ -21,9 +18,6 @@ export const validateForm = (v: Record<string, any>): Record<string, any> => {
   }
   if (!v.email) {
     errors.email = "Email required";
-  }
-  if (!v.password) {
-    errors.password = "Password required";
   }
   if (!v.organization_id) {
     errors.organization_id = "organization id is required";
@@ -44,69 +38,25 @@ export const validateForm = (v: Record<string, any>): Record<string, any> => {
   return errors;
 };
 
-const UserCreateToolbar = () => {
+export default function UsersEdit() {
   const redirect = useRedirect();
-  const notify = useNotify();
-  return (
-    <Toolbar sx={{ display: "flex", justifyContent: "space-between" }}>
-      <SaveButton
-        icon={<></>}
-        label="Create"
-        mutationOptions={{
-          onSuccess: () => {
-            notify("User created successfully", {
-              type: "success",
-              messageArgs: { smart_count: 1 }
-            });
-            redirect("..");
-          },
-          onError(error: any) {
-            notify(error?.response?.data?.detail, { type: "error" });
-          }
-        }}
-        type="button"
-      />
-      <PButton text="Cancel" onClick={() => redirect("..")} colors="error" />
-    </Toolbar>
-  );
-};
-
-export default function UsersCreate() {
   const mlStyle = { xs: 0, sm: "0.5em" };
   const mrStyle = { xs: 0, sm: "0.5em" };
   const displayStyle = { xs: "block", sm: "flex", width: "100%" };
 
   return (
-    <Create
+    <Edit
       sx={{
         justifySelf: "center",
         display: "flex",
         alignSelf: "center"
       }}
     >
-      <SimpleForm
-        sx={{ width: 900 }}
-        warnWhenUnsavedChanges
-        toolbar={<UserCreateToolbar />}
-        defaultValues={{
-          name: "Sina",
-          surname: "Farhadi",
-          email: "sina@mail.com",
-          password: "password",
-          roles: ["user"],
-          organization_id: 4,
-          active_study_area_id: 91620000,
-          active_data_upload_ids: [],
-          storage: 512000,
-          limit_scenarios: 50,
-          is_active: true,
-          newsletter: true,
-          occupation: "",
-          domain: "test",
-          language_preference: "de"
-        }}
-        validate={validateForm}
-      >
+      <IconButton sx={{ margin: 1 }} onClick={() => redirect("..")}>
+        <CloseIcon />
+      </IconButton>
+
+      <SimpleForm sx={{ width: 900 }}>
         <Typography variant="h6" gutterBottom>
           Creating new user
         </Typography>
@@ -124,18 +74,11 @@ export default function UsersCreate() {
           <Box flex={1} mr={mrStyle}>
             <TextInput source="email" isRequired fullWidth />
           </Box>
-          <Box flex={1} ml={mlStyle}>
-            <TextInput source="password" isRequired fullWidth />
-          </Box>
         </Box>
 
         <Box display={displayStyle}>
           <Box flex={1} mr={mrStyle}>
-            <SelectInput
-              source="roles"
-              fullWidth
-              choices={[{ id: "user", name: "User" }]}
-            />
+            <TextInput source="roles" value={[]} defaultValue={[]} />
           </Box>
           <Box flex={1} ml={mlStyle}>
             <TextInput source="active_study_area_id" isRequired fullWidth />
@@ -202,6 +145,6 @@ export default function UsersCreate() {
           </Box>
         </Box>
       </SimpleForm>
-    </Create>
+    </Edit>
   );
 }
