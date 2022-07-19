@@ -30,9 +30,8 @@ const Content = styled("div")(({ theme }) => ({
   display: "flex",
   flexDirection: "column",
   flexGrow: 2,
-  padding: theme.spacing(3),
   marginTop: 0,
-  paddingLeft: 20,
+  padding: "0 20px 20px 20px",
   marginLeft: 240
 }));
 
