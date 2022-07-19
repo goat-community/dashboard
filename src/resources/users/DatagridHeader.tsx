@@ -1,7 +1,14 @@
-import { TableHead, TableRow, TableCell } from "@mui/material";
 import type { DatagridHeaderProps } from "react-admin";
+import { TableHead, TableRow, TableCell } from "@mui/material";
+import PersonIcon from "@mui/icons-material/Person";
+import EmailIcon from "@mui/icons-material/Email";
 
 export function DatagridHeader(props: DatagridHeaderProps) {
+  const iconsList = {
+    name: <PersonIcon />,
+    surname: <PersonIcon />,
+    email: <EmailIcon />
+  };
   return (
     <TableHead>
       <TableRow>
@@ -12,7 +19,17 @@ export function DatagridHeader(props: DatagridHeaderProps) {
             key={child.props.source + child.props.label}
             sx={{ fontSize: 18, fontWeight: "bold" }}
           >
-            {child.props.source || "Action"}
+            <div
+              style={{
+                display: "flex",
+                alignContent: "center",
+                columnGap: 5
+              }}
+            >
+              {/* @ts-ignore */}
+              {iconsList[child.props.source]}
+              {child.props.source || "Action"}
+            </div>
           </TableCell>
         ))}
       </TableRow>
