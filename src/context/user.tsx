@@ -2,7 +2,10 @@ import type {
   CreateResult,
   DeleteParams,
   DeleteResult,
-  GetListResult
+  GetListParams,
+  GetListResult,
+  GetOneResult,
+  UpdateResult
 } from "react-admin";
 import { createSlice, type PayloadAction } from "@reduxjs/toolkit";
 import type {
@@ -11,16 +14,10 @@ import type {
   User,
   UserCreditionals
 } from "@types";
-import {
-  createUser,
-  deleteUser,
-  getAccessToken,
-  getMyInfo,
-  getUsers,
-  recoverPassword
-} from "@api/user";
+import * as Api from "@api/user";
 import { networkStateHandler } from "./network";
 import { notify } from "./notifier";
+import { pagination } from "@utils";
 
 /** Reducer */
 const initialState = {
@@ -45,7 +42,7 @@ export function login(creditionals: UserCreditionals) {
   return (dispatch: CallableFunction) =>
     dispatch(
       networkStateHandler(async () => {
-        const response = await getAccessToken(creditionals);
+        const response = await Api.getAccessToken(creditionals);
         if (response?.access_token) {
           // write token to local storage
           localStorage.setItem("access_token", response.access_token);
@@ -60,7 +57,7 @@ export function getMyUserInfo() {
   return (dispatch: CallableFunction) =>
     dispatch(
       networkStateHandler(async () => {
-        const response = await getMyInfo();
+        const response = await Api.getMyInfo();
         if (response) {
           // write user information to session storage
           localStorage.setItem("user_info", JSON.stringify(response));
@@ -76,7 +73,7 @@ export function recoverWithEmail(creditionals: RecoverPassCreditionals) {
   return (dispatch: CallableFunction) =>
     dispatch(
       networkStateHandler(async () => {
-        const response = await recoverPassword(creditionals);
+        const response = await Api.recoverPassword(creditionals);
         if (response) {
           dispatch(notify(response.msg, "success"));
         }
@@ -95,22 +92,37 @@ export function logout() {
 
 export const UserProvider = {
   /** Get Users List */
-  getUsersList: (): Promise<GetListResult> =>
+  getUsersList: (params: GetListParams): Promise<GetListResult> =>
     new Promise((resolve, reject) => {
-      getUsers()!
-        .then((users) =>
+      Api.getUsers()!
+        .then((users) => {
+          // handle pagination
+          let paginated_data = pagination({
+            data: [...users],
+            page: params.pagination.page,
+            perPage: params.pagination.perPage
+          });
+
           resolve({
-            data: users,
+            data: paginated_data,
             total: users?.length
-          })
-        )
+          });
+        })
         .catch((e) => reject(e));
     }),
 
-  /** Get Users List */
+  /** Get a user */
+  getUser: (user_id: number): Promise<GetOneResult> =>
+    new Promise((resolve, reject) => {
+      Api.getSingleUser(user_id)!
+        .then((user) => resolve({ data: user }))
+        .catch((e) => reject(e));
+    }),
+
+  /** Create User */
   createUser: (user: CreateUserCreditionals): Promise<CreateResult> =>
     new Promise((resolve, reject) => {
-      createUser(user)!
+      Api.createUser(user)!
         .then((user) =>
           resolve({
             data: user
@@ -122,10 +134,18 @@ export const UserProvider = {
   /** Delete a User */
   deleteUser: (params: DeleteParams): Promise<DeleteResult> =>
     new Promise((resolve, reject) => {
-      deleteUser(params.id as number)!
+      Api.deleteUser(params.id as number)!
         .then((result) => {
           resolve({ data: result });
         })
+        .catch((e) => reject(e));
+    }),
+
+  /** Upate a user */
+  updateUser: (user_id: number, user_data: User): Promise<UpdateResult> =>
+    new Promise((resolve, reject) => {
+      Api.updateUser(user_id, user_data)!
+        .then((user) => resolve({ data: user }))
         .catch((e) => reject(e));
     })
 };
