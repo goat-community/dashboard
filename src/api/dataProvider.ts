@@ -8,26 +8,28 @@ import type {
   CreateResult,
   DataProvider,
   DeleteResult,
-  GetListResult
+  GetListResult,
+  GetOneResult,
+  UpdateResult
 } from "react-admin";
 import { UserProvider } from "@context/user";
+import type { User } from "@types";
 
 export const dataProvider: DataProvider = {
-  getList: (resource): Promise<GetListResult> => {
+  getList: (resource, params): Promise<GetListResult> => {
     // Return promises based on the resource provided
     if (resource === "users") {
-      return UserProvider.getUsersList();
+      return UserProvider.getUsersList(params);
     }
-    return UserProvider.getUsersList();
+    return UserProvider.getUsersList(params);
   },
-
-  getOne: (resource): any => new Promise((resolve) => resolve(resource)),
-
-  getMany: (resource): any => new Promise((resolve) => resolve(resource)),
-
-  getManyReference: (resource): any =>
-    new Promise((resolve) => resolve(resource)),
-
+  getOne: (resource, params): Promise<GetOneResult> => {
+    // Return promises based on the resource provided
+    if (resource === "users") {
+      return UserProvider.getUser(params.id);
+    }
+    return UserProvider.getUser(params.id);
+  },
   create: (resource, params): Promise<CreateResult> => {
     // Return promises based on the resource provided
     if (resource === "users") {
@@ -35,11 +37,13 @@ export const dataProvider: DataProvider = {
     }
     return UserProvider.createUser(params.data);
   },
-
-  update: (resource): any => new Promise((resolve) => resolve(resource)),
-
-  updateMany: (resource): any => new Promise((resolve) => resolve(resource)),
-
+  update: (resource, params): Promise<UpdateResult> => {
+    // Return promises based on the resource provided
+    if (resource === "users") {
+      return UserProvider.updateUser(params.id as number, params.data as User);
+    }
+    return UserProvider.updateUser(params.id as number, params.data as User);
+  },
   delete: (resource, params): Promise<DeleteResult> => {
     // Return promises based on the resource provided
     if (resource === "users") {
@@ -48,5 +52,9 @@ export const dataProvider: DataProvider = {
     return UserProvider.deleteUser(params);
   },
 
+  getMany: (resource): any => new Promise((resolve) => resolve(resource)),
+  getManyReference: (resource): any =>
+    new Promise((resolve) => resolve(resource)),
+  updateMany: (resource): any => new Promise((resolve) => resolve(resource)),
   deleteMany: (resource): any => new Promise((resolve) => resolve(resource))
 };

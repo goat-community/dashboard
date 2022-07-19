@@ -73,3 +73,26 @@ export function createUser(
       throw err;
     });
 }
+
+export function getSingleUser(
+  user_id: number
+): RequestResult<User | ErrorResponse> {
+  return instance
+    .get(`/users/${user_id}`)
+    .then((response) => response.data)
+    .catch((err: AxiosError) => {
+      throw err;
+    });
+}
+
+export function updateUser(
+  user_id: number,
+  user: User
+): RequestResult<User | ErrorResponse> {
+  return instance
+    .put(`/users/${user_id}`, user)
+    .then((response) => response.data)
+    .catch((err: AxiosError) => {
+      throw err;
+    });
+}
