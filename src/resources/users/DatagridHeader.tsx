@@ -9,7 +9,6 @@ export function DatagridHeader(props: DatagridHeaderProps) {
     surname: <PersonIcon />,
     email: <EmailIcon />
   };
-
   return (
     <TableHead>
       <TableRow>

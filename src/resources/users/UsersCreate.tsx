@@ -59,7 +59,6 @@ export default function UsersCreate() {
       dispatch(getStudyAreas());
     });
   }, []);
-
   const mlStyle = { xs: 0, sm: "0.5em" };
   const mrStyle = { xs: 0, sm: "0.5em" };
   const displayStyle = { xs: "block", sm: "flex", width: "100%" };
