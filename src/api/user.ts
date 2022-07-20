@@ -6,7 +6,8 @@ import type {
   UserCreditionals,
   RecoverPassCreditionals,
   ErrorResponse,
-  CreateUserCreditionals
+  CreateUserCreditionals,
+  StudyAreas
 } from "@types";
 import { instance, objectToFormData } from "@utils";
 
@@ -91,6 +92,15 @@ export function updateUser(
 ): RequestResult<User | ErrorResponse> {
   return instance
     .put(`/users/${user_id}`, user)
+    .then((response) => response.data)
+    .catch((err: AxiosError) => {
+      throw err;
+    });
+}
+
+export function getStudyAreas(): RequestResult<StudyAreas[]> {
+  return instance
+    .get("/users/me/study-areas-list")
     .then((response) => response.data)
     .catch((err: AxiosError) => {
       throw err;
