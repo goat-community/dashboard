@@ -4,7 +4,8 @@ import {
   List,
   EditButton,
   TextInput,
-  Pagination
+  Pagination,
+  ShowButton
 } from "react-admin";
 import { Stack } from "@mui/material";
 import { DeleteButton } from "./DeleteButton";
