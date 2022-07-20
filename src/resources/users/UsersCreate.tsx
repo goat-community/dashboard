@@ -1,7 +1,15 @@
 import { useEffect } from "react";
-import { Create, SimpleForm, TextInput, SelectInput } from "react-admin";
+import { batch } from "react-redux";
+import {
+  Create,
+  SimpleForm,
+  TextInput,
+  SelectInput,
+  SelectArrayInput
+} from "react-admin";
 import { Box, Typography } from "@mui/material";
 import { getOrganizations } from "@context/organizations";
+import { getStudyAreas } from "@context/user";
 import { useAppDispatch, useAppSelector } from "@hooks";
 import UserCreateToolbar from "./UserCreateToolbar";
 
@@ -42,10 +50,14 @@ export default function UsersCreate() {
   const dispatch = useAppDispatch();
   const loading = useAppSelector((state) => state.network.loading);
   const organizations = useAppSelector((state) => state.organizations.organs);
+  const studyAreas = useAppSelector((state) => state.user.studyAreas);
 
-  // fetch organizations
+  // fetch organizations and study areas
   useEffect(() => {
-    dispatch(getOrganizations());
+    batch(() => {
+      dispatch(getOrganizations());
+      dispatch(getStudyAreas());
+    });
   }, []);
 
   const mlStyle = { xs: 0, sm: "0.5em" };
@@ -69,16 +81,17 @@ export default function UsersCreate() {
           surname: "",
           email: "",
           password: "",
-          roles: ["user"],
-          organization_id: null,
-          active_study_area_id: 91620000,
+          roles: { id: "user", name: "user" },
+          organization_id: [],
+          active_study_area_id: [],
           storage: 512000,
           limit_scenarios: 50,
           is_active: true,
           newsletter: true,
           occupation: "",
           domain: "",
-          language_preference: "de"
+          language_preference: "de",
+          active_data_upload_ids: []
         }}
         validate={validateForm}
       >
@@ -88,32 +101,56 @@ export default function UsersCreate() {
 
         <Box display={displayStyle}>
           <Box flex={1} mr={mrStyle}>
-            <TextInput source="name" isRequired fullWidth />
+            <TextInput source="name" isRequired fullWidth variant="outlined" />
           </Box>
           <Box flex={1} ml={mlStyle}>
-            <TextInput source="surname" isRequired fullWidth />
-          </Box>
-        </Box>
-
-        <Box display={displayStyle}>
-          <Box flex={1} mr={mrStyle}>
-            <TextInput source="email" isRequired fullWidth />
-          </Box>
-          <Box flex={1} ml={mlStyle}>
-            <TextInput source="password" isRequired fullWidth />
-          </Box>
-        </Box>
-
-        <Box display={displayStyle}>
-          <Box flex={1} mr={mrStyle}>
-            <SelectInput
-              source="roles"
+            <TextInput
+              source="surname"
+              isRequired
               fullWidth
-              choices={[{ id: "user", name: "User" }]}
+              variant="outlined"
+            />
+          </Box>
+        </Box>
+
+        <Box display={displayStyle}>
+          <Box flex={1} mr={mrStyle}>
+            <TextInput source="email" isRequired fullWidth variant="outlined" />
+          </Box>
+          <Box flex={1} ml={mlStyle}>
+            <TextInput
+              source="password"
+              isRequired
+              fullWidth
+              variant="outlined"
+            />
+          </Box>
+        </Box>
+
+        <Box display={displayStyle}>
+          <Box flex={1} mr={mrStyle}>
+            <SelectArrayInput
+              label="Roles"
+              source="roles"
+              choices={[
+                { id: "user", name: "user" },
+                { id: "admin", name: "admin" }
+              ]}
+              variant="outlined"
+              sx={{ width: "100%" }}
             />
           </Box>
           <Box flex={1} ml={mlStyle}>
-            <TextInput source="active_study_area_id" isRequired fullWidth />
+            <SelectInput
+              source="active_study_area_id"
+              emptyText={"Please select a study area"}
+              isRequired
+              fullWidth
+              choices={
+                loading ? [{ name: "Loading study areas..." }] : studyAreas
+              }
+              variant="outlined"
+            />
           </Box>
         </Box>
 
@@ -127,6 +164,7 @@ export default function UsersCreate() {
                 { id: true, name: "Yes" },
                 { id: false, name: "No" }
               ]}
+              variant="outlined"
             />
           </Box>
           <Box flex={1} ml={mlStyle}>
@@ -138,16 +176,17 @@ export default function UsersCreate() {
               choices={
                 loading ? [{ name: "Loading organizations..." }] : organizations
               }
+              variant="outlined"
             />
           </Box>
         </Box>
 
         <Box display={displayStyle}>
           <Box flex={1} mr={mrStyle}>
-            <TextInput source="occupation" fullWidth />
+            <TextInput source="occupation" fullWidth variant="outlined" />
           </Box>
           <Box flex={1} ml={mlStyle}>
-            <TextInput source="domain" fullWidth />
+            <TextInput source="domain" fullWidth variant="outlined" />
           </Box>
         </Box>
 
@@ -161,16 +200,27 @@ export default function UsersCreate() {
                 { id: true, name: "Active" },
                 { id: false, name: "Not active" }
               ]}
+              variant="outlined"
             />
           </Box>
           <Box flex={1} ml={mlStyle}>
-            <TextInput source="storage" isRequired fullWidth />
+            <TextInput
+              source="storage"
+              isRequired
+              fullWidth
+              variant="outlined"
+            />
           </Box>
         </Box>
 
         <Box display={displayStyle}>
           <Box flex={1} mr={mrStyle}>
-            <TextInput source="limit_scenarios" isRequired fullWidth />
+            <TextInput
+              source="limit_scenarios"
+              isRequired
+              fullWidth
+              variant="outlined"
+            />
           </Box>
           <Box flex={1} ml={mlStyle}>
             <SelectInput
@@ -181,6 +231,7 @@ export default function UsersCreate() {
                 { id: "en", name: "en" },
                 { id: "de", name: "de" }
               ]}
+              variant="outlined"
             />
           </Box>
         </Box>

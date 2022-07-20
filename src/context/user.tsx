@@ -11,6 +11,7 @@ import { createSlice, type PayloadAction } from "@reduxjs/toolkit";
 import type {
   CreateUserCreditionals,
   RecoverPassCreditionals,
+  StudyAreas,
   User,
   UserCreditionals
 } from "@types";
@@ -21,7 +22,8 @@ import { pagination, search } from "@utils";
 
 /** Reducer */
 const initialState = {
-  user: {} as User
+  user: {} as User,
+  studyAreas: [] as StudyAreas[]
 };
 
 export const user = createSlice({
@@ -30,11 +32,17 @@ export const user = createSlice({
   reducers: {
     setUser: (state: typeof initialState, action: PayloadAction<User>) => {
       state.user = action.payload;
+    },
+    setStudyAreas: (
+      state: typeof initialState,
+      action: PayloadAction<StudyAreas[]>
+    ) => {
+      state.studyAreas = action.payload;
     }
   }
 });
 
-export const { setUser } = user.actions;
+export const { setUser, setStudyAreas } = user.actions;
 export default user.reducer;
 
 /** Actions  */
@@ -88,6 +96,18 @@ export function logout() {
 
     window.location.href = "/";
   };
+}
+
+export function getStudyAreas() {
+  return (dispatch: CallableFunction) =>
+    dispatch(
+      networkStateHandler(async () => {
+        const response = await Api.getStudyAreas();
+        if (response) {
+          dispatch(setStudyAreas(response));
+        }
+      })
+    );
 }
 
 export const UserProvider = {
