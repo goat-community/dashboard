@@ -36,9 +36,6 @@ export const validateForm = (v: Record<string, any>): Record<string, any> => {
   if (!v.storage) {
     errors.storage = "storage is required";
   }
-  if (!v.active_study_area_id) {
-    errors.active_study_area_id = "active study area id is required";
-  }
   if (!v.limit_scenarios) {
     errors.limit_scenarios = "limit scenarios is required";
   }
@@ -80,9 +77,9 @@ export default function UsersCreate() {
           surname: "",
           email: "",
           password: "",
-          roles: { id: "user", name: "user" },
-          organization_id: [],
-          active_study_area_id: [],
+          roles: null,
+          organization_id: null,
+          active_study_area_id: null,
           storage: 512000,
           limit_scenarios: 50,
           is_active: true,
@@ -131,10 +128,7 @@ export default function UsersCreate() {
             <SelectArrayInput
               label="Roles"
               source="roles"
-              choices={[
-                { id: "user", name: "user" },
-                { id: "admin", name: "admin" }
-              ]}
+              choices={[{ id: "user", name: "user" }]}
               variant="outlined"
               sx={{ width: "100%" }}
             />
