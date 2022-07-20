@@ -1,15 +1,9 @@
-import {
-  Create,
-  SimpleForm,
-  TextInput,
-  Toolbar,
-  SaveButton,
-  SelectInput,
-  useRedirect,
-  useNotify
-} from "react-admin";
+import { useEffect } from "react";
+import { Create, SimpleForm, TextInput, SelectInput } from "react-admin";
 import { Box, Typography } from "@mui/material";
-import { PButton } from "@common";
+import { getOrganizations } from "@context/organizations";
+import { useAppDispatch, useAppSelector } from "@hooks";
+import UserCreateToolbar from "./UserCreateToolbar";
 
 export const validateForm = (v: Record<string, any>): Record<string, any> => {
   const errors = {} as any;
@@ -44,34 +38,16 @@ export const validateForm = (v: Record<string, any>): Record<string, any> => {
   return errors;
 };
 
-const UserCreateToolbar = () => {
-  const redirect = useRedirect();
-  const notify = useNotify();
-  return (
-    <Toolbar sx={{ display: "flex", justifyContent: "space-between" }}>
-      <SaveButton
-        icon={<></>}
-        label="Create"
-        mutationOptions={{
-          onSuccess: () => {
-            notify("User created successfully", {
-              type: "success",
-              messageArgs: { smart_count: 1 }
-            });
-            redirect("..");
-          },
-          onError(error: any) {
-            notify(error?.response?.data?.detail, { type: "error" });
-          }
-        }}
-        type="button"
-      />
-      <PButton text="Cancel" onClick={() => redirect("..")} colors="error" />
-    </Toolbar>
-  );
-};
-
 export default function UsersCreate() {
+  const dispatch = useAppDispatch();
+  const loading = useAppSelector((state) => state.network.loading);
+  const organizations = useAppSelector((state) => state.organizations.organs);
+
+  // fetch organizations
+  useEffect(() => {
+    dispatch(getOrganizations());
+  }, []);
+
   const mlStyle = { xs: 0, sm: "0.5em" };
   const mrStyle = { xs: 0, sm: "0.5em" };
   const displayStyle = { xs: "block", sm: "flex", width: "100%" };
@@ -89,20 +65,19 @@ export default function UsersCreate() {
         warnWhenUnsavedChanges
         toolbar={<UserCreateToolbar />}
         defaultValues={{
-          name: "Sina",
-          surname: "Farhadi",
-          email: "sina@mail.com",
-          password: "password",
+          name: "",
+          surname: "",
+          email: "",
+          password: "",
           roles: ["user"],
-          organization_id: 4,
+          organization_id: null,
           active_study_area_id: 91620000,
-          active_data_upload_ids: [],
           storage: 512000,
           limit_scenarios: 50,
           is_active: true,
           newsletter: true,
           occupation: "",
-          domain: "test",
+          domain: "",
           language_preference: "de"
         }}
         validate={validateForm}
@@ -146,6 +121,7 @@ export default function UsersCreate() {
           <Box flex={1} mr={mrStyle}>
             <SelectInput
               source="newsletter"
+              emptyText={"Please select newsletter state"}
               fullWidth
               choices={[
                 { id: true, name: "Yes" },
@@ -154,7 +130,15 @@ export default function UsersCreate() {
             />
           </Box>
           <Box flex={1} ml={mlStyle}>
-            <TextInput source="organization_id" isRequired fullWidth />
+            <SelectInput
+              source="organization_id"
+              emptyText={"Please select an organization"}
+              isRequired
+              fullWidth
+              choices={
+                loading ? [{ name: "Loading organizations..." }] : organizations
+              }
+            />
           </Box>
         </Box>
 
@@ -171,6 +155,7 @@ export default function UsersCreate() {
           <Box flex={1} mr={mrStyle}>
             <SelectInput
               source="is_active"
+              emptyText={"Please select an active status"}
               fullWidth
               choices={[
                 { id: true, name: "Active" },
@@ -190,15 +175,13 @@ export default function UsersCreate() {
           <Box flex={1} ml={mlStyle}>
             <SelectInput
               source="language_preference"
+              emptyText={"Please select an language prefrense"}
               fullWidth
               choices={[
                 { id: "en", name: "en" },
                 { id: "de", name: "de" }
               ]}
             />
-          </Box>
-          <Box flex={1} ml={mlStyle}>
-            <TextInput source="active_data_upload_ids" fullWidth />
           </Box>
         </Box>
       </SimpleForm>

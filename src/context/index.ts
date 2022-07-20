@@ -2,12 +2,14 @@ import { configureStore } from "@reduxjs/toolkit";
 import userReducer from "./user";
 import networkReducer from "./network";
 import notifierReducer from "./notifier";
+import organizationReducer from "./organizations";
 
 export const store = configureStore({
   reducer: {
     user: userReducer,
     network: networkReducer,
-    notifier: notifierReducer
+    notifier: notifierReducer,
+    organizations: organizationReducer
   }
 });
 
