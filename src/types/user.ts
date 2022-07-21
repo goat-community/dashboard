@@ -17,3 +17,8 @@ export interface User {
   creation_date?: string;
   language_preference: string;
 }
+
+export interface StudyAreas {
+  id: number;
+  name: string;
+}
