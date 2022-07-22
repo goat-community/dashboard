@@ -20,6 +20,12 @@ export function Sidebar() {
             Users
           </li>
         </Link>
+        <Link to={"/layers"}>
+          <li>
+            <PeopleIcon />
+            Layers
+          </li>
+        </Link>
         <li className="logout" onClick={() => dispatch(logout())}>
           <LogoutIcon />
           Logout

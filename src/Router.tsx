@@ -2,7 +2,7 @@ import { Admin, Resource } from "react-admin";
 /** Pages */
 import LoginPage from "@pages/login/Login";
 /** Resources */
-import { UsersResource } from "@resources";
+import { UsersResource, LayersResource } from "@resources";
 /** Providers */
 import { dataProvider } from "@api";
 import { PLayout } from "@common";
@@ -20,6 +20,7 @@ export default function AppRouter() {
         dataProvider={dataProvider}
       >
         <Resource name="users" {...UsersResource} />
+        <Resource name="layers" {...LayersResource} />
       </Admin>
     );
   } else {
