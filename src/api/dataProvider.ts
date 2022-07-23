@@ -13,6 +13,7 @@ import type {
   UpdateResult
 } from "react-admin";
 import { UserProvider } from "@context/user";
+import { LayerProvider } from "@context/layers";
 import type { User } from "@types";
 
 export const dataProvider: DataProvider = {
@@ -20,6 +21,9 @@ export const dataProvider: DataProvider = {
     // Return promises based on the resource provided
     if (resource === "users") {
       return UserProvider.getUsersList(params);
+    }
+    if (resource === "layers") {
+      return LayerProvider.getLayersList(params);
     }
     return UserProvider.getUsersList(params);
   },
@@ -52,9 +56,8 @@ export const dataProvider: DataProvider = {
     return UserProvider.deleteUser(params);
   },
 
-  getMany: (resource): any => new Promise((resolve) => resolve(resource)),
-  getManyReference: (resource): any =>
-    new Promise((resolve) => resolve(resource)),
-  updateMany: (resource): any => new Promise((resolve) => resolve(resource)),
-  deleteMany: (resource): any => new Promise((resolve) => resolve(resource))
+  getMany: (resource): any => true,
+  getManyReference: (resource): any => true,
+  updateMany: (resource): any => true,
+  deleteMany: (resource): any => true
 };

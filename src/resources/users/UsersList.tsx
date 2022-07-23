@@ -24,7 +24,7 @@ const UsersPagination = () => (
   <Pagination rowsPerPageOptions={[10, 25, 50, 100]} defaultValue={10} />
 );
 
-export function UsersList() {
+export default function UsersList() {
   return (
     <List filters={usersFilters} pagination={<UsersPagination />}>
       <Datagrid
