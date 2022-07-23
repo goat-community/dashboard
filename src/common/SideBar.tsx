@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useLocation } from "react-router-dom";
 import { Link, useTranslate } from "react-admin";
 import PeopleIcon from "@mui/icons-material/People";
 import LogoutIcon from "@mui/icons-material/Logout";
@@ -10,6 +11,7 @@ import GoatLogo from "@assets/images/logo_green.webp";
 import { useAppDispatch } from "@hooks";
 
 export function Sidebar() {
+  let location = useLocation();
   const translate = useTranslate();
   const dispatch = useAppDispatch();
   const [collapsed, setCollapsed] = useState(false);
@@ -20,29 +22,32 @@ export function Sidebar() {
       <h5>{translate("ra.page.dashboard")}</h5>
       <ul className="sidebar-menu">
         <Link to={"/users"}>
-          <li>
+          <li className={location.pathname === "/users" ? "active" : ""}>
             <PeopleIcon />
             Users
           </li>
         </Link>
-        <li onClick={() => setCollapsed((prevState) => !prevState)}>
-          <LayersIcon />
-          Layers
-        </li>
-        {collapsed && (
-          <div className="collapsed-menu">
-            <Link to="layers">
+        <Link to="layers">
+          <li
+            onClick={() => setCollapsed((prevState) => !prevState)}
+            className={location.pathname === "/layers" ? "active" : ""}
+          >
+            <LayersIcon />
+            Layers
+          </li>
+          {collapsed && (
+            <div className="collapsed-menu">
               <li>
                 <ListIcon />
                 Styles
               </li>
-            </Link>
-            <li>
-              <FileUploadIcon />
-              Upload
-            </li>
-          </div>
-        )}
+              <li>
+                <FileUploadIcon />
+                Upload
+              </li>
+            </div>
+          )}
+        </Link>
         <li className="logout" onClick={() => dispatch(logout())}>
           <LogoutIcon />
           Logout
