@@ -75,7 +75,7 @@ export default function UsersEdit() {
         <CloseIcon />
       </IconButton>
 
-      <SimpleForm sx={{ width: 900 }}>
+      <SimpleForm sx={{ width: 900 }} validate={validateForm}>
         <Box display={displayStyle}>
           <Box flex={1} mr={mrStyle}>
             <TextInput source="name" isRequired fullWidth variant="outlined" />

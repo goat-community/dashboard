@@ -1,4 +1,4 @@
-import type { GetListParams, GetListResult } from "react-admin";
+import type { GetListParams, GetListResult, GetOneResult } from "react-admin";
 import { createSlice, type PayloadAction } from "@reduxjs/toolkit";
 import type { Layer } from "@types";
 import * as Api from "@api/layers";
@@ -43,10 +43,32 @@ export const LayerProvider = {
               q: params.filter.q
             });
           }
+          // we should replace all ids with the layer name to
+          // handle the case of data provider
+          layers!.forEach((layer) => {
+            layer.id = layer.name;
+          });
 
           resolve({
             data: filtered_data,
             total: layers?.length
+          });
+        })
+        .catch((e) => reject(e));
+    }),
+
+  /** Get a layer */
+  getLayer: (layer_name: string): Promise<GetOneResult> =>
+    new Promise((resolve, reject) => {
+      Api.getLayer(layer_name)!
+        .then((layer) => {
+          // we should replace the id with the layer name to
+          // handle the case of data provider
+          resolve({
+            data: {
+              ...layer,
+              id: layer.name
+            }
           });
         })
         .catch((e) => reject(e));

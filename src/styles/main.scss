@@ -8,7 +8,6 @@
 * {
   margin: 0;
   padding: 0;
-  font-family: "Nanum", sans-serif !important;
 }
 
 @mixin light-font {
@@ -43,6 +42,12 @@ h5 {
 h6 {
   @include light-font;
   font-size: 12px;
+}
+
+p,
+span,
+a {
+  @include light-font;
 }
 
 .error-text {

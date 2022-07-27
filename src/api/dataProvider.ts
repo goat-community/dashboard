@@ -32,6 +32,10 @@ export const dataProvider: DataProvider = {
     if (resource === "users") {
       return UserProvider.getUser(params.id);
     }
+    if (resource === "layers") {
+      console.log(params);
+      return LayerProvider.getLayer(params.id);
+    }
     return UserProvider.getUser(params.id);
   },
   create: (resource, params): Promise<CreateResult> => {

@@ -7,6 +7,7 @@ import {
   Pagination
 } from "react-admin";
 import { Stack } from "@mui/material";
+import { DatagridHeader } from "@common";
 
 const layersFilters = [
   <TextInput
@@ -25,8 +26,12 @@ const LayersPagination = () => (
 export default function LayersList() {
   return (
     <List filters={layersFilters} pagination={<LayersPagination />}>
-      <Datagrid optimized isRowSelectable={() => false} size="small">
-        <TextField source="id" sortable={false} />
+      <Datagrid
+        header={<DatagridHeader withoutIcons />}
+        optimized
+        isRowSelectable={() => false}
+        size="small"
+      >
         <TextField source="name" sortable={false} />
         <Stack spacing={1} direction="row">
           <EditButton />

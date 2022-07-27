@@ -3,7 +3,11 @@ import { TableHead, TableRow, TableCell } from "@mui/material";
 import PersonIcon from "@mui/icons-material/Person";
 import EmailIcon from "@mui/icons-material/Email";
 
-export function DatagridHeader(props: DatagridHeaderProps) {
+interface DatagridHeaderPropsCustom extends DatagridHeaderProps {
+  withoutIcons?: boolean;
+}
+
+export function DatagridHeader(props: DatagridHeaderPropsCustom) {
   const iconsList = {
     name: <PersonIcon />,
     surname: <PersonIcon />,
@@ -27,7 +31,7 @@ export function DatagridHeader(props: DatagridHeaderProps) {
               }}
             >
               {/* @ts-ignore */}
-              {iconsList[child.props.source]}
+              {!props.withoutIcons && iconsList[child.props.source]}
               {child.props.source || "Action"}
             </div>
           </TableCell>

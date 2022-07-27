@@ -13,5 +13,5 @@ export interface Layer {
   style_library_name: string;
   max_resolution: string;
   min_resolution: string;
-  id: number;
+  id: number | string;
 }
