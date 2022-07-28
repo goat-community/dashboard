@@ -85,9 +85,12 @@ export const LayerProvider = {
   updateLayer: (layer_name: string, data: LayerStyle): Promise<UpdateResult> =>
     new Promise((resolve, reject) => {
       Api.updateLayer(layer_name, data)!
-        .then(() => {
+        .then((layer) => {
           resolve({
-            data: true
+            data: {
+              ...layer,
+              id: layer.name
+            }
           });
         })
         .catch((e) => reject(e));
