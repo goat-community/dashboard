@@ -27,7 +27,7 @@ export default function LayersList() {
   return (
     <List filters={layersFilters} pagination={<LayersPagination />}>
       <Datagrid
-        header={<DatagridHeader withoutIcons />}
+        header={<DatagridHeader />}
         optimized
         isRowSelectable={() => false}
         size="small"

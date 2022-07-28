@@ -1,18 +1,7 @@
 import type { DatagridHeaderProps } from "react-admin";
 import { TableHead, TableRow, TableCell } from "@mui/material";
-import PersonIcon from "@mui/icons-material/Person";
-import EmailIcon from "@mui/icons-material/Email";
 
-interface DatagridHeaderPropsCustom extends DatagridHeaderProps {
-  withoutIcons?: boolean;
-}
-
-export function DatagridHeader(props: DatagridHeaderPropsCustom) {
-  const iconsList = {
-    name: <PersonIcon />,
-    surname: <PersonIcon />,
-    email: <EmailIcon />
-  };
+export function DatagridHeader(props: DatagridHeaderProps) {
   return (
     <TableHead>
       <TableRow>
@@ -31,7 +20,6 @@ export function DatagridHeader(props: DatagridHeaderPropsCustom) {
               }}
             >
               {/* @ts-ignore */}
-              {!props.withoutIcons && iconsList[child.props.source]}
               {child.props.source || "Action"}
             </div>
           </TableCell>
