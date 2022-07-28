@@ -70,6 +70,7 @@ export default function UsersEdit() {
         display: "flex",
         alignSelf: "center"
       }}
+      mutationMode="pessimistic"
     >
       <IconButton sx={{ margin: 1 }} onClick={() => redirect("..")}>
         <CloseIcon />

@@ -1,6 +1,13 @@
-import type { GetListParams, GetListResult, GetOneResult } from "react-admin";
+import type {
+  CreateResult,
+  DeleteResult,
+  GetListParams,
+  GetListResult,
+  GetOneResult,
+  UpdateResult
+} from "react-admin";
 import { createSlice, type PayloadAction } from "@reduxjs/toolkit";
-import type { Layer } from "@types";
+import type { Layer, LayerStyle } from "@types";
 import * as Api from "@api/layers";
 import { pagination, search } from "@utils";
 
@@ -69,6 +76,47 @@ export const LayerProvider = {
               ...layer,
               id: layer.name
             }
+          });
+        })
+        .catch((e) => reject(e));
+    }),
+
+  /** Update a layer */
+  updateLayer: (layer_name: string, data: LayerStyle): Promise<UpdateResult> =>
+    new Promise((resolve, reject) => {
+      Api.updateLayer(layer_name, data)!
+        .then(() => {
+          resolve({
+            data: true
+          });
+        })
+        .catch((e) => reject(e));
+    }),
+
+  /** Create a layer */
+  createLayer: (data: LayerStyle): Promise<CreateResult> =>
+    new Promise((resolve, reject) => {
+      Api.createLayer(data)!
+        .then((layer) => {
+          // we should replace the id with the layer name to
+          // handle the case of data provider
+          resolve({
+            data: {
+              ...layer,
+              id: layer.name
+            }
+          });
+        })
+        .catch((e) => reject(e));
+    }),
+
+  /** Delete a layer */
+  deleteLayer: (layer_name: string): Promise<DeleteResult> =>
+    new Promise((resolve, reject) => {
+      Api.deleteLayer(layer_name)!
+        .then((layer) => {
+          resolve({
+            data: layer
           });
         })
         .catch((e) => reject(e));

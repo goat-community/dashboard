@@ -15,3 +15,10 @@ export interface Layer {
   min_resolution: string;
   id: number | string;
 }
+
+export interface LayerStyle {
+  id?: number;
+  name: string;
+  style: object;
+  translation: object;
+}

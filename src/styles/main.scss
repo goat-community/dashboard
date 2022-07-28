@@ -1,13 +1,9 @@
 @import "./variables.scss";
 
-@font-face {
-  font-family: "Nanum";
-  src: url("@assets /fonts/NanumGothic-Regular.ttf") format("ttf");
-}
-
 * {
   margin: 0;
   padding: 0;
+  font-family: "Nanum", monospace;
 }
 
 @mixin light-font {

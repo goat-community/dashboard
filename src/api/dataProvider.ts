@@ -14,7 +14,7 @@ import type {
 } from "react-admin";
 import { UserProvider } from "@context/user";
 import { LayerProvider } from "@context/layers";
-import type { User } from "@types";
+import type { LayerStyle, User } from "@types";
 
 export const dataProvider: DataProvider = {
   getList: (resource, params): Promise<GetListResult> => {
@@ -33,7 +33,6 @@ export const dataProvider: DataProvider = {
       return UserProvider.getUser(params.id);
     }
     if (resource === "layers") {
-      console.log(params);
       return LayerProvider.getLayer(params.id);
     }
     return UserProvider.getUser(params.id);
@@ -43,6 +42,9 @@ export const dataProvider: DataProvider = {
     if (resource === "users") {
       return UserProvider.createUser(params.data);
     }
+    if (resource === "layers") {
+      return LayerProvider.createLayer(params.data as LayerStyle);
+    }
     return UserProvider.createUser(params.data);
   },
   update: (resource, params): Promise<UpdateResult> => {
@@ -50,12 +52,21 @@ export const dataProvider: DataProvider = {
     if (resource === "users") {
       return UserProvider.updateUser(params.id as number, params.data as User);
     }
+    if (resource === "layers") {
+      return LayerProvider.updateLayer(
+        params.id as string,
+        params.data as LayerStyle
+      );
+    }
     return UserProvider.updateUser(params.id as number, params.data as User);
   },
   delete: (resource, params): Promise<DeleteResult> => {
     // Return promises based on the resource provided
     if (resource === "users") {
       return UserProvider.deleteUser(params);
+    }
+    if (resource === "layers") {
+      return LayerProvider.deleteLayer(params.id as string);
     }
     return UserProvider.deleteUser(params);
   },
