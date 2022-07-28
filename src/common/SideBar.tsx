@@ -22,7 +22,7 @@ export function Sidebar() {
       <h5>{translate("ra.page.dashboard")}</h5>
       <ul className="sidebar-menu">
         <Link to={"/users"}>
-          <li className={location.pathname === "/users" ? "active" : ""}>
+          <li className={location.pathname.includes("/users") ? "active" : ""}>
             <PeopleIcon />
             Users
           </li>
@@ -30,7 +30,7 @@ export function Sidebar() {
         <Link to="layers">
           <li
             onClick={() => setCollapsed((prevState) => !prevState)}
-            className={location.pathname === "/layers" ? "active" : ""}
+            className={location.pathname.includes("/layers") ? "active" : ""}
           >
             <LayersIcon />
             Layers

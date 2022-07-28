@@ -70,12 +70,13 @@ export default function UsersEdit() {
         display: "flex",
         alignSelf: "center"
       }}
+      mutationMode="pessimistic"
     >
       <IconButton sx={{ margin: 1 }} onClick={() => redirect("..")}>
         <CloseIcon />
       </IconButton>
 
-      <SimpleForm sx={{ width: 900 }}>
+      <SimpleForm sx={{ width: 900 }} validate={validateForm}>
         <Box display={displayStyle}>
           <Box flex={1} mr={mrStyle}>
             <TextInput source="name" isRequired fullWidth variant="outlined" />

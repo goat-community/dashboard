@@ -8,7 +8,7 @@ import {
 } from "react-admin";
 import { Stack } from "@mui/material";
 import { DeleteButton } from "./DeleteButton";
-import { DatagridHeader } from "./DatagridHeader";
+import { DatagridHeader } from "@common";
 
 const usersFilters = [
   <TextInput
