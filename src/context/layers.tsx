@@ -6,40 +6,21 @@ import type {
   GetOneResult,
   UpdateResult
 } from "react-admin";
-import { createSlice, type PayloadAction } from "@reduxjs/toolkit";
-import type { Layer, LayerStyle } from "@types";
+import type { LayerStyle } from "@types";
 import * as Api from "@api/layers";
 import { pagination, search } from "@utils";
-
-/** Reducer */
-const initialState = {
-  layers: [] as Layer[]
-};
-
-export const layer = createSlice({
-  name: "layer",
-  initialState,
-  reducers: {
-    setLayers: (state: typeof initialState, action: PayloadAction<Layer[]>) => {
-      state.layers = action.payload;
-    }
-  }
-});
-
-export const { setLayers } = layer.actions;
-export default layer.reducer;
 
 /** Actions  */
 export const LayerProvider = {
   /** Get Layers List */
-  getLayersList: (params: GetListParams): Promise<GetListResult> =>
+  getLayersStyleList: (params: GetListParams): Promise<GetListResult> =>
     new Promise((resolve, reject) => {
-      Api.getLayers()!
-        .then((layers) => {
+      Api.getLayersStyle()!
+        .then((layersStyle) => {
           let filtered_data;
           // handle pagination
           filtered_data = pagination({
-            data: [...layers],
+            data: [...layersStyle],
             page: params.pagination.page,
             perPage: params.pagination.perPage
           });
@@ -52,29 +33,29 @@ export const LayerProvider = {
           }
           // we should replace all ids with the layer name to
           // handle the case of data provider
-          layers!.forEach((layer) => {
+          layersStyle!.forEach((layer) => {
             layer.id = layer.name;
           });
 
           resolve({
             data: filtered_data,
-            total: layers?.length
+            total: layersStyle?.length
           });
         })
         .catch((e) => reject(e));
     }),
 
   /** Get a layer */
-  getLayer: (layer_name: string): Promise<GetOneResult> =>
+  getLayerStyle: (layer_name: string): Promise<GetOneResult> =>
     new Promise((resolve, reject) => {
-      Api.getLayer(layer_name)!
-        .then((layer) => {
+      Api.getLayerStyle(layer_name)!
+        .then((layerStyle) => {
           // we should replace the id with the layer name to
           // handle the case of data provider
           resolve({
             data: {
-              ...layer,
-              id: layer.name
+              ...layerStyle,
+              id: layerStyle.name
             }
           });
         })
@@ -82,14 +63,17 @@ export const LayerProvider = {
     }),
 
   /** Update a layer */
-  updateLayer: (layer_name: string, data: LayerStyle): Promise<UpdateResult> =>
+  updateLayerStyle: (
+    layer_name: string,
+    data: LayerStyle
+  ): Promise<UpdateResult> =>
     new Promise((resolve, reject) => {
-      Api.updateLayer(layer_name, data)!
-        .then((layer) => {
+      Api.updateLayerStyle(layer_name, data)!
+        .then((layerStyle) => {
           resolve({
             data: {
-              ...layer,
-              id: layer.name
+              ...layerStyle,
+              id: layerStyle.name
             }
           });
         })
@@ -97,16 +81,16 @@ export const LayerProvider = {
     }),
 
   /** Create a layer */
-  createLayer: (data: LayerStyle): Promise<CreateResult> =>
+  createLayerStyle: (data: LayerStyle): Promise<CreateResult> =>
     new Promise((resolve, reject) => {
-      Api.createLayer(data)!
-        .then((layer) => {
+      Api.createLayerStyle(data)!
+        .then((layerStyle) => {
           // we should replace the id with the layer name to
           // handle the case of data provider
           resolve({
             data: {
-              ...layer,
-              id: layer.name
+              ...layerStyle,
+              id: layerStyle.name
             }
           });
         })
@@ -114,12 +98,12 @@ export const LayerProvider = {
     }),
 
   /** Delete a layer */
-  deleteLayer: (layer_name: string): Promise<DeleteResult> =>
+  deleteLayerStyle: (layer_name: string): Promise<DeleteResult> =>
     new Promise((resolve, reject) => {
-      Api.deleteLayer(layer_name)!
-        .then((layer) => {
+      Api.deleteLayerStyle(layer_name)!
+        .then((layerStyle) => {
           resolve({
-            data: layer
+            data: layerStyle
           });
         })
         .catch((e) => reject(e));

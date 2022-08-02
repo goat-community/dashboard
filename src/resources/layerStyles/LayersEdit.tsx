@@ -109,7 +109,13 @@ export default function LayersEdit() {
       >
         <Box display={displayStyle}>
           <Box flex={1}>
-            <TextInput source="name" isRequired fullWidth variant="outlined" />
+            <TextInput
+              source="name"
+              isRequired
+              fullWidth
+              variant="outlined"
+              disabled
+            />
           </Box>
         </Box>
         <Box>

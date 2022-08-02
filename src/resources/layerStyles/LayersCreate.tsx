@@ -35,7 +35,7 @@ const CustomToolbar = (props: any) => {
 };
 
 export default function LayersCreate() {
-  const { save, saving } = useCreateController({ resource: "layers" });
+  const { save, saving } = useCreateController({ resource: "styles" });
   const [translation, setTranslation] = useState<string>();
   const [styles, setStyles] = useState<string>();
   const displayStyle = { xs: "block", sm: "flex", width: "100%" };

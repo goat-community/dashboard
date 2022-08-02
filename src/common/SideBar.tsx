@@ -1,4 +1,3 @@
-import { useState } from "react";
 import { useLocation } from "react-router-dom";
 import { Link, useTranslate } from "react-admin";
 import PeopleIcon from "@mui/icons-material/People";
@@ -14,7 +13,6 @@ export function Sidebar() {
   let location = useLocation();
   const translate = useTranslate();
   const dispatch = useAppDispatch();
-  const [collapsed, setCollapsed] = useState(false);
 
   return (
     <aside className="sidebar-container">
@@ -27,21 +25,14 @@ export function Sidebar() {
             Users
           </li>
         </Link>
-        <Link to="layers">
-          <li
-            onClick={() => setCollapsed((prevState) => !prevState)}
-            className={location.pathname.includes("/layers") ? "active" : ""}
-          >
+        <Link to="styles">
+          <li className={location.pathname.includes("/styles") ? "active" : ""}>
             <LibraryBooksIcon />
             Layer Library
           </li>
-          {collapsed && (
+          {location.pathname.includes("/styles") && (
             <div className="collapsed-menu">
-              <li
-                className={
-                  location.pathname.includes("/layers") ? "active" : ""
-                }
-              >
+              <li>
                 <LayersIcon />
                 Layers
               </li>

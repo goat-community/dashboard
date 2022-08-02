@@ -2,7 +2,7 @@ import { Admin, Resource, defaultTheme } from "react-admin";
 /** Pages */
 import LoginPage from "@pages/login/Login";
 /** Resources */
-import { UsersResource, LayersResource } from "@resources";
+import { UsersResource, LayerStylesResource } from "@resources";
 /** Providers */
 import { theme } from "@styles/theme";
 import { dataProvider } from "@api";
@@ -22,7 +22,7 @@ export default function AppRouter() {
         theme={theme}
       >
         <Resource name="users" {...UsersResource} />
-        <Resource name="layers" {...LayersResource} />
+        <Resource name="styles" {...LayerStylesResource} />
       </Admin>
     );
   } else {

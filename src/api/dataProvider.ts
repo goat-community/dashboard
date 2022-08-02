@@ -22,8 +22,8 @@ export const dataProvider: DataProvider = {
     if (resource === "users") {
       return UserProvider.getUsersList(params);
     }
-    if (resource === "layers") {
-      return LayerProvider.getLayersList(params);
+    if (resource === "styles") {
+      return LayerProvider.getLayersStyleList(params);
     }
     return UserProvider.getUsersList(params);
   },
@@ -32,8 +32,8 @@ export const dataProvider: DataProvider = {
     if (resource === "users") {
       return UserProvider.getUser(params.id);
     }
-    if (resource === "layers") {
-      return LayerProvider.getLayer(params.id);
+    if (resource === "styles") {
+      return LayerProvider.getLayerStyle(params.id);
     }
     return UserProvider.getUser(params.id);
   },
@@ -42,8 +42,8 @@ export const dataProvider: DataProvider = {
     if (resource === "users") {
       return UserProvider.createUser(params.data);
     }
-    if (resource === "layers") {
-      return LayerProvider.createLayer(params.data as LayerStyle);
+    if (resource === "styles") {
+      return LayerProvider.createLayerStyle(params.data as LayerStyle);
     }
     return UserProvider.createUser(params.data);
   },
@@ -52,8 +52,8 @@ export const dataProvider: DataProvider = {
     if (resource === "users") {
       return UserProvider.updateUser(params.id as number, params.data as User);
     }
-    if (resource === "layers") {
-      return LayerProvider.updateLayer(
+    if (resource === "styles") {
+      return LayerProvider.updateLayerStyle(
         params.id as string,
         params.data as LayerStyle
       );
@@ -65,8 +65,8 @@ export const dataProvider: DataProvider = {
     if (resource === "users") {
       return UserProvider.deleteUser(params);
     }
-    if (resource === "layers") {
-      return LayerProvider.deleteLayer(params.id as string);
+    if (resource === "styles") {
+      return LayerProvider.deleteLayerStyle(params.id as string);
     }
     return UserProvider.deleteUser(params);
   },
