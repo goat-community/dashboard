@@ -1,5 +1,5 @@
 import { useLocation } from "react-router-dom";
-import { Link, useTranslate } from "react-admin";
+import { Link, useResourceContext, useTranslate } from "react-admin";
 import PeopleIcon from "@mui/icons-material/People";
 import LogoutIcon from "@mui/icons-material/Logout";
 import LayersIcon from "@mui/icons-material/Layers";
@@ -25,17 +25,26 @@ export function Sidebar() {
             Users
           </li>
         </Link>
-        <Link to="styles">
-          <li className={location.pathname.includes("/styles") ? "active" : ""}>
+        <Link to="layers">
+          <li>
             <LibraryBooksIcon />
             Layer Library
           </li>
-          {location.pathname.includes("/styles") && (
-            <div className="collapsed-menu">
-              <li>
+        </Link>
+        {(location.pathname.includes("/layers") ||
+          location.pathname.includes("/styles")) && (
+          <div className="collapsed-menu">
+            <Link to="layers">
+              <li
+                className={
+                  location.pathname.includes("/layers") ? "active" : ""
+                }
+              >
                 <LayersIcon />
                 Layers
               </li>
+            </Link>
+            <Link to="styles">
               <li
                 className={
                   location.pathname.includes("/styles") ? "active" : ""
@@ -44,9 +53,9 @@ export function Sidebar() {
                 <ListIcon />
                 Styles
               </li>
-            </div>
-          )}
-        </Link>
+            </Link>
+          </div>
+        )}
         <li className="logout" onClick={() => dispatch(logout())}>
           <LogoutIcon />
           Logout

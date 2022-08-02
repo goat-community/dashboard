@@ -17,7 +17,7 @@ export interface Layer {
 }
 
 export interface LayerStyle {
-  id?: number;
+  id?: number | string;
   name: string;
   style: object;
   translation: object;

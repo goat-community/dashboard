@@ -1,8 +1,8 @@
-import { Admin, Resource, defaultTheme } from "react-admin";
+import { Admin, Resource } from "react-admin";
 /** Pages */
 import LoginPage from "@pages/login/Login";
 /** Resources */
-import { UsersResource, LayerStylesResource } from "@resources";
+import { UsersResource, LayerStylesResource, LayersResource } from "@resources";
 /** Providers */
 import { theme } from "@styles/theme";
 import { dataProvider } from "@api";
@@ -23,6 +23,7 @@ export default function AppRouter() {
       >
         <Resource name="users" {...UsersResource} />
         <Resource name="styles" {...LayerStylesResource} />
+        <Resource name="layers" {...LayersResource} />
       </Admin>
     );
   } else {

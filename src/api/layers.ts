@@ -2,7 +2,7 @@ import type { AxiosError } from "axios";
 import type { RequestResult, Layer, LayerStyle } from "@types";
 import { instance } from "@utils";
 
-export function getLayersStyle(): RequestResult<Layer[]> {
+export function getLayersStyle(): RequestResult<LayerStyle[]> {
   return instance
     .get(`/config/layers/library/styles`)
     .then((response) => response.data)
@@ -11,7 +11,7 @@ export function getLayersStyle(): RequestResult<Layer[]> {
     });
 }
 
-export function getLayerStyle(layer_name: string): RequestResult<Layer> {
+export function getLayerStyle(layer_name: string): RequestResult<LayerStyle> {
   return instance
     .get(`/config/layers/library/styles/${layer_name}`)
     .then((response) => response.data)
@@ -48,6 +48,15 @@ export function deleteLayerStyle(
 ): RequestResult<LayerStyle> {
   return instance
     .delete(`/config/layers/library/styles/${layer_name}`)
+    .then((response) => response.data)
+    .catch((err: AxiosError) => {
+      throw err;
+    });
+}
+
+export function getLayers(): RequestResult<Layer[]> {
+  return instance
+    .get(`/config/layers/library`)
     .then((response) => response.data)
     .catch((err: AxiosError) => {
       throw err;
