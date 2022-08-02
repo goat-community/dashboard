@@ -200,6 +200,25 @@ a {
 
   .collapsed-menu {
     margin-left: 20px;
+
+    & li {
+      border-radius: 8px;
+      height: 40px;
+      margin: 5px 10px 0;
+      border: 3px solid transparent;
+
+      &.active {
+        background-color: transparent;
+        border: 3px solid $primary-1;
+        color: white;
+      }
+
+      &:hover {
+        background-color: transparent;
+        border: 3px solid $primary-1;
+        color: white;
+      }
+    }
   }
 }
 

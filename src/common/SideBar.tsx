@@ -5,7 +5,7 @@ import PeopleIcon from "@mui/icons-material/People";
 import LogoutIcon from "@mui/icons-material/Logout";
 import LayersIcon from "@mui/icons-material/Layers";
 import ListIcon from "@mui/icons-material/List";
-import FileUploadIcon from "@mui/icons-material/FileUpload";
+import LibraryBooksIcon from "@mui/icons-material/LibraryBooks";
 import { logout } from "@context/user";
 import GoatLogo from "@assets/images/logo_green.webp";
 import { useAppDispatch } from "@hooks";
@@ -32,18 +32,26 @@ export function Sidebar() {
             onClick={() => setCollapsed((prevState) => !prevState)}
             className={location.pathname.includes("/layers") ? "active" : ""}
           >
-            <LayersIcon />
-            Layers
+            <LibraryBooksIcon />
+            Layer Library
           </li>
           {collapsed && (
             <div className="collapsed-menu">
-              <li>
+              <li
+                className={
+                  location.pathname.includes("/layers") ? "active" : ""
+                }
+              >
+                <LayersIcon />
+                Layers
+              </li>
+              <li
+                className={
+                  location.pathname.includes("/styles") ? "active" : ""
+                }
+              >
                 <ListIcon />
                 Styles
-              </li>
-              <li>
-                <FileUploadIcon />
-                Upload
               </li>
             </div>
           )}
