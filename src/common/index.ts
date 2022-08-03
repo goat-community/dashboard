@@ -5,3 +5,5 @@ export * from "./LocalChanger";
 export * from "./Notifier";
 export * from "./Layout";
 export * from "./ErrorBoundary";
+export * from "./DataGridHeader";
+export * from "./JSONEditor";

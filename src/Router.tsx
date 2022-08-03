@@ -2,8 +2,9 @@ import { Admin, Resource } from "react-admin";
 /** Pages */
 import LoginPage from "@pages/login/Login";
 /** Resources */
-import { UsersResource } from "@resources";
+import { UsersResource, LayerStylesResource, LayersResource } from "@resources";
 /** Providers */
+import { theme } from "@styles/theme";
 import { dataProvider } from "@api";
 import { PLayout } from "@common";
 import { useAuth } from "@hooks/auth";
@@ -18,8 +19,11 @@ export default function AppRouter() {
         i18nProvider={i18nProvider}
         layout={PLayout}
         dataProvider={dataProvider}
+        theme={theme}
       >
         <Resource name="users" {...UsersResource} />
+        <Resource name="styles" {...LayerStylesResource} />
+        <Resource name="layers" {...LayersResource} />
       </Admin>
     );
   } else {

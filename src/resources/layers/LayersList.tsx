@@ -7,10 +7,9 @@ import {
   Pagination
 } from "react-admin";
 import { Stack } from "@mui/material";
-import { DeleteButton } from "./DeleteButton";
 import { DatagridHeader } from "@common";
 
-const usersFilters = [
+const layersFilters = [
   <TextInput
     label="Search"
     variant="outlined"
@@ -20,25 +19,22 @@ const usersFilters = [
   />
 ];
 
-const UsersPagination = () => (
+const LayersPagination = () => (
   <Pagination rowsPerPageOptions={[10, 25, 50, 100]} defaultValue={10} />
 );
 
-export default function UsersList() {
+export default function LayersList() {
   return (
-    <List filters={usersFilters} pagination={<UsersPagination />}>
+    <List filters={layersFilters} pagination={<LayersPagination />}>
       <Datagrid
+        header={<DatagridHeader />}
         optimized
         isRowSelectable={() => false}
-        header={<DatagridHeader />}
         size="small"
       >
         <TextField source="name" sortable={false} />
-        <TextField source="surname" sortable={false} />
-        <TextField source="email" sortable={false} />
         <Stack spacing={1} direction="row">
           <EditButton />
-          <DeleteButton />
         </Stack>
       </Datagrid>
     </List>

@@ -13,13 +13,21 @@ import type {
   UpdateResult
 } from "react-admin";
 import { UserProvider } from "@context/user";
-import type { User } from "@types";
+import { LayerStylesProvider } from "@context/layerStyles";
+import { LayerProvider } from "@context/layers";
+import type { LayerStyle, User } from "@types";
 
 export const dataProvider: DataProvider = {
   getList: (resource, params): Promise<GetListResult> => {
     // Return promises based on the resource provided
     if (resource === "users") {
       return UserProvider.getUsersList(params);
+    }
+    if (resource === "styles") {
+      return LayerStylesProvider.getLayersStyleList(params);
+    }
+    if (resource === "layers") {
+      return LayerProvider.getLayersList(params);
     }
     return UserProvider.getUsersList(params);
   },
@@ -28,12 +36,21 @@ export const dataProvider: DataProvider = {
     if (resource === "users") {
       return UserProvider.getUser(params.id);
     }
+    if (resource === "styles") {
+      return LayerStylesProvider.getLayerStyle(params.id);
+    }
+    if (resource === "layers") {
+      return LayerProvider.getLayer(params.id);
+    }
     return UserProvider.getUser(params.id);
   },
   create: (resource, params): Promise<CreateResult> => {
     // Return promises based on the resource provided
     if (resource === "users") {
       return UserProvider.createUser(params.data);
+    }
+    if (resource === "styles") {
+      return LayerStylesProvider.createLayerStyle(params.data as LayerStyle);
     }
     return UserProvider.createUser(params.data);
   },
@@ -42,6 +59,12 @@ export const dataProvider: DataProvider = {
     if (resource === "users") {
       return UserProvider.updateUser(params.id as number, params.data as User);
     }
+    if (resource === "styles") {
+      return LayerStylesProvider.updateLayerStyle(
+        params.id as string,
+        params.data as LayerStyle
+      );
+    }
     return UserProvider.updateUser(params.id as number, params.data as User);
   },
   delete: (resource, params): Promise<DeleteResult> => {
@@ -49,12 +72,14 @@ export const dataProvider: DataProvider = {
     if (resource === "users") {
       return UserProvider.deleteUser(params);
     }
+    if (resource === "styles") {
+      return LayerStylesProvider.deleteLayerStyle(params.id as string);
+    }
     return UserProvider.deleteUser(params);
   },
 
-  getMany: (resource): any => new Promise((resolve) => resolve(resource)),
-  getManyReference: (resource): any =>
-    new Promise((resolve) => resolve(resource)),
-  updateMany: (resource): any => new Promise((resolve) => resolve(resource)),
-  deleteMany: (resource): any => new Promise((resolve) => resolve(resource))
+  getMany: (resource): any => true,
+  getManyReference: (resource): any => true,
+  updateMany: (resource): any => true,
+  deleteMany: (resource): any => true
 };

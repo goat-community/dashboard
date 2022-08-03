@@ -32,7 +32,7 @@ const Content = styled("div")(({ theme }) => ({
   flexGrow: 2,
   marginTop: 0,
   padding: "0 20px 20px 20px",
-  marginLeft: 240
+  marginLeft: 270
 }));
 
 export function PLayout(props: LayoutProps) {

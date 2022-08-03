@@ -1,14 +1,8 @@
 @import "./variables.scss";
 
-@font-face {
-  font-family: "Nanum";
-  src: url("@assets /fonts/NanumGothic-Regular.ttf") format("ttf");
-}
-
 * {
   margin: 0;
   padding: 0;
-  font-family: "Nanum", sans-serif !important;
 }
 
 @mixin light-font {
@@ -43,6 +37,16 @@ h5 {
 h6 {
   @include light-font;
   font-size: 12px;
+}
+
+p,
+span,
+a,
+li,
+ul,
+ol {
+  @include light-font;
+  font-family: monospace;
 }
 
 .error-text {
@@ -141,15 +145,18 @@ h6 {
 .sidebar-container {
   width: $sidebar-width;
   position: fixed;
-  top: 0;
-  left: 0;
-  height: 100vh;
-  padding: 20px 0;
+  top: 10px;
+  left: 10px;
+  bottom: 10px;
+  border-radius: 40px;
+  padding: 40px 0px;
   display: flex;
   flex-direction: column;
   align-items: center;
   background-color: $primary-2;
-  color: white;
+  color: $primary-3;
+  box-shadow: 0px 10px 15px -3px rgba(0, 0, 0, 0.1),
+    3px 0px 7px -12px rgba(0, 0, 0, 0.1);
 
   & h5 {
     color: $primary-3;
@@ -173,19 +180,19 @@ h6 {
       cursor: pointer;
 
       &.active {
-        background-color: $primary-3;
+        background-color: $primary-1;
         color: white;
       }
 
       &:hover {
-        background-color: $primary-3;
+        background-color: $primary-1;
         color: white;
       }
 
       &.logout {
         position: absolute;
         width: $sidebar-width - 25px;
-        bottom: 50px;
+        bottom: 35px;
         &:hover {
           background-color: $error;
           color: white;
@@ -193,4 +200,66 @@ h6 {
       }
     }
   }
+
+  .collapsed-menu {
+    margin-left: 20px;
+
+    & li {
+      border-radius: 8px;
+      height: 40px;
+      margin: 5px 10px 0;
+      border: 3px solid transparent;
+
+      &.active {
+        background-color: transparent;
+        border: 3px solid $primary-1;
+        color: white;
+      }
+
+      &:hover {
+        background-color: transparent;
+        border: 3px solid $primary-1;
+        color: white;
+      }
+    }
+  }
+}
+
+// Theme overrides
+.css-t6skwj {
+  background-color: #f5f5f5 !important;
+}
+
+.RaDatagrid-tableWrapper {
+  box-shadow: none !important;
+}
+
+table {
+  thead {
+    th {
+      background-color: $primary-2;
+      color: white !important;
+      &:first-child {
+        border-radius: 15px 0px 0px 15px !important;
+      }
+      &:last-child {
+        border-radius: 0px 15px 15px 0px !important;
+      }
+    }
+  }
+
+  td {
+    border-top: 2px solid #f5f5f5 !important;
+    border-bottom: 2px solid #f5f5f5 !important;
+    text-align: left;
+    height: 50px;
+  }
+}
+
+// Prevent the Ace editor overrides styles
+#editor * {
+  font-family: monospace !important;
+  font-size: 16px !important;
+  direction: ltr !important;
+  text-align: left !important;
 }
