@@ -3,7 +3,6 @@
 * {
   margin: 0;
   padding: 0;
-  font-family: "Nanum", monospace;
 }
 
 @mixin light-font {
@@ -42,8 +41,12 @@ h6 {
 
 p,
 span,
-a {
+a,
+li,
+ul,
+ol {
   @include light-font;
+  font-family: monospace;
 }
 
 .error-text {
@@ -200,6 +203,25 @@ a {
 
   .collapsed-menu {
     margin-left: 20px;
+
+    & li {
+      border-radius: 8px;
+      height: 40px;
+      margin: 5px 10px 0;
+      border: 3px solid transparent;
+
+      &.active {
+        background-color: transparent;
+        border: 3px solid $primary-1;
+        color: white;
+      }
+
+      &:hover {
+        background-color: transparent;
+        border: 3px solid $primary-1;
+        color: white;
+      }
+    }
   }
 }
 
@@ -232,4 +254,12 @@ table {
     text-align: left;
     height: 50px;
   }
+}
+
+// Prevent the Ace editor overrides styles
+#editor * {
+  font-family: monospace !important;
+  font-size: 16px !important;
+  direction: ltr !important;
+  text-align: left !important;
 }

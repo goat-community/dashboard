@@ -1,7 +1,7 @@
 export interface Layer {
   name: string;
   url: string;
-  legend_urls: [string];
+  legend_urls: string[];
   special_attribute: {};
   access_token: string;
   type: string;
@@ -17,7 +17,7 @@ export interface Layer {
 }
 
 export interface LayerStyle {
-  id?: number;
+  id?: number | string;
   name: string;
   style: object;
   translation: object;
