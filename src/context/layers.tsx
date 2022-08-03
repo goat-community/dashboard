@@ -1,6 +1,12 @@
-import type { GetListParams, GetListResult, GetOneResult } from "react-admin";
+import type {
+  GetListParams,
+  GetListResult,
+  GetOneResult,
+  UpdateResult
+} from "react-admin";
 import * as Api from "@api/layers";
 import { pagination, search } from "@utils";
+import { Layer } from "@types";
 
 /** Actions  */
 export const LayerProvider = {
@@ -48,6 +54,21 @@ export const LayerProvider = {
             data: {
               ...layer,
               id: layer.name
+            }
+          });
+        })
+        .catch((e) => reject(e));
+    }),
+
+  /** Update a layer */
+  updateLayer: (layer_id: number, data: Layer): Promise<UpdateResult> =>
+    new Promise((resolve, reject) => {
+      Api.updateLayer(layer_id, data)!
+        .then((layerStyle) => {
+          resolve({
+            data: {
+              ...layerStyle,
+              id: layerStyle.name
             }
           });
         })

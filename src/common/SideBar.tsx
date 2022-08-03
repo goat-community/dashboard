@@ -1,8 +1,9 @@
 import { useLocation } from "react-router-dom";
-import { Link, useResourceContext, useTranslate } from "react-admin";
+import { Link, useTranslate } from "react-admin";
 import PeopleIcon from "@mui/icons-material/People";
 import LogoutIcon from "@mui/icons-material/Logout";
 import LayersIcon from "@mui/icons-material/Layers";
+import UploadIcon from "@mui/icons-material/Upload";
 import ListIcon from "@mui/icons-material/List";
 import LibraryBooksIcon from "@mui/icons-material/LibraryBooks";
 import { logout } from "@context/user";
@@ -32,7 +33,8 @@ export function Sidebar() {
           </li>
         </Link>
         {(location.pathname.includes("/layers") ||
-          location.pathname.includes("/styles")) && (
+          location.pathname.includes("/styles") ||
+          location.pathname.includes("/upload")) && (
           <div className="collapsed-menu">
             <Link to="layers">
               <li
@@ -52,6 +54,16 @@ export function Sidebar() {
               >
                 <ListIcon />
                 Styles
+              </li>
+            </Link>
+            <Link to="upload">
+              <li
+                className={
+                  location.pathname.includes("/upload") ? "active" : ""
+                }
+              >
+                <UploadIcon />
+                Upload Data
               </li>
             </Link>
           </div>

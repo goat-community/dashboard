@@ -72,3 +72,16 @@ export function getLayer(layer_name: string): RequestResult<Layer> {
       throw err;
     });
 }
+
+export function updateLayer(
+  layer_id: number,
+  data: Layer
+): RequestResult<Layer> {
+  delete data.id;
+  return instance
+    .put(`/config/layers/library/${layer_id}`, data)
+    .then((response) => response.data)
+    .catch((err: AxiosError) => {
+      throw err;
+    });
+}

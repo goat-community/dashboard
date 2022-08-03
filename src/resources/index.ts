@@ -1,2 +1,2 @@
 export * from "./users";
-export * from "./layerLibrary";
+export * as LayerLibraryResources from "./layerLibrary";
