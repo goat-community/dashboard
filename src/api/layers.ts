@@ -62,3 +62,13 @@ export function getLayers(): RequestResult<Layer[]> {
       throw err;
     });
 }
+
+// single layer
+export function getLayer(layer_name: string): RequestResult<Layer> {
+  return instance
+    .get(`/config/layers/library/${layer_name}`)
+    .then((response) => response.data)
+    .catch((err: AxiosError) => {
+      throw err;
+    });
+}

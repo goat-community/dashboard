@@ -39,6 +39,9 @@ export const dataProvider: DataProvider = {
     if (resource === "styles") {
       return LayerStylesProvider.getLayerStyle(params.id);
     }
+    if (resource === "layers") {
+      return LayerProvider.getLayer(params.id);
+    }
     return UserProvider.getUser(params.id);
   },
   create: (resource, params): Promise<CreateResult> => {

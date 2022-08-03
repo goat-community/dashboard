@@ -1,4 +1,4 @@
-import type { GetListParams, GetListResult } from "react-admin";
+import type { GetListParams, GetListResult, GetOneResult } from "react-admin";
 import * as Api from "@api/layers";
 import { pagination, search } from "@utils";
 
@@ -32,6 +32,23 @@ export const LayerProvider = {
           resolve({
             data: filtered_data,
             total: layer?.length
+          });
+        })
+        .catch((e) => reject(e));
+    }),
+
+  /** Get a layer */
+  getLayer: (layer_name: string): Promise<GetOneResult> =>
+    new Promise((resolve, reject) => {
+      Api.getLayer(layer_name)!
+        .then((layer) => {
+          // we should replace the id with the layer name to
+          // handle the case of data provider
+          resolve({
+            data: {
+              ...layer,
+              id: layer.name
+            }
           });
         })
         .catch((e) => reject(e));
