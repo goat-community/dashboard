@@ -1,5 +1,5 @@
 # GOAT management dashboard
-This repo is created for GOAT administration purposes, CRUD the things across all resources
+The GOAT management dashboard is created for configuring GOAT. It mostly allows CRUD the things across all resources
 
 ## Run it locally
 
