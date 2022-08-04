@@ -9,6 +9,45 @@ import type {
 import * as Api from "@api/extraLayers";
 import { pagination, search } from "@utils";
 
+import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { networkStateHandler } from "./network";
+import { ExtraLayer } from "@types";
+
+/** Reducer */
+const initialState = {
+  extraLayers: [] as ExtraLayer[]
+};
+
+export const extraLayers = createSlice({
+  name: "extraLayers",
+  initialState,
+  reducers: {
+    setLayers: (
+      state: typeof initialState,
+      action: PayloadAction<ExtraLayer[]>
+    ) => {
+      state.extraLayers = action.payload;
+    }
+  }
+});
+
+export const { setLayers } = extraLayers.actions;
+export default extraLayers.reducer;
+
+/** Actions  */
+
+export function getExtraLayers() {
+  return (dispatch: CallableFunction) =>
+    dispatch(
+      networkStateHandler(async () => {
+        const response = await Api.getExtraLayers();
+        if (response) {
+          dispatch(setLayers(response));
+        }
+      })
+    );
+}
+
 export const ExtraLayerProvider = {
   /** Get Extra Layers List */
   getExtraLayersList: (params: GetListParams): Promise<GetListResult> =>

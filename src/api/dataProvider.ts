@@ -59,6 +59,9 @@ export const dataProvider: DataProvider = {
     if (resource === "styles") {
       return LayerStylesProvider.createLayerStyle(params.data as LayerStyle);
     }
+    if (resource === "layers") {
+      return LayerProvider.createLayer(params.data as Layer);
+    }
     if (resource === "upload") {
       return ExtraLayerProvider.createExtraLayer(
         params.data as { upload_file: string }

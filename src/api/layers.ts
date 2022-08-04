@@ -85,3 +85,12 @@ export function updateLayer(
       throw err;
     });
 }
+
+export function createLayer(data: Layer): RequestResult<Layer> {
+  return instance
+    .post(`/config/layers/library`, data)
+    .then((response) => response.data)
+    .catch((err: AxiosError) => {
+      throw err;
+    });
+}

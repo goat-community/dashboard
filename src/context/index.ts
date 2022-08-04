@@ -3,13 +3,17 @@ import userReducer from "./user";
 import networkReducer from "./network";
 import notifierReducer from "./notifier";
 import organizationReducer from "./organizations";
+import layerStylesReducer from "./layerStyles";
+import extraLayersReducer from "./extraLayers";
 
 export const store = configureStore({
   reducer: {
     user: userReducer,
     network: networkReducer,
     notifier: notifierReducer,
-    organizations: organizationReducer
+    organizations: organizationReducer,
+    layerStyles: layerStylesReducer,
+    extraLayers: extraLayersReducer
   }
 });
 

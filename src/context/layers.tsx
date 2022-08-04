@@ -1,4 +1,5 @@
 import type {
+  CreateResult,
   GetListParams,
   GetListResult,
   GetOneResult,
@@ -69,6 +70,23 @@ export const LayerProvider = {
             data: {
               ...layerStyle,
               id: layerStyle.name
+            }
+          });
+        })
+        .catch((e) => reject(e));
+    }),
+
+  /** Create a Layer */
+  createLayer: (data: Layer): Promise<CreateResult> =>
+    new Promise((resolve, reject) => {
+      Api.createLayer(data)!
+        .then((layer) => {
+          // we should replace the id with the layer name to
+          // handle the case of data provider
+          resolve({
+            data: {
+              ...layer,
+              id: layer.name
             }
           });
         })
