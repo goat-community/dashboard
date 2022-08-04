@@ -33,6 +33,7 @@ export default function LayersList() {
         size="small"
       >
         <TextField source="id" sortable={false} />
+        <TextField source="table_name" sortable={false} />
         <TextField source="creation_date" sortable={false} />
         <Stack spacing={1} direction="row">
           <EditButton />
