@@ -14,6 +14,10 @@ import { Box, IconButton } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
 import { MapViewer, JSONEditor, ChipInput } from "@common";
 
+const mlStyle = { xs: 0, sm: "0.5em" };
+const mrStyle = { xs: 0, sm: "0.5em" };
+const displayStyle = { xs: "block", sm: "flex", width: "100%" };
+
 const JSONViewer = (props: { jsonResource: string; onChange: any }) => {
   const { jsonResource, onChange } = props;
   const record = useRecordContext();
@@ -39,7 +43,20 @@ const CustomToolbar = (props: any) => {
 
 const Map = () => {
   const record = useRecordContext();
-  return <MapViewer mapType={record["type"]} mapURL={record["url"]} />;
+  const available_records = ["XYZ", "WMS"];
+  if (available_records.includes(record["type"])) {
+    return (
+      <Box display={displayStyle} mt={5} sx={{ height: 400 }}>
+        <Box flex={1}>
+          <h3>Map preview</h3>
+          <br />
+          <MapViewer mapType={record["type"]} mapURL={record["url"]} />
+        </Box>
+      </Box>
+    );
+  } else {
+    return <></>;
+  }
 };
 
 const LegendsInput = (props: any) => {
@@ -59,7 +76,7 @@ export default function LayersEdit() {
   const [specialAttribute, setSpecialAttribute] = useState<undefined | string>(
     undefined
   );
-  const [lengendsURL, setLengendsURL] = useState<null | string[]>();
+  const [legendsURL, setLengendsURL] = useState<null | string[]>();
 
   const postSave = (data: any) => {
     const mixedData = {
@@ -68,20 +85,13 @@ export default function LayersEdit() {
         specialAttribute === undefined
           ? data.special_attribute
           : JSON.parse(specialAttribute),
-      legened_urls:
-        specialAttribute === undefined
-          ? data.special_attribute
-          : JSON.parse(specialAttribute)
+      legened_urls: legendsURL === undefined ? data.legends_url : legendsURL
     };
 
     save!({
       ...mixedData
     });
   };
-
-  const mlStyle = { xs: 0, sm: "0.5em" };
-  const mrStyle = { xs: 0, sm: "0.5em" };
-  const displayStyle = { xs: "block", sm: "flex", width: "100%" };
 
   return (
     <Edit
@@ -171,14 +181,7 @@ export default function LayersEdit() {
             />
           </Box>
         </Box>
-
-        <Box display={displayStyle} mt={5} sx={{ height: 400 }}>
-          <Box flex={1}>
-            <h3>Map preview</h3>
-            <br />
-            <Map />
-          </Box>
-        </Box>
+        <Map />
       </SimpleForm>
     </Edit>
   );

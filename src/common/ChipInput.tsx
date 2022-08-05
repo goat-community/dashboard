@@ -16,7 +16,7 @@ export function ChipInput(props: ChipInputProps) {
       options={[]}
       defaultValue={props.defaultValue || []}
       freeSolo
-      onChange={(_, value: any) => props.onChange([value])}
+      onChange={(_, value: any) => props.onChange([...value])}
       renderTags={(
         value: any[],
         getTagProps: (arg0: { index: any }) => JSX.IntrinsicAttributes
