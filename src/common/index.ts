@@ -8,3 +8,4 @@ export * from "./ErrorBoundary";
 export * from "./DataGridHeader";
 export * from "./JSONEditor";
 export * from "./MapViewer";
+export * from "./ChipInput";

@@ -12,7 +12,7 @@ import {
 } from "react-admin";
 import { Box, IconButton } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
-import { MapViewer, JSONEditor } from "@common";
+import { MapViewer, JSONEditor, ChipInput } from "@common";
 
 const JSONViewer = (props: { jsonResource: string; onChange: any }) => {
   const { jsonResource, onChange } = props;
@@ -42,17 +42,33 @@ const Map = () => {
   return <MapViewer mapType={record["type"]} mapURL={record["url"]} />;
 };
 
+const LegendsInput = (props: any) => {
+  const record = useRecordContext();
+  return (
+    <ChipInput
+      label="Legend URL's"
+      onChange={(urls) => props.setLengendsURL(urls)}
+      defaultValue={record["legend_urls"]}
+    />
+  );
+};
+
 export default function LayersEdit() {
   const { save } = useEditController();
   const redirect = useRedirect();
   const [specialAttribute, setSpecialAttribute] = useState<undefined | string>(
     undefined
   );
+  const [lengendsURL, setLengendsURL] = useState<null | string[]>();
 
   const postSave = (data: any) => {
     const mixedData = {
       ...data,
       special_attribute:
+        specialAttribute === undefined
+          ? data.special_attribute
+          : JSON.parse(specialAttribute),
+      legened_urls:
         specialAttribute === undefined
           ? data.special_attribute
           : JSON.parse(specialAttribute)
@@ -139,17 +155,11 @@ export default function LayersEdit() {
 
         <Box display={displayStyle}>
           <Box flex={1}>
-            <TextInput
-              label="Legend URL's"
-              source="legend_urls"
-              variant="outlined"
-              required
-              sx={{ width: "100%" }}
-            />
+            <LegendsInput setLengendsURL={setLengendsURL} />
           </Box>
         </Box>
 
-        <Box display={displayStyle}>
+        <Box display={displayStyle} mt={6}>
           <Box flex={1}>
             <h3>Special Attributes</h3>
             <br />
