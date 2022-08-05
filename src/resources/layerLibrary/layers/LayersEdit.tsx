@@ -164,8 +164,15 @@ export default function LayersEdit() {
         </Box>
 
         <Box display={displayStyle}>
-          <Box flex={1}>
+          <Box flex={1} mr={mrStyle}>
             <LegendsInput setLengendsURL={setLengendsURL} />
+          </Box>
+          <Box flex={1} ml={mlStyle}>
+            <TextInput
+              source="style_library_name"
+              fullWidth
+              variant="outlined"
+            />
           </Box>
         </Box>
 
