@@ -85,8 +85,7 @@ export const LayerProvider = {
           // handle the case of data provider
           resolve({
             data: {
-              ...layer,
-              id: layer.name
+              ...layer
             }
           });
         })

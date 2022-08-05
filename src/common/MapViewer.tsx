@@ -18,7 +18,6 @@ interface MapViewerProps {
 export function MapViewer(props: MapViewerProps) {
   const { mapURL, mapType } = props;
   const mapRef = useRef<HTMLDivElement>();
-
   // we should decide on the map source type
   // to be used for the map
   const layer = () => {

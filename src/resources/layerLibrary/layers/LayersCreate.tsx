@@ -1,46 +1,65 @@
-import { useEffect } from "react";
+import { useState } from "react";
 import {
   SimpleForm,
   TextInput,
-  SelectArrayInput,
+  Toolbar,
+  SaveButton,
+  DeleteButton,
   Create,
+  useCreateController,
   SelectInput
 } from "react-admin";
-import { batch } from "react-redux";
 import { Box } from "@mui/material";
-import { useAppDispatch, useAppSelector } from "@hooks";
-import { getLayersStyles } from "@context/layerStyles";
-import { getExtraLayers } from "@context/extraLayers";
+import { MapViewer, JSONEditor, ChipInput } from "@common";
 
-export const validateForm = (v: Record<string, any>): Record<string, any> => {
-  const errors = {} as any;
-  if (!v.name) {
-    errors.name = "Layer name is required";
-  }
+const mlStyle = { xs: 0, sm: "0.5em" };
+const mrStyle = { xs: 0, sm: "0.5em" };
+const displayStyle = { xs: "block", sm: "flex", width: "100%" };
 
-  return errors;
+const CustomToolbar = (props: any) => {
+  return (
+    <Toolbar
+      {...props}
+      sx={{ display: "flex", justifyContent: "space-between" }}
+    >
+      <SaveButton alwaysEnable />
+      <DeleteButton mutationMode="pessimistic" />
+    </Toolbar>
+  );
+};
+
+const LegendsInput = (props: any) => {
+  return (
+    <ChipInput
+      label="Legend URL's"
+      onChange={(urls) => props.setLengendsURL(urls)}
+    />
+  );
 };
 
 export default function LayersCreate() {
-  const dispatch = useAppDispatch();
-  const loading = useAppSelector((state) => state.network.loading);
-  const layerStylesList = useAppSelector(
-    (state) => state.layerStyles.layerStyles
-  );
-  const extraLayersList = useAppSelector(
-    (state) => state.extraLayers.extraLayers
+  const { save } = useCreateController();
+  const [legendsURL, setLengendsURL] = useState<null | string[]>();
+  const [mapURL, setMapURL] = useState<null | string>();
+  const [mapType, setMapType] = useState<"XYZ" | "WMS" | null>();
+  const [specialAttribute, setSpecialAttribute] = useState<undefined | string>(
+    undefined
   );
 
-  useEffect(() => {
-    batch(() => {
-      dispatch(getLayersStyles());
-      dispatch(getExtraLayers());
+  const postSave = (data: any) => {
+    const mixedData = {
+      ...data,
+      special_attribute:
+        specialAttribute === undefined
+          ? data.special_attribute
+          : JSON.parse(specialAttribute),
+      legened_urls: legendsURL === undefined ? data.legends_url : legendsURL
+    };
+
+    save!({
+      ...mixedData
     });
-  }, []);
-
-  const mlStyle = { xs: 0, sm: "0.5em" };
-  const mrStyle = { xs: 0, sm: "0.5em" };
-  const displayStyle = { xs: "block", sm: "flex", width: "100%" };
+  };
 
   return (
     <Create
@@ -49,12 +68,18 @@ export default function LayersCreate() {
         display: "flex",
         alignSelf: "center"
       }}
+      redirect="list"
     >
       <SimpleForm
         noValidate
         sx={{ width: 900 }}
+        warnWhenUnsavedChanges
+        toolbar={<CustomToolbar />}
+        onSubmit={postSave}
         defaultValues={{
-          legend_urls: []
+          legend_urls: [],
+          special_attribute: {},
+          type: ["XYZ", "WMS"]
         }}
       >
         <Box display={displayStyle}>
@@ -62,7 +87,12 @@ export default function LayersCreate() {
             <TextInput source="name" isRequired fullWidth variant="outlined" />
           </Box>
           <Box flex={1} ml={mlStyle}>
-            <TextInput source="url" fullWidth variant="outlined" />
+            <TextInput
+              source="url"
+              fullWidth
+              variant="outlined"
+              onChange={(e) => setMapURL(e.target.value)}
+            />
           </Box>
         </Box>
 
@@ -72,6 +102,15 @@ export default function LayersCreate() {
           </Box>
           <Box flex={1} ml={mlStyle}>
             <TextInput source="map_attribution" fullWidth variant="outlined" />
+          </Box>
+        </Box>
+
+        <Box display={displayStyle}>
+          <Box flex={1} mr={mrStyle}>
+            <TextInput source="source" fullWidth variant="outlined" />
+          </Box>
+          <Box flex={1} ml={mlStyle}>
+            <TextInput source="source_1" fullWidth variant="outlined" />
           </Box>
         </Box>
 
@@ -91,61 +130,57 @@ export default function LayersCreate() {
           <Box flex={1} ml={mlStyle}>
             <TextInput source="min_resolution" fullWidth variant="outlined" />
           </Box>
+          <Box flex={1} ml={mlStyle}>
+            <SelectInput
+              source="type"
+              emptyText={"Please select a layer type"}
+              isRequired
+              fullWidth
+              choices={[
+                { id: "XYZ", name: "XYZ" },
+                { id: "WMS", name: "WMS" }
+              ]}
+              variant="outlined"
+              onChange={(e) => setMapType(e.target.value)}
+            />
+          </Box>
         </Box>
 
         <Box display={displayStyle}>
           <Box flex={1} mr={mrStyle}>
-            <TextInput source="type" fullWidth variant="outlined" />
+            <LegendsInput setLengendsURL={setLengendsURL} />
           </Box>
           <Box flex={1} ml={mlStyle}>
-            <SelectArrayInput
-              label="Legend URL's"
-              source="legend_urls"
-              choices={[]}
+            <TextInput
+              source="style_library_name"
+              fullWidth
               variant="outlined"
-              sx={{ width: "100%" }}
             />
           </Box>
         </Box>
 
-        <Box display={displayStyle}>
+        <Box display={displayStyle} mt={6}>
           <Box flex={1}>
-            <TextInput
-              source="special_attribute"
-              fullWidth
-              variant="outlined"
+            <h3>Special Attributes</h3>
+            <br />
+            <JSONEditor
+              onChange={(special_attributes: string) => {
+                setSpecialAttribute(special_attributes);
+              }}
             />
           </Box>
         </Box>
-        <Box display={displayStyle}>
-          <Box flex={1} mr={mrStyle}>
-            <SelectInput
-              source="style_library_name"
-              emptyText={"Select a style library"}
-              isRequired
-              fullWidth
-              choices={
-                loading ? [{ name: "Loading styles..." }] : layerStylesList
-              }
-              variant="outlined"
-            />
-          </Box>
-          {/* <Box flex={1} ml={mlStyle}>
-            <SelectInput
-              source="source"
-              emptyText={"Select a source data"}
-              isRequired
-              fullWidth
-              choices={
-                loading
-                  ? [{ name: "Loading extra layers data..." }]
-                  : extraLayersList
-              }
-              optionText="id"
-              optionValue="id"
-              variant="outlined"
-            />
-          </Box> */}
+
+        <Box display={displayStyle} mt={5} sx={{ height: 400 }}>
+          {["XYZ", "WMS"].includes(mapType!) && mapURL ? (
+            <Box flex={1}>
+              <h3>Map preview</h3>
+              <br />
+              <MapViewer mapType={mapType!} mapURL={mapURL!} />
+            </Box>
+          ) : (
+            <h4>Please fill the layer URL and layer type to preview in map</h4>
+          )}
         </Box>
       </SimpleForm>
     </Create>
