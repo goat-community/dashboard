@@ -15,6 +15,7 @@
     "axios": "^0.27.2",
     "formik": "^2.2.9",
     "jsoneditor": "^9.9.0",
+    "ol": "^6.15.1",
     "ra-i18n-polyglot": "^4.2.1",
     "ra-language-english": "^4.2.1",
     "ra-language-german": "^3.13.5",

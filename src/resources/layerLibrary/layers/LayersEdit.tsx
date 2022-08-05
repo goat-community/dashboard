@@ -1,3 +1,4 @@
+import { useState } from "react";
 import {
   SimpleForm,
   TextInput,
@@ -7,18 +8,21 @@ import {
   SaveButton,
   DeleteButton,
   useEditController,
-  SelectArrayInput
+  useRecordContext
 } from "react-admin";
 import { Box, IconButton } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
+import { MapViewer, JSONEditor } from "@common";
 
-export const validateForm = (v: Record<string, any>): Record<string, any> => {
-  const errors = {} as any;
-  if (!v.name) {
-    errors.name = "Layer name is required";
-  }
-
-  return errors;
+const JSONViewer = (props: { jsonResource: string; onChange: any }) => {
+  const { jsonResource, onChange } = props;
+  const record = useRecordContext();
+  return (
+    <JSONEditor
+      defaultValue={JSON.stringify(record[jsonResource], null, 2)}
+      onChange={onChange}
+    />
+  );
 };
 
 const CustomToolbar = (props: any) => {
@@ -33,13 +37,25 @@ const CustomToolbar = (props: any) => {
   );
 };
 
+const Map = () => {
+  const record = useRecordContext();
+  return <MapViewer mapType={record["type"]} mapURL={record["url"]} />;
+};
+
 export default function LayersEdit() {
   const { save } = useEditController();
   const redirect = useRedirect();
+  const [specialAttribute, setSpecialAttribute] = useState<undefined | string>(
+    undefined
+  );
 
   const postSave = (data: any) => {
     const mixedData = {
-      ...data
+      ...data,
+      special_attribute:
+        specialAttribute === undefined
+          ? data.special_attribute
+          : JSON.parse(specialAttribute)
     };
 
     save!({
@@ -75,13 +91,7 @@ export default function LayersEdit() {
       >
         <Box display={displayStyle}>
           <Box flex={1} mr={mrStyle}>
-            <TextInput
-              source="name"
-              isRequired
-              fullWidth
-              variant="outlined"
-              disabled
-            />
+            <TextInput source="name" isRequired fullWidth variant="outlined" />
           </Box>
           <Box flex={1} ml={mlStyle}>
             <TextInput source="url" fullWidth variant="outlined" />
@@ -94,6 +104,15 @@ export default function LayersEdit() {
           </Box>
           <Box flex={1} ml={mlStyle}>
             <TextInput source="map_attribution" fullWidth variant="outlined" />
+          </Box>
+        </Box>
+
+        <Box display={displayStyle}>
+          <Box flex={1} mr={mrStyle}>
+            <TextInput source="source" fullWidth variant="outlined" />
+          </Box>
+          <Box flex={1} ml={mlStyle}>
+            <TextInput source="source_1" fullWidth variant="outlined" />
           </Box>
         </Box>
 
@@ -119,21 +138,35 @@ export default function LayersEdit() {
         </Box>
 
         <Box display={displayStyle}>
-          <Box flex={1} mr={mrStyle}>
-            <SelectArrayInput
+          <Box flex={1}>
+            <TextInput
               label="Legend URL's"
               source="legend_urls"
-              choices={[]}
               variant="outlined"
+              required
               sx={{ width: "100%" }}
             />
           </Box>
-          <Box flex={1} ml={mlStyle}>
-            <TextInput
-              source="special_attribute"
-              fullWidth
-              variant="outlined"
+        </Box>
+
+        <Box display={displayStyle}>
+          <Box flex={1}>
+            <h3>Special Attributes</h3>
+            <br />
+            <JSONViewer
+              jsonResource="special_attribute"
+              onChange={(special_attributes: string) => {
+                setSpecialAttribute(special_attributes);
+              }}
             />
+          </Box>
+        </Box>
+
+        <Box display={displayStyle} mt={5} sx={{ height: 400 }}>
+          <Box flex={1}>
+            <h3>Map preview</h3>
+            <br />
+            <Map />
           </Box>
         </Box>
       </SimpleForm>

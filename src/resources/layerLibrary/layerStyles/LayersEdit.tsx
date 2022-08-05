@@ -12,11 +12,7 @@ import {
 } from "react-admin";
 import { Box, IconButton, Typography } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
-// Ace Editor
-import AceEditor from "react-ace";
-import "ace-builds/src-noconflict/mode-json";
-import "ace-builds/src-noconflict/theme-dracula";
-import "ace-builds/src-noconflict/ext-language_tools";
+import { JSONEditor } from "@common";
 
 export const validateForm = (v: Record<string, any>): Record<string, any> => {
   const errors = {} as any;
@@ -27,31 +23,14 @@ export const validateForm = (v: Record<string, any>): Record<string, any> => {
   return errors;
 };
 
-export const JSONViewer = (props: {
-  jsonResource: string;
-  onChange: (value: string, event?: any) => void;
-}) => {
+const JSONViewer = (props: { jsonResource: string; onChange: any }) => {
   const { jsonResource, onChange } = props;
   const record = useRecordContext();
   return (
-    <div style={{ width: "100%" }}>
-      <AceEditor
-        mode="json"
-        theme="dracula"
-        defaultValue={JSON.stringify(record[jsonResource], null, 2)}
-        name="editor"
-        width="100%"
-        editorProps={{ $blockScrolling: true }}
-        setOptions={{
-          useWorker: false,
-          enableBasicAutocompletion: true,
-          enableLiveAutocompletion: true,
-          enableSnippets: true
-        }}
-        onChange={onChange}
-        style={{ borderRadius: 10 }}
-      />
-    </div>
+    <JSONEditor
+      defaultValue={JSON.stringify(record[jsonResource], null, 2)}
+      onChange={onChange}
+    />
   );
 };
 

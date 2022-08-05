@@ -4,16 +4,18 @@ import "ace-builds/src-noconflict/mode-json";
 import "ace-builds/src-noconflict/theme-dracula";
 import "ace-builds/src-noconflict/ext-language_tools";
 
-interface JSONViewerProps {
+interface JSONEditorProps {
+  defaultValue?: string;
   onChange: (value: string, event?: any) => void;
 }
 
-export function JSONViewer(props: JSONViewerProps) {
-  const { onChange } = props;
+export function JSONEditor(props: JSONEditorProps) {
+  const { defaultValue, onChange } = props;
 
   return (
     <div style={{ width: "100%" }}>
       <AceEditor
+        defaultValue={defaultValue}
         mode="json"
         theme="dracula"
         name="editor"

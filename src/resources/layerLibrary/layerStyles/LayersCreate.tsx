@@ -10,7 +10,7 @@ import {
   LoadingIndicator
 } from "react-admin";
 import { Box, Typography } from "@mui/material";
-import { JSONViewer } from "@common";
+import { JSONEditor } from "@common";
 
 export const validateForm = (v: Record<string, any>): Record<string, any> => {
   const errors = {} as any;
@@ -78,7 +78,7 @@ export default function LayersCreate() {
           <Typography variant="h5">Styles</Typography>
         </Box>
         <Box display={displayStyle}>
-          <JSONViewer
+          <JSONEditor
             onChange={(newStyle: string) => {
               setStyles(newStyle);
             }}
@@ -89,7 +89,7 @@ export default function LayersCreate() {
           <Typography variant="h5">Translations</Typography>
         </Box>
         <Box display={displayStyle} className="mt-5 pt-5">
-          <JSONViewer
+          <JSONEditor
             onChange={(newTranslation: string) => {
               setTranslation(newTranslation);
             }}
