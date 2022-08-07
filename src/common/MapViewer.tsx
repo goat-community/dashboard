@@ -57,7 +57,8 @@ export function MapViewer(props: MapViewerProps) {
         zoom: 8
       })
     });
-  }, []);
+    // to re-render on map changes
+  }, [mapURL, mapURL]);
 
   return <div ref={mapRef as any} style={{ width: "100%", height: "100%" }} />;
 }

@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
   SimpleForm,
   TextInput,
@@ -8,11 +8,14 @@ import {
   SaveButton,
   DeleteButton,
   useEditController,
-  useRecordContext
+  useRecordContext,
+  SelectInput
 } from "react-admin";
+import { getLayersStyles } from "@context/layerStyles";
+import { MapViewer, JSONEditor, ChipInput } from "@common";
+import { useAppDispatch, useAppSelector } from "@hooks";
 import { Box, IconButton } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
-import { MapViewer, JSONEditor, ChipInput } from "@common";
 
 const mlStyle = { xs: 0, sm: "0.5em" };
 const mrStyle = { xs: 0, sm: "0.5em" };
@@ -25,6 +28,7 @@ const JSONViewer = (props: { jsonResource: string; onChange: any }) => {
     <JSONEditor
       defaultValue={JSON.stringify(record[jsonResource], null, 2)}
       onChange={onChange}
+      height="60px"
     />
   );
 };
@@ -71,12 +75,18 @@ const LegendsInput = (props: any) => {
 };
 
 export default function LayersEdit() {
+  const dispatch = useAppDispatch();
   const { save } = useEditController();
   const redirect = useRedirect();
   const [specialAttribute, setSpecialAttribute] = useState<undefined | string>(
     undefined
   );
   const [legendsURL, setLengendsURL] = useState<null | string[]>();
+  const layerStyles = useAppSelector((state) => state.layerStyles.layerStyles);
+
+  useEffect(() => {
+    dispatch(getLayersStyles());
+  });
 
   const postSave = (data: any) => {
     const mixedData = {
@@ -168,9 +178,12 @@ export default function LayersEdit() {
             <LegendsInput setLengendsURL={setLengendsURL} />
           </Box>
           <Box flex={1} ml={mlStyle}>
-            <TextInput
+            <SelectInput
               source="style_library_name"
+              emptyText={"Select an style library name"}
+              isRequired
               fullWidth
+              choices={layerStyles}
               variant="outlined"
             />
           </Box>

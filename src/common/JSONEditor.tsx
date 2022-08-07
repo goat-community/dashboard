@@ -6,11 +6,12 @@ import "ace-builds/src-noconflict/ext-language_tools";
 
 interface JSONEditorProps {
   defaultValue?: string;
+  height?: string;
   onChange: (value: string, event?: any) => void;
 }
 
 export function JSONEditor(props: JSONEditorProps) {
-  const { defaultValue, onChange } = props;
+  const { defaultValue, height = "300px", onChange } = props;
 
   return (
     <div style={{ width: "100%" }}>
@@ -20,6 +21,7 @@ export function JSONEditor(props: JSONEditorProps) {
         theme="dracula"
         name="editor"
         width="100%"
+        height={height}
         editorProps={{ $blockScrolling: true }}
         setOptions={{
           useWorker: false,

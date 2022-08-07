@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
   SimpleForm,
   TextInput,
@@ -11,6 +11,8 @@ import {
 } from "react-admin";
 import { Box } from "@mui/material";
 import { MapViewer, JSONEditor, ChipInput } from "@common";
+import { useAppDispatch, useAppSelector } from "@hooks";
+import { getLayersStyles } from "@context/layerStyles";
 
 const mlStyle = { xs: 0, sm: "0.5em" };
 const mrStyle = { xs: 0, sm: "0.5em" };
@@ -38,6 +40,7 @@ const LegendsInput = (props: any) => {
 };
 
 export default function LayersCreate() {
+  const dispatch = useAppDispatch();
   const { save } = useCreateController();
   const [legendsURL, setLengendsURL] = useState<null | string[]>();
   const [mapURL, setMapURL] = useState<null | string>();
@@ -45,6 +48,11 @@ export default function LayersCreate() {
   const [specialAttribute, setSpecialAttribute] = useState<undefined | string>(
     undefined
   );
+  const layerStyles = useAppSelector((state) => state.layerStyles.layerStyles);
+
+  useEffect(() => {
+    dispatch(getLayersStyles());
+  });
 
   const postSave = (data: any) => {
     const mixedData = {
@@ -151,9 +159,12 @@ export default function LayersCreate() {
             <LegendsInput setLengendsURL={setLengendsURL} />
           </Box>
           <Box flex={1} ml={mlStyle}>
-            <TextInput
+            <SelectInput
               source="style_library_name"
+              emptyText={"Select an style library name"}
+              isRequired
               fullWidth
+              choices={layerStyles}
               variant="outlined"
             />
           </Box>
@@ -167,13 +178,14 @@ export default function LayersCreate() {
               onChange={(special_attributes: string) => {
                 setSpecialAttribute(special_attributes);
               }}
+              height="60px"
             />
           </Box>
         </Box>
 
-        <Box display={displayStyle} mt={5} sx={{ height: 400 }}>
+        <Box display={displayStyle} mt={5}>
           {["XYZ", "WMS"].includes(mapType!) && mapURL ? (
-            <Box flex={1}>
+            <Box flex={1} sx={{ height: 400 }}>
               <h3>Map preview</h3>
               <br />
               <MapViewer mapType={mapType!} mapURL={mapURL!} />
