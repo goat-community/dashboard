@@ -86,7 +86,7 @@ export default function LayersEdit() {
 
   useEffect(() => {
     dispatch(getLayersStyles());
-  });
+  }, []);
 
   const postSave = (data: any) => {
     const mixedData = {

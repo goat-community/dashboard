@@ -52,7 +52,7 @@ export default function LayersCreate() {
 
   useEffect(() => {
     dispatch(getLayersStyles());
-  });
+  }, []);
 
   const postSave = (data: any) => {
     const mixedData = {
