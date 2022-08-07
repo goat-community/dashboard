@@ -45,16 +45,26 @@ const CustomToolbar = (props: any) => {
   );
 };
 
-const Map = () => {
+const Map = (props) => {
   const record = useRecordContext();
-  const available_records = ["XYZ", "WMS"];
+  const available_records = ["XYZ", "WMS", "MVT"];
   if (available_records.includes(record["type"])) {
     return (
       <Box display={displayStyle} mt={5} sx={{ height: 400 }}>
         <Box flex={1}>
           <h3>Map preview</h3>
           <br />
-          <MapViewer mapType={record["type"]} mapURL={record["url"]} />
+          <MapViewer
+            mapType={record["type"]}
+            mapURL={record["url"]}
+            mapName={record["name"]}
+            layerStyle={
+              props.layerStyles &&
+              props.layerStyles.find(
+                (ls: any) => ls.name === record["style_library_name"]
+              )
+            }
+          />
         </Box>
       </Box>
     );
@@ -201,7 +211,7 @@ export default function LayersEdit() {
             />
           </Box>
         </Box>
-        <Map />
+        <Map layerStyles={layerStyles} />
       </SimpleForm>
     </Edit>
   );

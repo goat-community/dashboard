@@ -8,15 +8,53 @@ import { fromLonLat } from "ol/proj";
 import ImageWMS from "ol/source/ImageWMS";
 import OSM from "ol/source/OSM";
 import XYZ from "ol/source/XYZ";
+import MVT from "ol/format/MVT";
+import VectorTileLayer from "ol/layer/VectorTile";
+import VectorTileSource from "ol/source/VectorTile";
 import "ol/ol.css";
+import { baseUrl, instance, OlStyleFactory } from "@utils";
 
 interface MapViewerProps {
   mapURL: string;
-  mapType: "WMS" | "XYZ";
+  mapName?: string;
+  layerStyle?: object;
+  mapType: "WMS" | "XYZ" | "MVT";
+}
+
+function styleVectorLayer(layer: any, lConf: any) {
+  // Style the vector tile layer
+  let styleObj;
+  if (typeof lConf.style === "object") {
+    styleObj = {
+      format: "geostyler",
+      style: lConf.style
+    };
+  } else if (lConf.style === "custom") {
+    styleObj = {
+      format: "custom"
+    };
+  } else {
+    return layer;
+  }
+  const olStyle = OlStyleFactory.getOlStyle(styleObj);
+  if (olStyle) {
+    if (olStyle instanceof Promise) {
+      olStyle
+        .then((style) => {
+          layer.setStyle(style);
+        })
+        .catch((error) => {
+          console.log(error);
+          console.log("error", lConf.name);
+        });
+    } else {
+      layer.setStyle(olStyle);
+    }
+  }
 }
 
 export function MapViewer(props: MapViewerProps) {
-  const { mapURL, mapType } = props;
+  const { mapURL, mapType, mapName, layerStyle } = props;
   const mapRef = useRef<HTMLDivElement>();
   // we should decide on the map source type
   // to be used for the map
@@ -37,6 +75,44 @@ export function MapViewer(props: MapViewerProps) {
           serverType: "geoserver"
         }),
         opacity: 0.6
+      });
+    }
+
+    if (mapType === "MVT") {
+      let map_url = mapURL
+        ? mapURL
+        : baseUrl() + `/layers/tiles/${mapName}/{z}/{x}/{y}.pbf`;
+
+      const layer = new VectorTileLayer({
+        source: new VectorTileSource({
+          format: new MVT(),
+          url: map_url,
+          tileLoadFunction: function (tile: any, url) {
+            tile.setLoader(function (extent: any, _: any, projection: any) {
+              instance
+                .get(url, {
+                  responseType: "arraybuffer",
+                  headers: {
+                    Accept: "application/pdf"
+                  }
+                })
+                .then((response) => {
+                  if (response.data) {
+                    const format = tile.getFormat(); // ol/format/MVT configured as source format
+                    const features = format.readFeatures(response.data, {
+                      extent: extent,
+                      featureProjection: projection
+                    });
+                    tile.setFeatures(features);
+                  }
+                });
+            });
+          }
+        })
+      });
+      return styleVectorLayer(layer, {
+        style: layerStyle?.style,
+        name: mapName
       });
     }
   };
