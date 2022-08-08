@@ -6,11 +6,53 @@ import type {
   GetOneResult,
   UpdateResult
 } from "react-admin";
-import type { LayerStyle } from "@types";
 import * as Api from "@api/layers";
+import type { LayerStyle } from "@types";
 import { pagination, search } from "@utils";
+import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { networkStateHandler } from "./network";
+
+/** Reducer */
+const initialState = {
+  layerStyles: [] as LayerStyle[]
+};
+
+export const layerStyles = createSlice({
+  name: "layerStyles",
+  initialState,
+  reducers: {
+    setLayers: (
+      state: typeof initialState,
+      action: PayloadAction<LayerStyle[]>
+    ) => {
+      state.layerStyles = action.payload;
+    }
+  }
+});
+
+export const { setLayers } = layerStyles.actions;
+export default layerStyles.reducer;
 
 /** Actions  */
+
+export function getLayersStyles() {
+  return (dispatch: CallableFunction) =>
+    dispatch(
+      networkStateHandler(async () => {
+        const response = await Api.getLayersStyle();
+        if (response) {
+          // we should replace all ids with the layer name to
+          // handle the case of data provider
+          response!.forEach((layer) => {
+            layer.id = layer.name;
+          });
+
+          dispatch(setLayers(response));
+        }
+      })
+    );
+}
+
 export const LayerStylesProvider = {
   /** Get Layers List */
   getLayersStyleList: (params: GetListParams): Promise<GetListResult> =>

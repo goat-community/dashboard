@@ -15,7 +15,8 @@ import type {
 import { UserProvider } from "@context/user";
 import { LayerStylesProvider } from "@context/layerStyles";
 import { LayerProvider } from "@context/layers";
-import type { LayerStyle, User } from "@types";
+import { ExtraLayerProvider } from "@context/extraLayers";
+import type { Layer, LayerStyle, User } from "@types";
 
 export const dataProvider: DataProvider = {
   getList: (resource, params): Promise<GetListResult> => {
@@ -28,6 +29,9 @@ export const dataProvider: DataProvider = {
     }
     if (resource === "layers") {
       return LayerProvider.getLayersList(params);
+    }
+    if (resource === "upload") {
+      return ExtraLayerProvider.getExtraLayersList(params);
     }
     return UserProvider.getUsersList(params);
   },
@@ -42,6 +46,9 @@ export const dataProvider: DataProvider = {
     if (resource === "layers") {
       return LayerProvider.getLayer(params.id);
     }
+    if (resource === "upload") {
+      return ExtraLayerProvider.getExtraLayer(params.id);
+    }
     return UserProvider.getUser(params.id);
   },
   create: (resource, params): Promise<CreateResult> => {
@@ -51,6 +58,14 @@ export const dataProvider: DataProvider = {
     }
     if (resource === "styles") {
       return LayerStylesProvider.createLayerStyle(params.data as LayerStyle);
+    }
+    if (resource === "layers") {
+      return LayerProvider.createLayer(params.data as Layer);
+    }
+    if (resource === "upload") {
+      return ExtraLayerProvider.createExtraLayer(
+        params.data as { upload_file: string }
+      );
     }
     return UserProvider.createUser(params.data);
   },
@@ -65,6 +80,18 @@ export const dataProvider: DataProvider = {
         params.data as LayerStyle
       );
     }
+    if (resource === "layers") {
+      return LayerProvider.updateLayer(
+        params.id as number,
+        params.data as Layer
+      );
+    }
+    if (resource === "upload") {
+      return ExtraLayerProvider.updateExtraLayer(
+        params.id as number,
+        params.data as { upload_file: string }
+      );
+    }
     return UserProvider.updateUser(params.id as number, params.data as User);
   },
   delete: (resource, params): Promise<DeleteResult> => {
@@ -74,6 +101,9 @@ export const dataProvider: DataProvider = {
     }
     if (resource === "styles") {
       return LayerStylesProvider.deleteLayerStyle(params.id as string);
+    }
+    if (resource === "upload") {
+      return ExtraLayerProvider.deleteExtraLayer(params.id as number);
     }
     return UserProvider.deleteUser(params);
   },

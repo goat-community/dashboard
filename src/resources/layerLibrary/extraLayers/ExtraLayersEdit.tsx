@@ -6,10 +6,15 @@ import {
   Toolbar,
   SaveButton,
   DeleteButton,
-  useEditController
+  useEditController,
+  useResourceContext,
+  useEditContext,
+  FileInput,
+  FileField
 } from "react-admin";
 import { Box, IconButton, Typography } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
+import { useParams } from "react-router-dom";
 
 export const validateForm = (v: Record<string, any>): Record<string, any> => {
   const errors = {} as any;
@@ -26,15 +31,15 @@ const CustomToolbar = (props: any) => {
       {...props}
       sx={{ display: "flex", justifyContent: "space-between" }}
     >
-      <p>CRUD not available yet!</p>
-      {/* <SaveButton alwaysEnable /> */}
-      {/* <DeleteButton mutationMode="pessimistic" /> */}
+      <SaveButton alwaysEnable />
+      <DeleteButton mutationMode="pessimistic" />
     </Toolbar>
   );
 };
 
 export default function LayersEdit() {
   const { save } = useEditController();
+  const { id } = useParams();
   const redirect = useRedirect();
 
   const postSave = (data: any) => {
@@ -72,59 +77,39 @@ export default function LayersEdit() {
       >
         <Box display={displayStyle}>
           <Box flex={1} mr={mrStyle}>
+            <TextInput source="id" fullWidth variant="outlined" disabled />
+          </Box>
+          <Box flex={1} ml={mlStyle}>
             <TextInput
-              source="name"
-              isRequired
+              source="creation_date"
               fullWidth
               variant="outlined"
               disabled
             />
           </Box>
-          <Box flex={1} ml={mlStyle}>
-            <TextInput source="url" fullWidth variant="outlined" />
-          </Box>
         </Box>
-
         <Box display={displayStyle}>
           <Box flex={1} mr={mrStyle}>
-            <TextInput source="access_token" fullWidth variant="outlined" />
-          </Box>
-          <Box flex={1} ml={mlStyle}>
-            <TextInput source="map_attribution" fullWidth variant="outlined" />
-          </Box>
-        </Box>
-
-        <Box display={displayStyle}>
-          <Box flex={1} mr={mrStyle}>
-            <TextInput source="date" fullWidth variant="outlined" />
-          </Box>
-          <Box flex={1} ml={mlStyle}>
-            <TextInput source="date_1" fullWidth variant="outlined" />
-          </Box>
-        </Box>
-
-        <Box display={displayStyle}>
-          <Box flex={1} mr={mrStyle}>
-            <TextInput source="max_resolution" fullWidth variant="outlined" />
-          </Box>
-          <Box flex={1} ml={mlStyle}>
-            <TextInput source="min_resolution" fullWidth variant="outlined" />
-          </Box>
-          <Box flex={1} ml={mlStyle}>
-            <TextInput source="type" fullWidth variant="outlined" />
-          </Box>
-        </Box>
-
-        <Box display={displayStyle}>
-          <Box flex={1} mr={mrStyle}>
-            <TextInput source="legend_urls" fullWidth variant="outlined" />
+            <TextInput source="user_id" fullWidth variant="outlined" disabled />
           </Box>
           <Box flex={1} ml={mlStyle}>
             <TextInput
-              source="special_attribute"
+              source="table_name"
               fullWidth
               variant="outlined"
+              disabled
             />
+          </Box>
+        </Box>
+        <Box display={displayStyle}>
+          <Box flex={1} mr={mrStyle}>
+            <FileInput
+              source="upload_file"
+              label="Upload File"
+              accept="application/pdf"
+            >
+              <FileField source="src" title="title" />
+            </FileInput>
           </Box>
         </Box>
       </SimpleForm>
