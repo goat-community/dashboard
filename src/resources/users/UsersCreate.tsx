@@ -13,7 +13,7 @@ import { getStudyAreas } from "@context/user";
 import { useAppDispatch, useAppSelector } from "@hooks";
 import UserCreateToolbar from "./UserCreateToolbar";
 
-export const validateForm = (v: Record<string, any>): Record<string, any> => {
+const validateForm = (v: Record<string, any>): Record<string, any> => {
   const errors = {} as any;
   if (!v.surname) {
     errors.surname = "Surname is required";
