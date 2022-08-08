@@ -101,7 +101,7 @@ export function MapViewer(props: MapViewerProps) {
       })
     });
     // to re-render on map changes
-  }, [layerURL, layerName, layerStyle]);
+  }, [layerURL, layerName, layerStyle, layerType]);
 
   return (
     <div ref={mapRef as any} style={{ width: "100%", height: "100%" }}></div>
