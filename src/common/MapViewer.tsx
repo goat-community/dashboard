@@ -10,8 +10,8 @@ import MVT from "ol/format/MVT";
 import VectorTileLayer from "ol/layer/VectorTile";
 import VectorTileSource from "ol/source/VectorTile";
 import "ol/ol.css";
-import { LayerStyle } from "@types";
-import { baseUrl, instance } from "@utils";
+import { baseUrl, instance, styleVectorLayer } from "@utils";
+import type { LayerStyle } from "@types";
 
 interface MapViewerProps {
   layerURL: string;
@@ -47,7 +47,7 @@ export function MapViewer(props: MapViewerProps) {
     }
 
     if (layerType === "MVT") {
-      return new VectorTileLayer({
+      const vtLayer = new VectorTileLayer({
         declutter: true,
         source: new VectorTileSource({
           format: new MVT(),
@@ -78,6 +78,13 @@ export function MapViewer(props: MapViewerProps) {
           }
         })
       });
+      if (layerStyle) {
+        styleVectorLayer({
+          layer: vtLayer,
+          lConf: layerStyle
+        });
+      }
+      return vtLayer;
     }
   };
 
