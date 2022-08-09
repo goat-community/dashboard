@@ -5,9 +5,44 @@ import type {
   GetOneResult,
   UpdateResult
 } from "react-admin";
+import { createSlice, type PayloadAction } from "@reduxjs/toolkit";
 import * as Api from "@api/layers";
 import { pagination, search } from "@utils";
-import { Layer } from "@types";
+import { Layer, LayerTile } from "@types";
+import { networkStateHandler } from "./network";
+
+/** Reducer */
+const initialState = {
+  layerTiles: {} as LayerTile
+};
+
+export const layers = createSlice({
+  name: "layers",
+  initialState,
+  reducers: {
+    setLayerTile: (
+      state: typeof initialState,
+      action: PayloadAction<LayerTile>
+    ) => {
+      state.layerTiles = action.payload;
+    }
+  }
+});
+
+export const { setLayerTile } = layers.actions;
+export default layers.reducer;
+
+export function getLayerTile(layer_name: string) {
+  return (dispatch: CallableFunction) =>
+    dispatch(
+      networkStateHandler(async () => {
+        const response = await Api.getLayerTile(layer_name);
+        if (response) {
+          dispatch(setLayerTile(response));
+        }
+      })
+    );
+}
 
 /** Actions  */
 export const LayerProvider = {
