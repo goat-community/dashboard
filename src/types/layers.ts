@@ -29,3 +29,21 @@ export interface ExtraLayer {
   user_id: number;
   table_name: string;
 }
+
+export interface LayerTile {
+  tiles: [string];
+  tilejson?: number;
+  name?: string;
+  description?: string;
+  version?: number;
+  attribution?: string;
+  template?: string;
+  legend?: string;
+  scheme?: string;
+  grids?: [string];
+  data?: [string];
+  minzoom?: number;
+  maxzoom?: number;
+  bounds?: [number, number, number, number];
+  center?: [string, string, string];
+}

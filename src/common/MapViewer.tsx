@@ -1,4 +1,4 @@
-import { useRef, useEffect } from "react";
+import { useRef, useEffect, useCallback } from "react";
 // OL Map
 import { Map, View } from "ol";
 import { Image as ImageLayer, Tile as TileLayer } from "ol/layer";
@@ -10,8 +10,10 @@ import MVT from "ol/format/MVT";
 import VectorTileLayer from "ol/layer/VectorTile";
 import VectorTileSource from "ol/source/VectorTile";
 import "ol/ol.css";
-import { LayerStyle } from "@types";
-import { baseUrl, instance } from "@utils";
+import { baseUrl, instance, styleVectorLayer } from "@utils";
+import type { LayerStyle } from "@types";
+import { useAppDispatch, useAppSelector } from "@hooks";
+import { getLayerTile } from "@context/layers";
 
 interface MapViewerProps {
   layerURL: string;
@@ -24,6 +26,8 @@ interface MapViewerProps {
 export function MapViewer(props: MapViewerProps) {
   const { layerURL, layerType, layerName, layerStyle, mapAttribution } = props;
   let mapRef = useRef<HTMLDivElement>();
+  const dispatch = useAppDispatch();
+  const LT = useAppSelector((state) => state.layers.layerTiles);
   // we should decide on the map source type
   // to be used for the map
   const layer = () => {
@@ -47,7 +51,7 @@ export function MapViewer(props: MapViewerProps) {
     }
 
     if (layerType === "MVT") {
-      return new VectorTileLayer({
+      const vtLayer = new VectorTileLayer({
         declutter: true,
         source: new VectorTileSource({
           format: new MVT(),
@@ -78,11 +82,29 @@ export function MapViewer(props: MapViewerProps) {
           }
         })
       });
+      if (layerStyle) {
+        styleVectorLayer({
+          layer: vtLayer,
+          lConf: layerStyle
+        });
+      }
+      return vtLayer;
     }
   };
 
-  // Initilize the openlayer Map class
-  useEffect(() => {
+  function fetchLayerTiles() {
+    if (layerName && !LT.tilejson) {
+      dispatch(getLayerTile(layerName));
+    }
+  }
+
+  const createMap = useCallback(() => {
+    const viewOptions = {
+      center: LT?.center
+        ? fromLonLat([...LT.center.map((i) => parseFloat(i) + 1)])
+        : fromLonLat([12, 49]),
+      zoom: LT.maxzoom ? LT.maxzoom / 2 - 5 : 8
+    };
     // empty the div to handle the map refresh
     mapRef!.current!.innerHTML = "";
     // create the map
@@ -95,13 +117,25 @@ export function MapViewer(props: MapViewerProps) {
         }),
         layer()!
       ],
-      view: new View({
-        center: fromLonLat([12, 49]),
-        zoom: 8
-      })
+      view: new View(viewOptions)
     });
+  }, [LT, layerURL, layerStyle, layerType]);
+
+  // Initilize the openlayer Map class
+  useEffect(() => {
+    createMap();
     // to re-render on map changes
   }, [layerURL, layerName, layerStyle, layerType]);
+
+  useEffect(() => {
+    // fetch the layer tiles
+    return () => fetchLayerTiles();
+  }, [layerName]);
+
+  useEffect(() => {
+    // refresh the map on tiles fetch
+    createMap();
+  }, [LT]);
 
   return (
     <div ref={mapRef as any} style={{ width: "100%", height: "100%" }}></div>

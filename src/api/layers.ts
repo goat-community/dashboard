@@ -1,5 +1,5 @@
 import type { AxiosError } from "axios";
-import type { RequestResult, Layer, LayerStyle } from "@types";
+import type { RequestResult, Layer, LayerStyle, LayerTile } from "@types";
 import { instance } from "@utils";
 
 export function getLayersStyle(): RequestResult<LayerStyle[]> {
@@ -89,6 +89,15 @@ export function updateLayer(
 export function createLayer(data: Layer): RequestResult<Layer> {
   return instance
     .post(`/config/layers/library`, data)
+    .then((response) => response.data)
+    .catch((err: AxiosError) => {
+      throw err;
+    });
+}
+
+export function getLayerTile(layer_name: string): RequestResult<LayerTile> {
+  return instance
+    .get(`/layers/tiles/${layer_name}/tilejson.json`)
     .then((response) => response.data)
     .catch((err: AxiosError) => {
       throw err;

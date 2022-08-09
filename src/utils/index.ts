@@ -5,4 +5,5 @@ export * from "./i18n";
 export * from "./backNavigate";
 export * from "./pagination";
 export * from "./search";
-export * from "./OLStyle";
+export * from "./oLStyler";
+export * from "./vectorStyler";

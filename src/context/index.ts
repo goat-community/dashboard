@@ -5,6 +5,7 @@ import notifierReducer from "./notifier";
 import organizationReducer from "./organizations";
 import layerStylesReducer from "./layerStyles";
 import extraLayersReducer from "./extraLayers";
+import layerReducer from "./layers";
 
 export const store = configureStore({
   reducer: {
@@ -13,7 +14,8 @@ export const store = configureStore({
     notifier: notifierReducer,
     organizations: organizationReducer,
     layerStyles: layerStylesReducer,
-    extraLayers: extraLayersReducer
+    extraLayers: extraLayersReducer,
+    layers: layerReducer
   }
 });
 

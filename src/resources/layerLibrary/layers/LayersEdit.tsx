@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { ChangeEvent, useEffect, useState } from "react";
 import {
   SimpleForm,
   TextInput,
@@ -67,11 +67,13 @@ const CustomToolbar = (props: any) => {
 
 const Map = (props: {
   layerURL: string | undefined;
+  layerType: undefined | "WMS" | "XYZ" | "MVT";
   layerStyles: LayerStyle[];
+  customLayerStyle: LayerStyle | undefined;
 }) => {
   const record = useRecordContext();
   const available_records = ["XYZ", "WMS", "MVT"];
-  const { layerURL, layerStyles } = props;
+  const { layerURL, layerStyles, customLayerStyle, layerType } = props;
 
   if (available_records.includes(record["type"])) {
     return (
@@ -80,15 +82,16 @@ const Map = (props: {
           <h3>Map preview</h3>
           <br />
           <MapViewer
-            layerType={record["type"]}
+            layerType={layerType === undefined ? record["type"] : layerType}
             layerURL={layerURL !== undefined ? layerURL : record["url"]}
             layerName={record["name"]}
             mapAttribution={record["map_attribution"]}
             layerStyle={
-              layerStyles &&
-              layerStyles.find(
-                (ls: LayerStyle) => ls.name === record["style_library_name"]
-              )
+              layerStyles && !customLayerStyle
+                ? layerStyles.find(
+                    (ls: LayerStyle) => ls.name === record["style_library_name"]
+                  )
+                : customLayerStyle
             }
           />
         </Box>
@@ -117,12 +120,18 @@ export default function LayersEdit() {
   const [legendsURL, setLengendsURL] = useState<null | string[]>();
   const layerStyles = useAppSelector((state) => state.layerStyles.layerStyles);
   const [mapURL, setMapURL] = useState<string | undefined>(undefined);
+  const [layerType, setLayerType] = useState<undefined | "WMS" | "XYZ" | "MVT">(
+    undefined
+  );
+  const [styleLibrary, setStyleLibrary] = useState<undefined | LayerStyle>(
+    undefined
+  );
   const [specialAttribute, setSpecialAttribute] = useState<undefined | string>(
     undefined
   );
 
   useEffect(() => {
-    dispatch(getLayersStyles());
+    return () => dispatch(getLayersStyles());
   }, []);
 
   const postSave = (data: any) => {
@@ -132,7 +141,10 @@ export default function LayersEdit() {
         specialAttribute === undefined
           ? data.special_attribute
           : JSON.parse(specialAttribute),
-      legened_urls: legendsURL === undefined ? data.legends_url : legendsURL
+      legened_urls: legendsURL === undefined ? data.legends_url : legendsURL,
+      style_library_name:
+        styleLibrary === undefined ? data.style_library_name : styleLibrary,
+      type: layerType === undefined ? data.type : layerType
     };
 
     save!({
@@ -247,6 +259,9 @@ export default function LayersEdit() {
                 { id: "WMS", name: "WMS" },
                 { id: "XYZ", name: "XYZ" }
               ]}
+              onChange={(e: any) => {
+                setLayerType(e.target.value);
+              }}
               variant="outlined"
             />
           </Box>
@@ -263,6 +278,12 @@ export default function LayersEdit() {
               fullWidth
               choices={layerStyles}
               variant="outlined"
+              onChange={(e: any) => {
+                const styleLibrary = layerStyles.find(
+                  (style) => style.name === e.target.value
+                );
+                setStyleLibrary(styleLibrary);
+              }}
             />
           </Box>
         </Box>
@@ -279,7 +300,12 @@ export default function LayersEdit() {
             />
           </Box>
         </Box>
-        <Map layerStyles={layerStyles} layerURL={mapURL} />
+        <Map
+          layerStyles={layerStyles}
+          layerURL={mapURL}
+          layerType={layerType}
+          customLayerStyle={styleLibrary}
+        />
       </SimpleForm>
     </Edit>
   );
