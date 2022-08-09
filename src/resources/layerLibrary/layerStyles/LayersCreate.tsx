@@ -29,7 +29,6 @@ const CustomToolbar = (props: any) => {
     >
       {props.loading && <LoadingIndicator />}
       {!props.loading && <SaveButton />}
-      <DeleteButton mutationMode="pessimistic" />
     </Toolbar>
   );
 };

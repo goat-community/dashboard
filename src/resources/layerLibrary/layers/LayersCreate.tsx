@@ -4,7 +4,6 @@ import {
   TextInput,
   Toolbar,
   SaveButton,
-  DeleteButton,
   SelectInput,
   Create,
   useCreateController,
@@ -14,6 +13,7 @@ import { Box } from "@mui/material";
 import { getLayersStyles } from "@context/layerStyles";
 import { MapViewer, JSONEditor, ChipInput } from "@common";
 import { useAppDispatch, useAppSelector } from "@hooks";
+import { LayerStyle } from "@types";
 
 const mlStyle = { xs: 0, sm: "0.5em" };
 const mrStyle = { xs: 0, sm: "0.5em" };
@@ -52,7 +52,6 @@ const CustomToolbar = (props: any) => {
     >
       {props.loading && <LoadingIndicator />}
       {!props.loading && <SaveButton />}
-      <DeleteButton />
     </Toolbar>
   );
 };
@@ -60,10 +59,11 @@ const CustomToolbar = (props: any) => {
 const Map = (props: {
   layerURL: string;
   layerType: "XYZ" | "MVT" | "WMS" | "";
+  layerStyle: LayerStyle | undefined;
   layerName: string;
 }) => {
   const available_types = ["XYZ", "WMS", "MVT"];
-  const { layerURL, layerType, layerName } = props;
+  const { layerURL, layerType, layerName, layerStyle } = props;
 
   if (available_types.includes(layerType) && layerType !== "") {
     return (
@@ -76,7 +76,7 @@ const Map = (props: {
             layerURL={layerURL}
             layerName={layerName}
             mapAttribution={undefined}
-            layerStyle={undefined}
+            layerStyle={layerStyle}
           />
         </Box>
       </Box>
@@ -103,6 +103,9 @@ export default function LayersEdit() {
   const [mapURL, setMapURL] = useState<string>("");
   const [layerType, setLayerType] = useState<"WMS" | "XYZ" | "MVT" | "">("");
   const [layerName, setLayerName] = useState<string>("");
+  const [layerStyle, setLayerStyle] = useState<LayerStyle | undefined>(
+    undefined
+  );
   const [specialAttribute, setSpecialAttribute] = useState<undefined | string>(
     undefined
   );
@@ -118,7 +121,9 @@ export default function LayersEdit() {
         specialAttribute === undefined
           ? data.special_attribute
           : JSON.parse(specialAttribute),
-      legend_urls: legendURL === undefined ? data.legend_urls : legendURL
+      legend_urls: legendURL === undefined ? data.legend_urls : legendURL,
+      style_library_name:
+        layerStyle === undefined ? data.style_library_name : layerStyle.name
     };
 
     save!({
@@ -250,6 +255,11 @@ export default function LayersEdit() {
               fullWidth
               isRequired
               choices={layerStyles}
+              onChange={(e) =>
+                setLayerStyle(
+                  layerStyles.find((s) => s.name === e.target.value)
+                )
+              }
               variant="outlined"
             />
           </Box>
@@ -267,7 +277,12 @@ export default function LayersEdit() {
             />
           </Box>
         </Box>
-        <Map layerType={layerType} layerURL={mapURL} layerName={layerName} />
+        <Map
+          layerType={layerType}
+          layerURL={mapURL}
+          layerName={layerName}
+          layerStyle={layerStyle}
+        />
       </SimpleForm>
     </Create>
   );
