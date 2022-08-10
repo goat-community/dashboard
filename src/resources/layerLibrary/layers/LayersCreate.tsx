@@ -14,6 +14,8 @@ import { getLayersStyles } from "@context/layerStyles";
 import { MapViewer, JSONEditor, ChipInput } from "@common";
 import { useAppDispatch, useAppSelector } from "@hooks";
 import { LayerStyle } from "@types";
+import { batch } from "react-redux";
+import { getExtraLayers } from "@context/extraLayers";
 
 const mlStyle = { xs: 0, sm: "0.5em" };
 const mrStyle = { xs: 0, sm: "0.5em" };
@@ -99,6 +101,8 @@ export default function LayersEdit() {
   const { save, saving } = useCreateController({ resource: "layers" });
   const dispatch = useAppDispatch();
   const layerStyles = useAppSelector((state) => state.layerStyles.layerStyles);
+  const extraLayers = useAppSelector((state) => state.extraLayers.extraLayers);
+
   const [legendURL, setLengendsURL] = useState<null | string[]>();
   const [mapURL, setMapURL] = useState<string>("");
   const [layerType, setLayerType] = useState<"WMS" | "XYZ" | "MVT" | "">("");
@@ -111,7 +115,10 @@ export default function LayersEdit() {
   );
 
   useEffect(() => {
-    dispatch(getLayersStyles());
+    batch(() => {
+      dispatch(getLayersStyles());
+      dispatch(getExtraLayers());
+    });
   }, []);
 
   const postSave = (data: any) => {
@@ -182,16 +189,46 @@ export default function LayersEdit() {
       >
         <Box display={displayStyle}>
           <Box flex={1} mr={mrStyle}>
-            <TextInput source="name" isRequired fullWidth variant="outlined" />
+            <SelectInput
+              source="type"
+              emptyText={"Select an layer type"}
+              fullWidth
+              isRequired
+              choices={[
+                { id: "MVT", name: "MVT" },
+                { id: "WMS", name: "WMS" },
+                { id: "XYZ", name: "XYZ" }
+              ]}
+              onChange={(e) => setLayerType(e.target.value)}
+              optionValue="name"
+              variant="outlined"
+            />
           </Box>
           <Box flex={1} ml={mlStyle}>
-            <TextInput source="url" fullWidth variant="outlined" />
+            {layerType === "MVT" ? (
+              <SelectInput
+                source="name"
+                emptyText={"Select a extra layer"}
+                fullWidth
+                choices={extraLayers}
+                variant="outlined"
+                optionValue="table_name"
+                optionText="table_name"
+              />
+            ) : (
+              <TextInput
+                source="name"
+                isRequired
+                fullWidth
+                variant="outlined"
+              />
+            )}
           </Box>
         </Box>
 
         <Box display={displayStyle}>
           <Box flex={1} mr={mrStyle}>
-            <TextInput source="access_token" fullWidth variant="outlined" />
+            <TextInput source="url" fullWidth variant="outlined" />
           </Box>
           <Box flex={1} ml={mlStyle}>
             <TextInput source="map_attribution" fullWidth variant="outlined" />
@@ -247,20 +284,7 @@ export default function LayersEdit() {
             <TextInput source="min_resolution" fullWidth variant="outlined" />
           </Box>
           <Box flex={1} ml={mlStyle}>
-            <SelectInput
-              source="type"
-              emptyText={"Select an layer type"}
-              fullWidth
-              isRequired
-              choices={[
-                { id: "MVT", name: "MVT" },
-                { id: "WMS", name: "WMS" },
-                { id: "XYZ", name: "XYZ" }
-              ]}
-              onChange={(e) => setLayerType(e.target.value)}
-              optionValue="name"
-              variant="outlined"
-            />
+            <TextInput source="access_token" fullWidth variant="outlined" />
           </Box>
         </Box>
 
