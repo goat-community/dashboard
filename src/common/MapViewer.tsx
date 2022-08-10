@@ -57,7 +57,7 @@ export function MapViewer(props: MapViewerProps) {
           format: new MVT(),
           url:
             layerURL ||
-            baseUrl() + `/layers/tiles/${layerName}/{z}/{x}/{y}.pbf`,
+            baseUrl() + `layers/tiles/${layerName}/{z}/{x}/{y}.pbf`,
           attributions: mapAttribution,
           tileLoadFunction: function (tile: any, url) {
             tile.setLoader(function (extent: any, _: any, projection: any) {
