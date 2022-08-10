@@ -5,7 +5,6 @@ import {
   Create,
   useCreateController,
   Toolbar,
-  DeleteButton,
   SaveButton,
   LoadingIndicator
 } from "react-admin";

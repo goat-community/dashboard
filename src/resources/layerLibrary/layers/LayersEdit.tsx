@@ -31,11 +31,17 @@ const validateForm = (v: Record<string, any>): Record<string, any> => {
   if (!v.source) {
     errors.source = "Source is required";
   }
-  if (!v.source_1) {
-    errors.source_1 = "Source 1 is required";
-  }
   if (!v.type) {
     errors.type = "Layer type is required";
+  }
+  if (v.type === "MVT" && !v.style_library_name) {
+    errors.style_library_name = "Style library name is required";
+  }
+  if (v.type === "XYZ" && !v.url) {
+    errors.url = "URL is required";
+  }
+  if (v.type === "WMS" && !v.url) {
+    errors.url = "URL is required";
   }
 
   return errors;
@@ -123,7 +129,7 @@ export default function LayersEdit() {
   const [layerType, setLayerType] = useState<undefined | "WMS" | "XYZ" | "MVT">(
     undefined
   );
-  const [styleLibrary, setStyleLibrary] = useState<undefined | LayerStyle>(
+  const [layerStyle, setLayerStyle] = useState<LayerStyle | undefined>(
     undefined
   );
   const [specialAttribute, setSpecialAttribute] = useState<undefined | string>(
@@ -135,17 +141,39 @@ export default function LayersEdit() {
   }, []);
 
   const postSave = (data: any) => {
-    const mixedData = {
+    let mixedData = {
       ...data,
       special_attribute:
         specialAttribute === undefined
           ? data.special_attribute
           : JSON.parse(specialAttribute),
-      legened_urls: legendsURL === undefined ? data.legends_url : legendsURL,
+      legend_urls: legendsURL === undefined ? data.legend_urls : legendsURL,
       style_library_name:
-        styleLibrary === undefined ? data.style_library_name : styleLibrary,
-      type: layerType === undefined ? data.type : layerType
+        layerStyle === undefined ? data.style_library_name : layerStyle.name
     };
+
+    if (
+      data.type === "WMS" &&
+      !legendsURL?.length &&
+      !data.legend_urls?.length
+    ) {
+      alert("Legend URLs is required for WMS layers");
+      return false;
+    }
+
+    if (mixedData.source_1 === "") {
+      mixedData = Object.fromEntries(
+        Object.entries(mixedData).filter(([key, _]) => key !== "source_1")
+      );
+    }
+
+    if (mixedData.style_library_name === "") {
+      mixedData = Object.fromEntries(
+        Object.entries(mixedData).filter(
+          ([key, _]) => key !== "style_library_name"
+        )
+      );
+    }
 
     save!({
       ...mixedData
@@ -278,11 +306,14 @@ export default function LayersEdit() {
               fullWidth
               choices={layerStyles}
               variant="outlined"
+              disabled={
+                layerType === "WMS" || layerType === "XYZ" || !layerType
+              }
               onChange={(e: any) => {
                 const styleLibrary = layerStyles.find(
                   (style) => style.name === e.target.value
                 );
-                setStyleLibrary(styleLibrary);
+                setLayerStyle(styleLibrary);
               }}
             />
           </Box>
@@ -304,7 +335,7 @@ export default function LayersEdit() {
           layerStyles={layerStyles}
           layerURL={mapURL}
           layerType={layerType}
-          customLayerStyle={styleLibrary}
+          customLayerStyle={layerStyle}
         />
       </SimpleForm>
     </Edit>
