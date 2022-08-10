@@ -332,9 +332,6 @@ export default function LayersEdit() {
               fullWidth
               choices={layerStyles}
               variant="outlined"
-              disabled={
-                layerType === "WMS" || layerType === "XYZ" || !layerType
-              }
               onChange={(e: any) => {
                 const styleLibrary = layerStyles.find(
                   (style) => style.name === e.target.value

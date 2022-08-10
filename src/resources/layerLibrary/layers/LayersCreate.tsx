@@ -212,6 +212,9 @@ export default function LayersEdit() {
                 fullWidth
                 choices={extraLayers}
                 variant="outlined"
+                onChange={(e) => {
+                  setLayerName(e.target.value);
+                }}
                 optionValue="table_name"
                 optionText="table_name"
               />
@@ -297,9 +300,6 @@ export default function LayersEdit() {
               source="style_library_name"
               emptyText={"Select an style library name"}
               fullWidth
-              disabled={
-                layerType === "WMS" || layerType === "XYZ" || !layerType
-              }
               choices={layerStyles}
               onChange={(e) =>
                 setLayerStyle(

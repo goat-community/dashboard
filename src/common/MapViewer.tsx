@@ -124,7 +124,7 @@ export function MapViewer(props: MapViewerProps) {
       ],
       view: new View(viewOptions)
     });
-  }, [LT, layerURL, layerStyle, layerType]);
+  }, [LT, layerURL, layerStyle, layerType, layerName]);
 
   // Initilize the openlayer Map class
   useEffect(() => {
