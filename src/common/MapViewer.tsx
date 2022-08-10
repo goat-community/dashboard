@@ -39,7 +39,7 @@ export function MapViewer(props: MapViewerProps) {
       });
     }
 
-    if (layerType === "WMS") {
+    if (layerType === "WMS" && layerURL) {
       return new ImageLayer({
         source: new ImageWMS({
           url: layerURL.split("?")[0] + "?",
@@ -90,6 +90,11 @@ export function MapViewer(props: MapViewerProps) {
       }
       return vtLayer;
     }
+
+    return new TileLayer({
+      source: new OSM(),
+      opacity: 1
+    });
   };
 
   function fetchLayerTiles() {
@@ -119,7 +124,7 @@ export function MapViewer(props: MapViewerProps) {
       ],
       view: new View(viewOptions)
     });
-  }, [LT, layerURL, layerStyle, layerType]);
+  }, [LT, layerURL, layerStyle, layerType, layerName]);
 
   // Initilize the openlayer Map class
   useEffect(() => {

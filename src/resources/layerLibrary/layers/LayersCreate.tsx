@@ -14,6 +14,8 @@ import { getLayersStyles } from "@context/layerStyles";
 import { MapViewer, JSONEditor, ChipInput } from "@common";
 import { useAppDispatch, useAppSelector } from "@hooks";
 import { LayerStyle } from "@types";
+import { batch } from "react-redux";
+import { getExtraLayers } from "@context/extraLayers";
 
 const mlStyle = { xs: 0, sm: "0.5em" };
 const mrStyle = { xs: 0, sm: "0.5em" };
@@ -21,24 +23,24 @@ const displayStyle = { xs: "block", sm: "flex", width: "100%" };
 
 const validateForm = (v: Record<string, any>): Record<string, any> => {
   const errors = {} as any;
-  // validate layers edit form
+  // validate layers create form
   if (!v.name) {
     errors.name = "Name is required";
   }
   if (!v.source) {
     errors.source = "Source is required";
   }
-  if (!v.source_1) {
-    errors.source_1 = "Source 1 is required";
-  }
   if (!v.type) {
     errors.type = "Layer type is required";
   }
-  if (!v.style_library_name) {
+  if (v.type === "MVT" && !v.style_library_name) {
     errors.style_library_name = "Style library name is required";
   }
-  if (v.type === "WMS" && !v.legend_urls) {
-    errors.legend_urls = "Legend URLs is required";
+  if (v.type === "XYZ" && !v.url) {
+    errors.url = "URL is required";
+  }
+  if (v.type === "WMS" && !v.url) {
+    errors.url = "URL is required";
   }
 
   return errors;
@@ -98,8 +100,10 @@ const LegendsInput = (props: any) => {
 export default function LayersEdit() {
   const { save, saving } = useCreateController({ resource: "layers" });
   const dispatch = useAppDispatch();
-  const [legendURL, setLengendsURL] = useState<null | string[]>();
   const layerStyles = useAppSelector((state) => state.layerStyles.layerStyles);
+  const extraLayers = useAppSelector((state) => state.extraLayers.extraLayers);
+
+  const [legendURL, setLengendsURL] = useState<null | string[]>();
   const [mapURL, setMapURL] = useState<string>("");
   const [layerType, setLayerType] = useState<"WMS" | "XYZ" | "MVT" | "">("");
   const [layerName, setLayerName] = useState<string>("");
@@ -111,11 +115,14 @@ export default function LayersEdit() {
   );
 
   useEffect(() => {
-    dispatch(getLayersStyles());
+    batch(() => {
+      dispatch(getLayersStyles());
+      dispatch(getExtraLayers());
+    });
   }, []);
 
   const postSave = (data: any) => {
-    const mixedData = {
+    let mixedData = {
       ...data,
       special_attribute:
         specialAttribute === undefined
@@ -125,6 +132,25 @@ export default function LayersEdit() {
       style_library_name:
         layerStyle === undefined ? data.style_library_name : layerStyle.name
     };
+
+    if (data.type === "WMS" && !legendURL?.length) {
+      alert("Legend URLs is required for WMS layers");
+      return false;
+    }
+
+    if (mixedData.source_1 === "") {
+      mixedData = Object.fromEntries(
+        Object.entries(mixedData).filter(([key, _]) => key !== "source_1")
+      );
+    }
+
+    if (mixedData.style_library_name === "") {
+      mixedData = Object.fromEntries(
+        Object.entries(mixedData).filter(
+          ([key, _]) => key !== "style_library_name"
+        )
+      );
+    }
 
     save!({
       ...mixedData
@@ -155,22 +181,57 @@ export default function LayersEdit() {
           }
         }}
         defaultValues={{
-          legend_urls: []
+          legend_urls: [],
+          source_1: null,
+          style_library_name: null
         }}
         validate={validateForm}
       >
         <Box display={displayStyle}>
           <Box flex={1} mr={mrStyle}>
-            <TextInput source="name" isRequired fullWidth variant="outlined" />
+            <SelectInput
+              source="type"
+              emptyText={"Select an layer type"}
+              fullWidth
+              isRequired
+              choices={[
+                { id: "MVT", name: "MVT" },
+                { id: "WMS", name: "WMS" },
+                { id: "XYZ", name: "XYZ" }
+              ]}
+              onChange={(e) => setLayerType(e.target.value)}
+              optionValue="name"
+              variant="outlined"
+            />
           </Box>
           <Box flex={1} ml={mlStyle}>
-            <TextInput source="url" fullWidth variant="outlined" />
+            {layerType === "MVT" ? (
+              <SelectInput
+                source="name"
+                emptyText={"Select a extra layer"}
+                fullWidth
+                choices={extraLayers}
+                variant="outlined"
+                onChange={(e) => {
+                  setLayerName(e.target.value);
+                }}
+                optionValue="table_name"
+                optionText="table_name"
+              />
+            ) : (
+              <TextInput
+                source="name"
+                isRequired
+                fullWidth
+                variant="outlined"
+              />
+            )}
           </Box>
         </Box>
 
         <Box display={displayStyle}>
           <Box flex={1} mr={mrStyle}>
-            <TextInput source="access_token" fullWidth variant="outlined" />
+            <TextInput source="url" fullWidth variant="outlined" />
           </Box>
           <Box flex={1} ml={mlStyle}>
             <TextInput source="map_attribution" fullWidth variant="outlined" />
@@ -198,7 +259,6 @@ export default function LayersEdit() {
               source="source_1"
               variant="outlined"
               fullWidth
-              isRequired
               choices={[
                 { id: 1, name: "Stadt Freiburg (FreiGIS)" },
                 { id: 2, name: "Bayerisches Landesamt für Umwelt" },
@@ -227,20 +287,7 @@ export default function LayersEdit() {
             <TextInput source="min_resolution" fullWidth variant="outlined" />
           </Box>
           <Box flex={1} ml={mlStyle}>
-            <SelectInput
-              source="type"
-              emptyText={"Select an layer type"}
-              fullWidth
-              isRequired
-              choices={[
-                { id: "MVT", name: "MVT" },
-                { id: "WMS", name: "WMS" },
-                { id: "XYZ", name: "XYZ" }
-              ]}
-              onChange={(e) => setLayerType(e.target.value)}
-              optionValue="name"
-              variant="outlined"
-            />
+            <TextInput source="access_token" fullWidth variant="outlined" />
           </Box>
         </Box>
 
@@ -253,7 +300,6 @@ export default function LayersEdit() {
               source="style_library_name"
               emptyText={"Select an style library name"}
               fullWidth
-              isRequired
               choices={layerStyles}
               onChange={(e) =>
                 setLayerStyle(

@@ -102,6 +102,9 @@ export const dataProvider: DataProvider = {
     if (resource === "styles") {
       return LayerStylesProvider.deleteLayerStyle(params.id as string);
     }
+    if (resource === "layers") {
+      return LayerProvider.deleteLayer(params.id as string);
+    }
     if (resource === "upload") {
       return ExtraLayerProvider.deleteExtraLayer(params.id as number);
     }

@@ -1,5 +1,6 @@
 import type {
   CreateResult,
+  DeleteResult,
   GetListParams,
   GetListResult,
   GetOneResult,
@@ -120,8 +121,21 @@ export const LayerProvider = {
           // handle the case of data provider
           resolve({
             data: {
-              ...layer
+              ...layer,
+              id: layer.name
             }
+          });
+        })
+        .catch((e) => reject(e));
+    }),
+
+  /** Delete a layer */
+  deleteLayer: (layer_name: string): Promise<DeleteResult> =>
+    new Promise((resolve, reject) => {
+      Api.deleteLayer(layer_name)!
+        .then((layer) => {
+          resolve({
+            data: layer
           });
         })
         .catch((e) => reject(e));
