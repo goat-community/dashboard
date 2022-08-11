@@ -1,6 +1,13 @@
-import type { GetListParams, GetListResult } from "react-admin";
+import type {
+  CreateResult,
+  GetListParams,
+  GetListResult,
+  GetOneResult,
+  UpdateResult
+} from "react-admin";
 import * as Api from "@api/geostores";
 import { pagination, search } from "@utils";
+import { GeoStore } from "@types";
 
 /** Actions  */
 export const GeoStoreProvider = {
@@ -23,15 +30,49 @@ export const GeoStoreProvider = {
               q: params.filter.q
             });
           }
-          //   // we should replace all ids with the geostores name to
-          //   // handle the case of data provider
-          //   geostores!.forEach((geostore) => {
-          //     geostore.id = layer.name;
-          //   });
 
           resolve({
             data: filtered_data,
             total: geostores?.length
+          });
+        })
+        .catch((e) => reject(e));
+    }),
+
+  /** Get a GeoStore item */
+  getGeoStore: (geostore_id: number): Promise<GetOneResult> =>
+    new Promise((resolve, reject) => {
+      Api.getGeoStore(geostore_id)!
+        .then((geostore) => {
+          resolve({
+            data: geostore
+          });
+        })
+        .catch((e) => reject(e));
+    }),
+
+  /** Update a GeoStore */
+  updateGeoStore: (
+    geostore_id: number,
+    data: GeoStore
+  ): Promise<UpdateResult> =>
+    new Promise((resolve, reject) => {
+      Api.updateGeoStore(geostore_id, data)!
+        .then((geostore) => {
+          resolve({
+            data: geostore
+          });
+        })
+        .catch((e) => reject(e));
+    }),
+
+  /** Create a GeoStore */
+  createGeoStore: (data: GeoStore): Promise<CreateResult> =>
+    new Promise((resolve, reject) => {
+      Api.createGeoStore(data)!
+        .then((geostore) => {
+          resolve({
+            data: geostore
           });
         })
         .catch((e) => reject(e));

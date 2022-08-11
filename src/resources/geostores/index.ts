@@ -1,5 +1,7 @@
 import GeoStoresList from "./GeoStoresList";
+import GeoStoresEdit from "./GeoStoresEdit";
 
 export const GeoStoresResource = {
-  list: GeoStoresList
+  list: GeoStoresList,
+  edit: GeoStoresEdit
 };

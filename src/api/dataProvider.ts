@@ -17,7 +17,7 @@ import { LayerStylesProvider } from "@context/layerStyles";
 import { LayerProvider } from "@context/layers";
 import { ExtraLayerProvider } from "@context/extraLayers";
 import { GeoStoreProvider } from "@context/geostores";
-import type { Layer, LayerStyle, User } from "@types";
+import type { GeoStore, Layer, LayerStyle, User } from "@types";
 
 export const dataProvider: DataProvider = {
   getList: (resource, params): Promise<GetListResult> => {
@@ -53,6 +53,9 @@ export const dataProvider: DataProvider = {
     if (resource === "upload") {
       return ExtraLayerProvider.getExtraLayer(params.id);
     }
+    if (resource === "geostores") {
+      return GeoStoreProvider.getGeoStore(params.id);
+    }
     return UserProvider.getUser(params.id);
   },
   create: (resource, params): Promise<CreateResult> => {
@@ -70,6 +73,9 @@ export const dataProvider: DataProvider = {
       return ExtraLayerProvider.createExtraLayer(
         params.data as { upload_file: string }
       );
+    }
+    if (resource === "geostores") {
+      return GeoStoreProvider.createGeoStore(params.data as GeoStore);
     }
     return UserProvider.createUser(params.data);
   },
@@ -94,6 +100,12 @@ export const dataProvider: DataProvider = {
       return ExtraLayerProvider.updateExtraLayer(
         params.id as number,
         params.data as { upload_file: string }
+      );
+    }
+    if (resource === "geostores") {
+      return GeoStoreProvider.updateGeoStore(
+        params.id as number,
+        params.data as GeoStore
       );
     }
     return UserProvider.updateUser(params.id as number, params.data as User);
