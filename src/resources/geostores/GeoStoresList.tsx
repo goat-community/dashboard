@@ -19,13 +19,13 @@ const usersFilters = [
   />
 ];
 
-const UsersPagination = () => (
+const ListPagination = () => (
   <Pagination rowsPerPageOptions={[10, 25, 50, 100]} defaultValue={10} />
 );
 
 export default function GeoStoresList() {
   return (
-    <List filters={usersFilters} pagination={<UsersPagination />}>
+    <List filters={usersFilters} pagination={<ListPagination />}>
       <Datagrid
         optimized
         isRowSelectable={() => false}
@@ -33,8 +33,8 @@ export default function GeoStoresList() {
         size="small"
       >
         <TextField source="name" sortable={false} />
-        <TextField source="surname" sortable={false} />
-        <TextField source="email" sortable={false} />
+        <TextField source="type" sortable={false} />
+        <TextField source="attribution" sortable={false} />
         <Stack spacing={1} direction="row">
           <EditButton />
         </Stack>

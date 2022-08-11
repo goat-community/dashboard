@@ -16,6 +16,7 @@ import { UserProvider } from "@context/user";
 import { LayerStylesProvider } from "@context/layerStyles";
 import { LayerProvider } from "@context/layers";
 import { ExtraLayerProvider } from "@context/extraLayers";
+import { GeoStoreProvider } from "@context/geostores";
 import type { Layer, LayerStyle, User } from "@types";
 
 export const dataProvider: DataProvider = {
@@ -32,6 +33,9 @@ export const dataProvider: DataProvider = {
     }
     if (resource === "upload") {
       return ExtraLayerProvider.getExtraLayersList(params);
+    }
+    if (resource === "geostores") {
+      return GeoStoreProvider.getGeoStoresList(params);
     }
     return UserProvider.getUsersList(params);
   },
