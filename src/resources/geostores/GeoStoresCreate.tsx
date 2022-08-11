@@ -1,19 +1,15 @@
 import { useState } from "react";
 import {
-  SimpleForm,
-  TextInput,
-  SelectInput,
-  useRedirect,
-  Edit,
-  useRecordContext,
   Toolbar,
   LoadingIndicator,
   SaveButton,
-  useEditController,
-  DeleteButton
+  useCreateController,
+  Create,
+  SimpleForm,
+  TextInput,
+  SelectInput
 } from "react-admin";
-import { Box, IconButton, Typography, TextField } from "@mui/material";
-import CloseIcon from "@mui/icons-material/Close";
+import { Box, TextField, Typography } from "@mui/material";
 import type { GeoStore } from "@types";
 
 export const validateForm = (v: Record<string, any>): Record<string, any> => {
@@ -40,10 +36,9 @@ export const validateForm = (v: Record<string, any>): Record<string, any> => {
 function ConfigurationForm(props: {
   onChange: (conf: GeoStore["configuration"] | {}) => void;
 }) {
-  const record = useRecordContext();
   const [configuration, setConfiguration] = useState<
     GeoStore["configuration"] | {}
-  >(record?.configuration || {});
+  >({});
 
   return (
     <>
@@ -58,8 +53,6 @@ function ConfigurationForm(props: {
       ].map((i: string) => (
         <TextField
           key={i}
-          // @ts-ignore
-          value={configuration?.[i]}
           onChange={(e) => {
             //@ts-ignore
             let new_configuration: GeoStore["configuration"] = {
@@ -86,14 +79,12 @@ const CustomToolbar = (props: any) => {
     >
       {props.loading && <LoadingIndicator />}
       {!props.loading && <SaveButton alwaysEnable />}
-      <DeleteButton />
     </Toolbar>
   );
 };
 
-export default function GeoStoresEdit() {
-  const redirect = useRedirect();
-  const { save, saving } = useEditController();
+export default function GeoStoresCreate() {
+  const { save, saving } = useCreateController({ resource: "geostores" });
   const [configuration, setConfiguration] = useState<
     GeoStore["configuration"] | {}
   >({});
@@ -125,18 +116,13 @@ export default function GeoStoresEdit() {
   };
 
   return (
-    <Edit
+    <Create
       sx={{
         justifySelf: "center",
         display: "flex",
         alignSelf: "center"
       }}
-      mutationMode="pessimistic"
     >
-      <IconButton sx={{ margin: 1 }} onClick={() => redirect("..")}>
-        <CloseIcon />
-      </IconButton>
-
       <SimpleForm
         sx={{ width: 900 }}
         validate={validateForm}
@@ -203,6 +189,6 @@ export default function GeoStoresEdit() {
           </Box>
         </Box>
       </SimpleForm>
-    </Edit>
+    </Create>
   );
 }
