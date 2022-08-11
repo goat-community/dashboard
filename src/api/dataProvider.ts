@@ -16,7 +16,8 @@ import { UserProvider } from "@context/user";
 import { LayerStylesProvider } from "@context/layerStyles";
 import { LayerProvider } from "@context/layers";
 import { ExtraLayerProvider } from "@context/extraLayers";
-import type { Layer, LayerStyle, User } from "@types";
+import { GeoStoreProvider } from "@context/geostores";
+import type { GeoStore, Layer, LayerStyle, User } from "@types";
 
 export const dataProvider: DataProvider = {
   getList: (resource, params): Promise<GetListResult> => {
@@ -33,6 +34,9 @@ export const dataProvider: DataProvider = {
     if (resource === "upload") {
       return ExtraLayerProvider.getExtraLayersList(params);
     }
+    if (resource === "geostores") {
+      return GeoStoreProvider.getGeoStoresList(params);
+    }
     return UserProvider.getUsersList(params);
   },
   getOne: (resource, params): Promise<GetOneResult> => {
@@ -48,6 +52,9 @@ export const dataProvider: DataProvider = {
     }
     if (resource === "upload") {
       return ExtraLayerProvider.getExtraLayer(params.id);
+    }
+    if (resource === "geostores") {
+      return GeoStoreProvider.getGeoStore(params.id);
     }
     return UserProvider.getUser(params.id);
   },
@@ -66,6 +73,9 @@ export const dataProvider: DataProvider = {
       return ExtraLayerProvider.createExtraLayer(
         params.data as { upload_file: string }
       );
+    }
+    if (resource === "geostores") {
+      return GeoStoreProvider.createGeoStore(params.data as GeoStore);
     }
     return UserProvider.createUser(params.data);
   },
@@ -92,6 +102,12 @@ export const dataProvider: DataProvider = {
         params.data as { upload_file: string }
       );
     }
+    if (resource === "geostores") {
+      return GeoStoreProvider.updateGeoStore(
+        params.id as number,
+        params.data as GeoStore
+      );
+    }
     return UserProvider.updateUser(params.id as number, params.data as User);
   },
   delete: (resource, params): Promise<DeleteResult> => {
@@ -107,6 +123,9 @@ export const dataProvider: DataProvider = {
     }
     if (resource === "upload") {
       return ExtraLayerProvider.deleteExtraLayer(params.id as number);
+    }
+    if (resource === "geostores") {
+      return GeoStoreProvider.deleteGeoStore(params.id as number);
     }
     return UserProvider.deleteUser(params);
   },

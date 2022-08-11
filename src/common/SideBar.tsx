@@ -4,10 +4,11 @@ import PeopleIcon from "@mui/icons-material/People";
 import LogoutIcon from "@mui/icons-material/Logout";
 import LayersIcon from "@mui/icons-material/Layers";
 import UploadIcon from "@mui/icons-material/Upload";
+import StorageIcon from "@mui/icons-material/Storage";
 import ListIcon from "@mui/icons-material/List";
 import LibraryBooksIcon from "@mui/icons-material/LibraryBooks";
-import { logout } from "@context/user";
 import GoatLogo from "@assets/images/logo_green.webp";
+import { logout } from "@context/user";
 import { useAppDispatch } from "@hooks";
 
 export function Sidebar() {
@@ -26,48 +27,44 @@ export function Sidebar() {
             Users
           </li>
         </Link>
+
+        {/**  Layer Library */}
         <Link to="layers">
           <li>
             <LibraryBooksIcon />
             Layer Library
           </li>
         </Link>
-        {(location.pathname.includes("/layers") ||
-          location.pathname.includes("/styles") ||
-          location.pathname.includes("/upload")) && (
+        {["/layers", "/styles", "/upload"].includes(location.pathname) && (
           <div className="collapsed-menu">
-            <Link to="layers">
-              <li
-                className={
-                  location.pathname.includes("/layers") ? "active" : ""
-                }
-              >
-                <LayersIcon />
-                Layers
-              </li>
-            </Link>
-            <Link to="styles">
-              <li
-                className={
-                  location.pathname.includes("/styles") ? "active" : ""
-                }
-              >
-                <ListIcon />
-                Styles
-              </li>
-            </Link>
-            <Link to="upload">
-              <li
-                className={
-                  location.pathname.includes("/upload") ? "active" : ""
-                }
-              >
-                <UploadIcon />
-                Upload Data
-              </li>
-            </Link>
+            {[
+              { path: "/layers", name: "Layers", icon: <LayersIcon /> },
+              { path: "/styles", name: "Styles", icon: <ListIcon /> },
+              { path: "/upload", name: "Extra layers", icon: <UploadIcon /> }
+            ].map((item) => (
+              <Link to={item.path} key={item.path}>
+                <li
+                  className={
+                    location.pathname.includes(item.path) ? "active" : ""
+                  }
+                >
+                  {item.icon}
+                  {item.name}
+                </li>
+              </Link>
+            ))}
           </div>
         )}
+
+        <Link to={"/geostores"}>
+          <li
+            className={location.pathname.includes("/geostores") ? "active" : ""}
+          >
+            <StorageIcon />
+            Geostores
+          </li>
+        </Link>
+
         <li className="logout" onClick={() => dispatch(logout())}>
           <LogoutIcon />
           Logout

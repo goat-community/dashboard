@@ -2,7 +2,11 @@ import { Admin, Resource } from "react-admin";
 /** Pages */
 import LoginPage from "@pages/login/Login";
 /** Resources */
-import { UsersResource, LayerLibraryResources as LLR } from "@resources";
+import {
+  UsersResource,
+  LayerLibraryResources as LLR,
+  GeoStoresResource
+} from "@resources";
 /** Providers */
 import { theme } from "@styles/theme";
 import { dataProvider } from "@api";
@@ -25,6 +29,7 @@ export default function AppRouter() {
         <Resource name="styles" {...LLR.LayerStylesResource} />
         <Resource name="layers" {...LLR.LayersResource} />
         <Resource name="upload" {...LLR.ExtraLayersResource} />
+        <Resource name="geostores" {...GeoStoresResource} />
       </Admin>
     );
   } else {
