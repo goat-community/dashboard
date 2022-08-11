@@ -1,5 +1,6 @@
 import type {
   CreateResult,
+  DeleteResult,
   GetListParams,
   GetListResult,
   GetOneResult,
@@ -70,6 +71,18 @@ export const GeoStoreProvider = {
   createGeoStore: (data: GeoStore): Promise<CreateResult> =>
     new Promise((resolve, reject) => {
       Api.createGeoStore(data)!
+        .then((geostore) => {
+          resolve({
+            data: geostore
+          });
+        })
+        .catch((e) => reject(e));
+    }),
+
+  /** Delete a GeoStore */
+  deleteGeoStore: (geostore_id: number): Promise<DeleteResult> =>
+    new Promise((resolve, reject) => {
+      Api.deleteGeoStore(geostore_id)!
         .then((geostore) => {
           resolve({
             data: geostore

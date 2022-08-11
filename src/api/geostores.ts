@@ -41,3 +41,12 @@ export function createGeoStore(data: GeoStore): RequestResult<GeoStore> {
       throw err;
     });
 }
+
+export function deleteGeoStore(geostore_id: number): RequestResult<GeoStore> {
+  return instance
+    .delete(`/config/geostores/${geostore_id}`)
+    .then((response) => response.data)
+    .catch((err: AxiosError) => {
+      throw err;
+    });
+}
