@@ -5,7 +5,8 @@ import LoginPage from "@pages/login/Login";
 import {
   UsersResource,
   LayerLibraryResources as LLR,
-  GeoStoresResource
+  GeoStoresResource,
+  StudyAreasResource
 } from "@resources";
 /** Providers */
 import { theme } from "@styles/theme";
@@ -30,6 +31,7 @@ export default function AppRouter() {
         <Resource name="layers" {...LLR.LayersResource} />
         <Resource name="upload" {...LLR.ExtraLayersResource} />
         <Resource name="geostores" {...GeoStoresResource} />
+        <Resource name="studyareas" {...StudyAreasResource} />
       </Admin>
     );
   } else {

@@ -17,6 +17,7 @@ import { LayerStylesProvider } from "@context/layerStyles";
 import { LayerProvider } from "@context/layers";
 import { ExtraLayerProvider } from "@context/extraLayers";
 import { GeoStoreProvider } from "@context/geostores";
+import { StudyAreaProvider } from "@context/studyareas";
 import type { GeoStore, Layer, LayerStyle, User } from "@types";
 
 export const dataProvider: DataProvider = {
@@ -37,6 +38,9 @@ export const dataProvider: DataProvider = {
     if (resource === "geostores") {
       return GeoStoreProvider.getGeoStoresList(params);
     }
+    if (resource === "studyareas") {
+      return StudyAreaProvider.getStudyAreasList(params);
+    }
     return UserProvider.getUsersList(params);
   },
   getOne: (resource, params): Promise<GetOneResult> => {
@@ -55,6 +59,16 @@ export const dataProvider: DataProvider = {
     }
     if (resource === "geostores") {
       return GeoStoreProvider.getGeoStore(params.id);
+    }
+    if (resource === "studyareas") {
+      return new Promise((resolve) =>
+        resolve({
+          data: {
+            id: params.id,
+            name: "Study Area " + params.id
+          }
+        })
+      );
     }
     return UserProvider.getUser(params.id);
   },
@@ -106,6 +120,12 @@ export const dataProvider: DataProvider = {
       return GeoStoreProvider.updateGeoStore(
         params.id as number,
         params.data as GeoStore
+      );
+    }
+    if (resource === "studyareas") {
+      return StudyAreaProvider.updateStudyAreaLayerConfig(
+        params.id as number,
+        params.data as any
       );
     }
     return UserProvider.updateUser(params.id as number, params.data as User);

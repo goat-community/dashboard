@@ -6,6 +6,7 @@ import organizationReducer from "./organizations";
 import layerStylesReducer from "./layerStyles";
 import extraLayersReducer from "./extraLayers";
 import layerReducer from "./layers";
+import studyareasReducer from "./studyareas";
 
 export const store = configureStore({
   reducer: {
@@ -15,7 +16,8 @@ export const store = configureStore({
     organizations: organizationReducer,
     layerStyles: layerStylesReducer,
     extraLayers: extraLayersReducer,
-    layers: layerReducer
+    layers: layerReducer,
+    studyareas: studyareasReducer
   }
 });
 
