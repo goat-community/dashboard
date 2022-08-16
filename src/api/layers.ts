@@ -112,3 +112,12 @@ export function deleteLayer(layer_name: string): RequestResult<Layer> {
       throw err;
     });
 }
+
+export function getLayerGroupsEnum(): RequestResult<string[]> {
+  return instance
+    .get(`openapi.json`)
+    .then((response) => response.data.components.schemas.LayerGroupsEnum.enum)
+    .catch((err: AxiosError) => {
+      throw err;
+    });
+}

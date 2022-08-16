@@ -5,6 +5,7 @@ import LogoutIcon from "@mui/icons-material/Logout";
 import LayersIcon from "@mui/icons-material/Layers";
 import UploadIcon from "@mui/icons-material/Upload";
 import StorageIcon from "@mui/icons-material/Storage";
+import SignpostIcon from "@mui/icons-material/Signpost";
 import ListIcon from "@mui/icons-material/List";
 import LibraryBooksIcon from "@mui/icons-material/LibraryBooks";
 import GoatLogo from "@assets/images/logo_green.webp";
@@ -62,6 +63,17 @@ export function Sidebar() {
           >
             <StorageIcon />
             Geostores
+          </li>
+        </Link>
+
+        <Link to={"/studyareas"}>
+          <li
+            className={
+              location.pathname.includes("/studyareas") ? "active" : ""
+            }
+          >
+            <SignpostIcon />
+            Studyareas
           </li>
         </Link>
 

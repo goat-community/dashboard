@@ -47,3 +47,28 @@ export interface LayerTile {
   bounds?: [number, number, number, number];
   center?: [string, string, string];
 }
+
+export interface StaticVectorLayer {
+  type: string;
+  features: [
+    {
+      type: string;
+      geometry: {
+        type: string;
+        coordinates: any[];
+      };
+      properties: {
+        population: number;
+        name: string;
+        id: number;
+        setting: {
+          layer_groups: any[];
+        };
+        buffer_geom_heatmap: {
+          type: string;
+          coordinates: any[];
+        };
+      };
+    }
+  ];
+}

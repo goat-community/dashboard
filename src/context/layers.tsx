@@ -14,7 +14,8 @@ import { networkStateHandler } from "./network";
 
 /** Reducer */
 const initialState = {
-  layerTiles: {} as LayerTile
+  layerTiles: {} as LayerTile,
+  layerGroups: [] as string[]
 };
 
 export const layers = createSlice({
@@ -26,11 +27,17 @@ export const layers = createSlice({
       action: PayloadAction<LayerTile>
     ) => {
       state.layerTiles = action.payload;
+    },
+    setLayerGroups: (
+      state: typeof initialState,
+      action: PayloadAction<string[]>
+    ) => {
+      state.layerGroups = action.payload;
     }
   }
 });
 
-export const { setLayerTile } = layers.actions;
+export const { setLayerTile, setLayerGroups } = layers.actions;
 export default layers.reducer;
 
 export function getLayerTile(layer_name: string) {
@@ -40,6 +47,18 @@ export function getLayerTile(layer_name: string) {
         const response = await Api.getLayerTile(layer_name);
         if (response) {
           dispatch(setLayerTile(response));
+        }
+      })
+    );
+}
+
+export function getLayerGroups() {
+  return (dispatch: CallableFunction) =>
+    dispatch(
+      networkStateHandler(async () => {
+        const response = await Api.getLayerGroupsEnum();
+        if (response) {
+          dispatch(setLayerGroups(response));
         }
       })
     );

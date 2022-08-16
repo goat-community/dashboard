@@ -98,7 +98,7 @@ export function updateUser(
     });
 }
 
-export function getStudyAreas(): RequestResult<StudyAreas[]> {
+export function getUserStudyAreas(): RequestResult<StudyAreas[]> {
   return instance
     .get("/users/me/study-areas-list")
     .then((response) => response.data)
