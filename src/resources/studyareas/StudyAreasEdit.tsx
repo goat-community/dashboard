@@ -4,7 +4,7 @@ import { useParams } from "react-router-dom";
 import { useAppDispatch, useAppSelector } from "@hooks";
 import { getLayerGroups } from "@context/layers";
 import CloseIcon from "@mui/icons-material/Close";
-import { Box, Chip, CircularProgress, IconButton } from "@mui/material";
+import { Alert, Box, Chip, CircularProgress, IconButton } from "@mui/material";
 import {
   SimpleForm,
   useRedirect,
@@ -21,6 +21,7 @@ import {
   getLayerStudyAreasConfig
 } from "@context/studyareas";
 import { LayerPickerComponent } from "./LayerPicker.components";
+import { GeoStorePickerComponent } from "./GeoStorePicker.component";
 
 const displayStyle = { xs: "block", sm: "flex", width: "100%" };
 
@@ -198,24 +199,16 @@ export default function StudyAreasEdit() {
                 sx={{ margin: 1 }}
               />
             ))}
-            <Chip
-              label="Add GeoStore + "
-              disabled={loading}
-              color="success"
-              sx={{ margin: 1 }}
-              onClick={() => alert("test")}
-            />
-            <br />
-            <br />
-            {/* <TextInput
-              source="geostore"
-              label="Write GeoStore ID here to append it to the config"
-              variant="outlined"
-              disabled={loading}
-              fullWidth
-              value={geoStoreId}
-              onChange={(e) => setGeoStoreId(e.target.value)}
-            /> */}
+            {!geoStoreId && (
+              <GeoStorePickerComponent
+                onAppendGeoStore={(id) => setGeoStoreId(id)}
+              />
+            )}
+            {geoStoreId && (
+              <Alert severity="info">
+                GeoStore picked and will append after save!
+              </Alert>
+            )}
           </Box>
         </Box>
       </SimpleForm>

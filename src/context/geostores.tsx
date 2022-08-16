@@ -9,8 +9,42 @@ import type {
 import * as Api from "@api/geostores";
 import { pagination, search } from "@utils";
 import { GeoStore } from "@types";
+import { networkStateHandler } from "./network";
+import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
-/** Actions  */
+/** Reducer */
+const initialState = {
+  geostores: [] as GeoStore[]
+};
+
+export const geostores = createSlice({
+  name: "geostores",
+  initialState,
+  reducers: {
+    setGeoStores: (
+      state: typeof initialState,
+      action: PayloadAction<GeoStore[]>
+    ) => {
+      state.geostores = action.payload;
+    }
+  }
+});
+
+export const { setGeoStores } = geostores.actions;
+export default geostores.reducer;
+
+export function getGeoStores() {
+  return (dispatch: CallableFunction) =>
+    dispatch(
+      networkStateHandler(async () => {
+        const response = await Api.getGeoStores();
+        if (response) {
+          dispatch(setGeoStores(response));
+        }
+      })
+    );
+}
+
 export const GeoStoreProvider = {
   /** Get GeoStores List */
   getGeoStoresList: (params: GetListParams): Promise<GetListResult> =>
