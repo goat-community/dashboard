@@ -3,10 +3,12 @@ import * as Api from "@api/studyareas";
 import { pagination, search } from "@utils";
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { networkStateHandler } from "./network";
+import { GeoStore } from "@types";
 
 /** Reducer */
 const initialState = {
-  layerStudyAreasConfig: [] as string[]
+  layerStudyAreasConfig: [] as string[],
+  geoStoresConfig: [] as GeoStore[]
 };
 
 export const studyareas = createSlice({
@@ -18,11 +20,18 @@ export const studyareas = createSlice({
       action: PayloadAction<string[]>
     ) => {
       state.layerStudyAreasConfig = action.payload;
+    },
+    setGeoStoresConfig: (
+      state: typeof initialState,
+      action: PayloadAction<GeoStore[]>
+    ) => {
+      state.geoStoresConfig = action.payload;
     }
   }
 });
 
-export const { setLayerStudyAreasConfig } = studyareas.actions;
+export const { setLayerStudyAreasConfig, setGeoStoresConfig } =
+  studyareas.actions;
 export default studyareas.reducer;
 
 export function getLayerStudyAreasConfig(
@@ -39,6 +48,55 @@ export function getLayerStudyAreasConfig(
         );
         if (response) {
           dispatch(setLayerStudyAreasConfig(response));
+        }
+      })
+    );
+  };
+}
+
+export function getGeoStoresConfig(study_area_id: number) {
+  return (dispatch: CallableFunction) => {
+    dispatch(setLayerStudyAreasConfig([]));
+    dispatch(
+      networkStateHandler(async () => {
+        const response = await Api.getGeoStoresConfig(study_area_id);
+        if (response) {
+          dispatch(setGeoStoresConfig(response));
+        }
+      })
+    );
+  };
+}
+
+export function deleteGeoStoresConfig(
+  study_area_id: number,
+  geostore_id: number
+) {
+  return (dispatch: CallableFunction) => {
+    dispatch(
+      networkStateHandler(async () => {
+        const response = await Api.deleteGeoStoresConfig(
+          study_area_id,
+          geostore_id
+        );
+        if (response) {
+          dispatch(setGeoStoresConfig(response));
+        }
+      })
+    );
+  };
+}
+
+export function addGeoStoresConfig(study_area_id: number, geostore_id: number) {
+  return (dispatch: CallableFunction) => {
+    dispatch(
+      networkStateHandler(async () => {
+        const response = await Api.addGeoStoresConfig(
+          study_area_id,
+          geostore_id
+        );
+        if (response) {
+          dispatch(setGeoStoresConfig(response));
         }
       })
     );

@@ -1,4 +1,11 @@
 import { useEffect, useState } from "react";
+import { batch } from "react-redux";
+import { ChipInput } from "@common";
+import { useParams } from "react-router-dom";
+import { useAppDispatch, useAppSelector } from "@hooks";
+import { getLayerGroups } from "@context/layers";
+import CloseIcon from "@mui/icons-material/Close";
+import { Box, Chip, CircularProgress, IconButton } from "@mui/material";
 import {
   SimpleForm,
   useRedirect,
@@ -6,16 +13,15 @@ import {
   Toolbar,
   SaveButton,
   useEditController,
-  SelectInput
+  SelectInput,
+  TextInput
 } from "react-admin";
-import { batch } from "react-redux";
-import { useParams } from "react-router-dom";
-import { Box, CircularProgress, IconButton } from "@mui/material";
-import CloseIcon from "@mui/icons-material/Close";
-import { ChipInput } from "@common";
-import { useAppDispatch, useAppSelector } from "@hooks";
-import { getLayerGroups } from "@context/layers";
-import { getLayerStudyAreasConfig } from "@context/studyareas";
+import {
+  addGeoStoresConfig,
+  deleteGeoStoresConfig,
+  getGeoStoresConfig,
+  getLayerStudyAreasConfig
+} from "@context/studyareas";
 
 const displayStyle = { xs: "block", sm: "flex", width: "100%" };
 
@@ -38,25 +44,32 @@ export default function StudyAreasEdit() {
 
   const loading = useAppSelector((state) => state.network.loading);
   const layerGroups = useAppSelector((state) => state.layers.layerGroups);
-  const layerConfigs = useAppSelector(
-    (state) => state.studyareas.layerStudyAreasConfig
-  );
+  const studyAreasConfig = useAppSelector((state) => state.studyareas);
 
   const [layerStudyAreasConfig, setLayerStudyAreasConfig] = useState<
     string[] | null
   >(null);
   const [groupName, setGroupName] = useState<string>("");
+  const [geoStoreId, setGeoStoreId] = useState<number | null>(null);
 
   useEffect(() => {
-    batch(() => {
+    return batch(() => {
       dispatch(getLayerGroups());
+      dispatch(getGeoStoresConfig(parseFloat(id as string)));
     });
   }, []);
 
   const postSave = () => {
+    if (geoStoreId) {
+      dispatch(
+        addGeoStoresConfig(parseFloat(id as string), geoStoreId as number)
+      );
+    }
+
     if (layerStudyAreasConfig === null) {
       return false;
     }
+
     save!({
       group_name: groupName,
       layer_configs: layerStudyAreasConfig
@@ -80,19 +93,27 @@ export default function StudyAreasEdit() {
         sx={{ width: 900 }}
         warnWhenUnsavedChanges
         toolbar={
-          <CustomToolbar enable={groupName && layerStudyAreasConfig !== null} />
+          <CustomToolbar
+            enable={(groupName && layerStudyAreasConfig !== null) || geoStoreId}
+          />
         }
         onSubmit={postSave}
       >
-        <Box display={displayStyle}>
+        <h1>
+          Study Area: {id}
+          <span style={{ paddingLeft: 20 }}>
+            {loading && <CircularProgress />}
+          </span>
+        </h1>
+
+        <Box display={displayStyle} mt={5}>
           <Box flex={1}>
             <h3>Layer Library</h3>
-            <br />
             <p>Choose Group name to fetch its config</p>
             <br />
-            <sub>Please save before change the group</sub>
             <SelectInput
-              source="name"
+              source="layers"
+              disabled={loading}
               emptyText={"Select a group"}
               fullWidth
               choices={
@@ -118,8 +139,7 @@ export default function StudyAreasEdit() {
               variant="outlined"
               optionText="name"
             />
-            {loading && <CircularProgress />}
-            {!loading && layerConfigs && groupName && (
+            {!loading && studyAreasConfig.layerStudyAreasConfig && groupName && (
               <ChipInput
                 label="Areas"
                 onChange={(area) =>
@@ -127,11 +147,46 @@ export default function StudyAreasEdit() {
                   setLayerStudyAreasConfig(area)
                 }
                 defaultValue={[
-                  ...layerConfigs,
+                  ...studyAreasConfig.layerStudyAreasConfig,
                   ...(layerStudyAreasConfig || [])
                 ]}
               />
             )}
+          </Box>
+        </Box>
+
+        <hr />
+
+        <Box display={displayStyle} mt={5}>
+          <Box flex={1}>
+            <h3>GeoStores</h3>
+            <br />
+            {studyAreasConfig.geoStoresConfig.map((i) => (
+              <Chip
+                label={i.name}
+                disabled={loading}
+                onDelete={() => {
+                  dispatch(
+                    deleteGeoStoresConfig(
+                      parseFloat(id as string),
+                      i.id as number
+                    )
+                  );
+                }}
+                sx={{ margin: 1 }}
+              />
+            ))}
+            <br />
+            <br />
+            <TextInput
+              source="geostore"
+              label="Write GeoStore ID here to append it to the config"
+              variant="outlined"
+              disabled={loading}
+              fullWidth
+              value={geoStoreId}
+              onChange={(e) => setGeoStoreId(e.target.value)}
+            />
           </Box>
         </Box>
       </SimpleForm>

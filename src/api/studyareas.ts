@@ -1,5 +1,5 @@
 import type { AxiosError } from "axios";
-import type { RequestResult, StudyArea } from "@types";
+import type { GeoStore, RequestResult, StudyArea } from "@types";
 import { instance } from "@utils";
 
 export function getStudyAreas(): RequestResult<StudyArea[]> {
@@ -30,6 +30,43 @@ export function updateStudyAreaLayerConfig(
 ): RequestResult<string[]> {
   return instance
     .put(`/config/study-area/settings/${study_area_id}/${group_name}`, layers)
+    .then((response) => response.data)
+    .catch((err: AxiosError) => {
+      throw err;
+    });
+}
+
+export function getGeoStoresConfig(
+  study_area_id: number
+): RequestResult<GeoStore[]> {
+  return instance
+    .get(`/config/geostores/study_area/${study_area_id}`)
+    .then((response) => response.data)
+    .catch((err: AxiosError) => {
+      throw err;
+    });
+}
+
+export function deleteGeoStoresConfig(
+  study_area_id: number,
+  geostore_id: number
+): RequestResult<GeoStore[]> {
+  return instance
+    .delete(
+      `/config/geostores/study_area/${study_area_id}/remove/${geostore_id}`
+    )
+    .then((response) => response.data)
+    .catch((err: AxiosError) => {
+      throw err;
+    });
+}
+
+export function addGeoStoresConfig(
+  study_area_id: number,
+  geostore_id: number
+): RequestResult<GeoStore[]> {
+  return instance
+    .post(`/config/geostores/study_area/${study_area_id}/add/${geostore_id}`)
     .then((response) => response.data)
     .catch((err: AxiosError) => {
       throw err;
