@@ -7,6 +7,7 @@ import layerStylesReducer from "./layerStyles";
 import extraLayersReducer from "./extraLayers";
 import layerReducer from "./layers";
 import studyareasReducer from "./studyareas";
+import geostoresReducer from "./geostores";
 
 export const store = configureStore({
   reducer: {
@@ -17,7 +18,8 @@ export const store = configureStore({
     layerStyles: layerStylesReducer,
     extraLayers: extraLayersReducer,
     layers: layerReducer,
-    studyareas: studyareasReducer
+    studyareas: studyareasReducer,
+    geostores: geostoresReducer
   }
 });
 
