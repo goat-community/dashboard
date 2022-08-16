@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react";
 import { batch } from "react-redux";
-import { ChipInput } from "@common";
 import { useParams } from "react-router-dom";
 import { useAppDispatch, useAppSelector } from "@hooks";
 import { getLayerGroups } from "@context/layers";
@@ -13,8 +12,7 @@ import {
   Toolbar,
   SaveButton,
   useEditController,
-  SelectInput,
-  TextInput
+  SelectInput
 } from "react-admin";
 import {
   addGeoStoresConfig,
@@ -22,6 +20,7 @@ import {
   getGeoStoresConfig,
   getLayerStudyAreasConfig
 } from "@context/studyareas";
+import { LayerPickerComponent } from "./LayerPicker.components";
 
 const displayStyle = { xs: "block", sm: "flex", width: "100%" };
 
@@ -87,8 +86,8 @@ export default function StudyAreasEdit() {
       <IconButton sx={{ margin: 1 }} onClick={() => redirect("..")}>
         <CloseIcon />
       </IconButton>
-
       <SimpleForm
+        onSubmit={postSave}
         noValidate
         sx={{ width: 900 }}
         warnWhenUnsavedChanges
@@ -97,7 +96,6 @@ export default function StudyAreasEdit() {
             enable={(groupName && layerStudyAreasConfig !== null) || geoStoreId}
           />
         }
-        onSubmit={postSave}
       >
         <h1>
           Study Area: {id}
@@ -112,9 +110,9 @@ export default function StudyAreasEdit() {
             <p>Choose Group name to fetch its config</p>
             <br />
             <SelectInput
-              source="layers"
+              source="layers group"
               disabled={loading}
-              emptyText={"Select a group"}
+              emptyText={"Select a layer group"}
               fullWidth
               choices={
                 layerGroups
@@ -139,17 +137,41 @@ export default function StudyAreasEdit() {
               variant="outlined"
               optionText="name"
             />
-            {!loading && studyAreasConfig.layerStudyAreasConfig && groupName && (
-              <ChipInput
-                label="Areas"
-                onChange={(area) =>
-                  // @ts-ignore
-                  setLayerStudyAreasConfig(area)
+            <br />
+            {[
+              ...new Set([
+                ...(layerStudyAreasConfig ||
+                  studyAreasConfig.layerStudyAreasConfig)
+              ])
+            ].map((i) => (
+              <Chip
+                label={i}
+                disabled={loading}
+                sx={{ margin: 1 }}
+                onDelete={() => {
+                  setLayerStudyAreasConfig([
+                    ...new Set(
+                      [
+                        ...studyAreasConfig.layerStudyAreasConfig,
+                        ...(layerStudyAreasConfig || [])
+                      ].filter((l) => l !== i)
+                    )
+                  ]);
+                }}
+              />
+            ))}
+
+            {groupName && (
+              <LayerPickerComponent
+                onAppendLayer={(layer_name) =>
+                  setLayerStudyAreasConfig([
+                    ...new Set([
+                      ...studyAreasConfig.layerStudyAreasConfig,
+                      ...(layerStudyAreasConfig || []),
+                      layer_name
+                    ])
+                  ])
                 }
-                defaultValue={[
-                  ...studyAreasConfig.layerStudyAreasConfig,
-                  ...(layerStudyAreasConfig || [])
-                ]}
               />
             )}
           </Box>
@@ -176,9 +198,16 @@ export default function StudyAreasEdit() {
                 sx={{ margin: 1 }}
               />
             ))}
+            <Chip
+              label="Add GeoStore + "
+              disabled={loading}
+              color="success"
+              sx={{ margin: 1 }}
+              onClick={() => alert("test")}
+            />
             <br />
             <br />
-            <TextInput
+            {/* <TextInput
               source="geostore"
               label="Write GeoStore ID here to append it to the config"
               variant="outlined"
@@ -186,7 +215,7 @@ export default function StudyAreasEdit() {
               fullWidth
               value={geoStoreId}
               onChange={(e) => setGeoStoreId(e.target.value)}
-            />
+            /> */}
           </Box>
         </Box>
       </SimpleForm>
