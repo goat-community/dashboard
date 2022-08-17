@@ -20,8 +20,8 @@ import {
   getGeoStoresConfig,
   getLayerStudyAreasConfig
 } from "@context/studyareas";
-import { LayerPickerComponent } from "./LayerPicker.components";
-import { GeoStorePickerComponent } from "./GeoStorePicker.component";
+import { LayerPickerComponent } from "./components/LayerPicker.components";
+import { GeoStorePickerComponent } from "./components/GeoStorePicker.component";
 
 const displayStyle = { xs: "block", sm: "flex", width: "100%" };
 
@@ -98,17 +98,16 @@ export default function StudyAreasEdit() {
           />
         }
       >
-        <h1>
+        <p style={{ fontSize: 30, fontWeight: "bold" }}>
           Study Area: {id}
           <span style={{ paddingLeft: 20 }}>
             {loading && <CircularProgress />}
           </span>
-        </h1>
+        </p>
 
         <Box display={displayStyle} mt={5}>
           <Box flex={1}>
-            <h3>Layer Library</h3>
-            <p>Choose Group name to fetch its config</p>
+            <p style={{ fontSize: 20 }}>Layer Library</p>
             <br />
             <SelectInput
               source="layers group"
@@ -182,7 +181,7 @@ export default function StudyAreasEdit() {
 
         <Box display={displayStyle} mt={5}>
           <Box flex={1}>
-            <h3>GeoStores</h3>
+            <p style={{ fontSize: 20 }}>GeoStores</p>
             <br />
             {studyAreasConfig.geoStoresConfig.map((i) => (
               <Chip
