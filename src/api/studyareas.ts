@@ -116,3 +116,14 @@ export function createStudyAreaOpportunity(
       throw err;
     });
 }
+
+export function deleteStudyAreaOpportunity(
+  study_area_id: number
+): RequestResult<Opportunity> {
+  return instance
+    .delete(`/config/opportunity-study-area/${study_area_id}`)
+    .then((response) => response.data)
+    .catch((err: AxiosError) => {
+      throw err;
+    });
+}

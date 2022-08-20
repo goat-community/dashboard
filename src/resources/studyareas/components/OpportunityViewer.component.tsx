@@ -1,8 +1,11 @@
 import { useEffect, useState } from "react";
-import { Box, Chip, Dialog, DialogContent } from "@mui/material";
+import { batch } from "react-redux";
+import Switch from "@mui/material/Switch";
+import { Box, Dialog, DialogContent, TextField } from "@mui/material";
 import { ChipInput } from "@common";
 import { useAppDispatch, useAppSelector } from "@hooks";
 import {
+  Button,
   LoadingIndicator,
   SaveButton,
   SelectInput,
@@ -10,16 +13,53 @@ import {
   TextInput,
   Toolbar,
   useCreateController,
+  useDelete,
+  useRecordContext,
   useRedirect
 } from "react-admin";
 import {
   getOpportunitiesGroup,
   getOpportunitiesList
 } from "@context/studyareas";
-import { batch } from "react-redux";
-import Switch from "@mui/material/Switch";
+import type { Opportunity } from "@types";
 
 const label = { inputProps: { "aria-label": "Switch demo" } };
+
+const DeleteButton = ({ id }: { id: number }) => {
+  const redirect = useRedirect();
+  const [deleteOne, { isLoading, error }] = useDelete(
+    "studyareas",
+    {
+      id: id
+    },
+    {
+      onSettled: (data, error) => {
+        redirect("/studyareas");
+      }
+    }
+  );
+  const handleClick = () => {
+    deleteOne();
+  };
+  if (error) {
+    return <p>ERROR</p>;
+  }
+  return (
+    <>
+      {isLoading && <LoadingIndicator />}
+      {!isLoading && (
+        <Button
+          disabled={isLoading}
+          onClick={handleClick}
+          variant="contained"
+          sx={{ backgroundColor: "red", "&:hover": { backgroundColor: "red" } }}
+        >
+          <p style={{ fontSize: 17 }}>Delete</p>
+        </Button>
+      )}
+    </>
+  );
+};
 
 const CustomToolbar = (props: any) => {
   return (
@@ -29,13 +69,15 @@ const CustomToolbar = (props: any) => {
     >
       {props.loading && <LoadingIndicator />}
       {!props.loading && <SaveButton alwaysEnable />}
+      <DeleteButton id={props.id} />
     </Toolbar>
   );
 };
 
-export function OpportunityCreatorComponent(props: { studyAreaId: number }) {
+export function OpportunityViewerComponent(props: {
+  opportunityData: Opportunity;
+}) {
   const { save, saving } = useCreateController({ resource: "studyareas" });
-  const redirect = useRedirect();
   const dispatch = useAppDispatch();
   const opps = useAppSelector((state) => state.studyareas.opportunitiesList);
   const groups = useAppSelector((state) => state.studyareas.opportunityGroups);
@@ -43,7 +85,7 @@ export function OpportunityCreatorComponent(props: { studyAreaId: number }) {
   const [colors, setColors] = useState<[] | string[]>([]);
   const [category, setCategory] = useState<string | null>(null);
   const [writeCategory, setWriteCategory] = useState<boolean | string>(false);
-  const [dialogOpen, setDialogOpen] = useState<boolean>(false);
+  const [dialogOpen, setDialogOpen] = useState<boolean>(true);
 
   useEffect(() => {
     batch(() => {
@@ -59,7 +101,7 @@ export function OpportunityCreatorComponent(props: { studyAreaId: number }) {
       category: category,
       icon: data.icon,
       color: colors,
-      study_area_id: props.studyAreaId,
+      study_area_id: props.opportunityData.study_area_id,
       is_active: data.is_active
     };
 
@@ -84,18 +126,15 @@ export function OpportunityCreatorComponent(props: { studyAreaId: number }) {
 
   return (
     <>
-      <Chip
-        label="Create Opportunity + "
-        color="success"
-        sx={{ margin: 1 }}
-        onClick={() => setDialogOpen(true)}
-      />
-
       <Dialog open={dialogOpen} onClose={() => setDialogOpen(false)}>
         <DialogContent className="d-flex px-2" sx={{ width: 400 }}>
-          <p style={{ fontSize: 20 }}>Creating new Opportunitiy</p>
+          <p style={{ fontSize: 20 }}>
+            Opportunitiy {props.opportunityData.id}
+          </p>
           <SimpleForm
-            toolbar={<CustomToolbar loading={saving} />}
+            toolbar={
+              <CustomToolbar loading={saving} id={props.opportunityData.id} />
+            }
             onSubmit={submit}
             redirect="false"
           >
@@ -107,7 +146,7 @@ export function OpportunityCreatorComponent(props: { studyAreaId: number }) {
                 fullWidth
                 isRequired
                 choices={[{ name: true }, { name: false }]}
-                defaultValue={true}
+                defaultValue={props.opportunityData.multiple_entrance}
                 optionValue="name"
               />
             </Box>
@@ -133,6 +172,7 @@ export function OpportunityCreatorComponent(props: { studyAreaId: number }) {
                   source="category"
                   emptyText={"Select a category"}
                   fullWidth
+                  value={props.opportunityData.category}
                   choices={opps}
                   onChange={(e) => {
                     setCategory(e.target.value);
@@ -143,12 +183,14 @@ export function OpportunityCreatorComponent(props: { studyAreaId: number }) {
                 />
               )}
               {writeCategory && (
-                <TextInput
-                  source="category"
-                  isRequired
-                  fullWidth
-                  onChange={(e) => setCategory(e.target.value)}
+                <TextField
+                  label="category"
                   variant="outlined"
+                  required
+                  fullWidth
+                  sx={{ marginBottom: 3 }}
+                  onChange={(e) => setCategory(e.target.value)}
+                  value={props.opportunityData.category}
                 />
               )}
             </Box>
@@ -158,25 +200,28 @@ export function OpportunityCreatorComponent(props: { studyAreaId: number }) {
                 emptyText={"Select a group"}
                 fullWidth
                 choices={groups}
+                value={props.opportunityData.opportunity_group_id}
                 variant="outlined"
                 optionText="group"
                 optionValue="id"
               />
             </Box>
             <Box flex={1} display={displayStyle}>
-              <TextInput
-                source="icon"
-                isRequired
+              <TextField
+                label="icon"
+                value={props.opportunityData.icon}
+                required
                 fullWidth
                 variant="outlined"
               />
             </Box>
+            <br />
             <Box flex={1} display={displayStyle}>
               <ChipInput
                 sx={{ width: "100%" }}
                 label="Colors"
                 onChange={(color) => setColors(color)}
-                defaultValue={[]}
+                defaultValue={props.opportunityData.color}
               />
             </Box>
             <br />
@@ -188,7 +233,7 @@ export function OpportunityCreatorComponent(props: { studyAreaId: number }) {
                 fullWidth
                 isRequired
                 choices={[{ name: true }, { name: false }]}
-                defaultValue={true}
+                defaultValue={props.opportunityData.is_active}
                 optionValue="name"
               />
             </Box>

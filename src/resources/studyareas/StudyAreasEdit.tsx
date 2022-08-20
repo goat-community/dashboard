@@ -24,6 +24,8 @@ import {
 import { LayerPickerComponent } from "./components/LayerPicker.components";
 import { GeoStorePickerComponent } from "./components/GeoStorePicker.component";
 import { OpportunityCreatorComponent } from "./components/OpportunityCreator.component";
+import { OpportunityViewerComponent } from "./components/OpportunityViewer.component";
+import { Opportunity } from "@types";
 
 const displayStyle = { xs: "block", sm: "flex", width: "100%" };
 
@@ -53,10 +55,12 @@ export default function StudyAreasEdit() {
   >(null);
   const [groupName, setGroupName] = useState<string>("");
   const [geoStoreId, setGeoStoreId] = useState<number | null>(null);
+  const [opportunityData, setOpportunityData] = useState<null | Opportunity>(
+    null
+  );
 
   useEffect(() => {
     return batch(() => {
-      dispatch(getLayerGroups());
       dispatch(getStudyAreasOpportunities(parseFloat(id as string)));
       dispatch(getGeoStoresConfig(parseFloat(id as string)));
     });
@@ -228,28 +232,33 @@ export default function StudyAreasEdit() {
                 )}
               </span>
             </p>
-            <br />
             {studyAreasConfig.opportunities &&
               studyAreasConfig.opportunities.map((i) => (
                 <Box
                   sx={{
-                    width: "100%",
+                    width: "90%",
                     color: "white",
-                    padding: 3,
-                    marginTop: 5,
-                    backgroundColor: "primary.dark"
+                    padding: 1,
+                    marginTop: 2,
+                    border: "1px solid black",
+                    borderRadius: 10
                   }}
                 >
-                  <p>
-                    ID: {i.id}
-                    --- opportunity_group_id: {i.opportunity_group_id}
-                    /--- category: {i.category}
-                  </p>
+                  <Chip label={"ID: " + i.id} sx={{ margin: 1 }} />
+                  <Chip
+                    label={"Opportunity: " + i.opportunity_group_id}
+                    sx={{ margin: 1 }}
+                  />
+                  <Chip label={"Category: " + i.category} sx={{ margin: 1 }} />
+                  <Chip
+                    label="View"
+                    color="secondary"
+                    onClick={() => setOpportunityData(i)}
+                  />
                 </Box>
               ))}
-            <br />
-            {studyAreasConfig.opportunityGroups && (
-              <p>{JSON.stringify(studyAreasConfig.opportunityGroups)}</p>
+            {opportunityData && (
+              <OpportunityViewerComponent opportunityData={opportunityData} />
             )}
           </Box>
         </Box>

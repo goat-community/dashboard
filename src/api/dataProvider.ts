@@ -150,6 +150,9 @@ export const dataProvider: DataProvider = {
     if (resource === "geostores") {
       return GeoStoreProvider.deleteGeoStore(params.id as number);
     }
+    if (resource === "studyareas") {
+      return StudyAreaProvider.deleteStudyAreaOpportunity(params.id as number);
+    }
     return UserProvider.deleteUser(params);
   },
 

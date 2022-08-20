@@ -1,5 +1,6 @@
 import type {
   CreateResult,
+  DeleteResult,
   GetListParams,
   GetListResult,
   UpdateResult
@@ -228,7 +229,24 @@ export const StudyAreaProvider = {
       Api.createStudyAreaOpportunity(data)!
         .then((opportunity) => {
           resolve({
-            data: opportunity
+            data: {
+              ...opportunity,
+              id: data.study_area_id
+            }
+          });
+        })
+        .catch((e) => reject(e));
+    }),
+
+  deleteStudyAreaOpportunity: (study_area_id: number): Promise<DeleteResult> =>
+    new Promise((resolve, reject) => {
+      Api.deleteStudyAreaOpportunity(study_area_id)!
+        .then((study_area) => {
+          resolve({
+            data: {
+              ...study_area,
+              id: study_area_id
+            }
           });
         })
         .catch((e) => reject(e));
