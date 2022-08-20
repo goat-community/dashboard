@@ -18,10 +18,12 @@ import {
   addGeoStoresConfig,
   deleteGeoStoresConfig,
   getGeoStoresConfig,
-  getLayerStudyAreasConfig
+  getLayerStudyAreasConfig,
+  getStudyAreasOpportunities
 } from "@context/studyareas";
 import { LayerPickerComponent } from "./components/LayerPicker.components";
 import { GeoStorePickerComponent } from "./components/GeoStorePicker.component";
+import { OpportunityCreatorComponent } from "./components/OpportunityCreator.component";
 
 const displayStyle = { xs: "block", sm: "flex", width: "100%" };
 
@@ -55,6 +57,7 @@ export default function StudyAreasEdit() {
   useEffect(() => {
     return batch(() => {
       dispatch(getLayerGroups());
+      dispatch(getStudyAreasOpportunities(parseFloat(id as string)));
       dispatch(getGeoStoresConfig(parseFloat(id as string)));
     });
   }, []);
@@ -207,6 +210,46 @@ export default function StudyAreasEdit() {
               <Alert severity="info">
                 GeoStore picked and will append after save!
               </Alert>
+            )}
+          </Box>
+        </Box>
+
+        <hr />
+
+        <Box display={displayStyle} mt={5}>
+          <Box flex={1}>
+            <p style={{ fontSize: 20 }}>
+              Opportunities
+              <span>
+                {!geoStoreId && (
+                  <OpportunityCreatorComponent
+                    studyAreaId={parseFloat(id as string)}
+                  />
+                )}
+              </span>
+            </p>
+            <br />
+            {studyAreasConfig.opportunities &&
+              studyAreasConfig.opportunities.map((i) => (
+                <Box
+                  sx={{
+                    width: "100%",
+                    color: "white",
+                    padding: 3,
+                    marginTop: 5,
+                    backgroundColor: "primary.dark"
+                  }}
+                >
+                  <p>
+                    ID: {i.id}
+                    --- opportunity_group_id: {i.opportunity_group_id}
+                    /--- category: {i.category}
+                  </p>
+                </Box>
+              ))}
+            <br />
+            {studyAreasConfig.opportunityGroups && (
+              <p>{JSON.stringify(studyAreasConfig.opportunityGroups)}</p>
             )}
           </Box>
         </Box>

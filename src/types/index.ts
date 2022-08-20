@@ -5,3 +5,4 @@ export * from "./organizations";
 export * from "./layers";
 export * from "./geostores";
 export * from "./studyareas";
+export * from "./opportunities";

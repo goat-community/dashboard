@@ -3,6 +3,7 @@ import { Autocomplete, TextField, Chip } from "@mui/material";
 
 interface ChipInputProps {
   defaultValue?: string[];
+  sx?: any;
   label: string;
   onChange: (value: string[]) => void;
 }
@@ -11,6 +12,7 @@ export function ChipInput(props: ChipInputProps) {
   const [receivers, setReceivers] = useState<string[]>([]);
   return (
     <Autocomplete
+      sx={props.sx}
       multiple
       id="tags-filled"
       options={[]}

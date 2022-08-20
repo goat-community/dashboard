@@ -91,6 +91,9 @@ export const dataProvider: DataProvider = {
     if (resource === "geostores") {
       return GeoStoreProvider.createGeoStore(params.data as GeoStore);
     }
+    if (resource === "studyareas") {
+      return StudyAreaProvider.createStudyAreaOpportunity(params.data as any);
+    }
     return UserProvider.createUser(params.data);
   },
   update: (resource, params): Promise<UpdateResult> => {

@@ -1,14 +1,22 @@
-import type { GetListParams, GetListResult, UpdateResult } from "react-admin";
+import type {
+  CreateResult,
+  GetListParams,
+  GetListResult,
+  UpdateResult
+} from "react-admin";
 import * as Api from "@api/studyareas";
 import { pagination, search } from "@utils";
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { networkStateHandler } from "./network";
-import { GeoStore } from "@types";
+import { GeoStore, Opportunity, OpportunityGroup } from "@types";
 
 /** Reducer */
 const initialState = {
   layerStudyAreasConfig: [] as string[],
-  geoStoresConfig: [] as GeoStore[]
+  geoStoresConfig: [] as GeoStore[],
+  opportunities: [] as Opportunity[],
+  opportunityGroups: [] as OpportunityGroup[],
+  opportunitiesList: [] as Opportunity[]
 };
 
 export const studyareas = createSlice({
@@ -26,12 +34,35 @@ export const studyareas = createSlice({
       action: PayloadAction<GeoStore[]>
     ) => {
       state.geoStoresConfig = action.payload;
+    },
+    setOpportunities: (
+      state: typeof initialState,
+      action: PayloadAction<Opportunity[]>
+    ) => {
+      state.opportunities = action.payload;
+    },
+    setOpportunityGroups: (
+      state: typeof initialState,
+      action: PayloadAction<OpportunityGroup[]>
+    ) => {
+      state.opportunityGroups = action.payload;
+    },
+    setOpportunitiesList: (
+      state: typeof initialState,
+      action: PayloadAction<Opportunity[]>
+    ) => {
+      state.opportunitiesList = action.payload;
     }
   }
 });
 
-export const { setLayerStudyAreasConfig, setGeoStoresConfig } =
-  studyareas.actions;
+export const {
+  setLayerStudyAreasConfig,
+  setGeoStoresConfig,
+  setOpportunityGroups,
+  setOpportunities,
+  setOpportunitiesList
+} = studyareas.actions;
 export default studyareas.reducer;
 
 export function getLayerStudyAreasConfig(
@@ -103,6 +134,49 @@ export function addGeoStoresConfig(study_area_id: number, geostore_id: number) {
   };
 }
 
+export function getStudyAreasOpportunities(study_area_id: number) {
+  return (dispatch: CallableFunction) => {
+    dispatch(
+      networkStateHandler(async () => {
+        const response = await Api.getStudyAreasOpportunities();
+        if (response) {
+          dispatch(
+            setOpportunities(
+              response.filter((i) => i.study_area_id === study_area_id)
+            )
+          );
+        }
+      })
+    );
+  };
+}
+
+export function getOpportunitiesGroup() {
+  return (dispatch: CallableFunction) => {
+    dispatch(
+      networkStateHandler(async () => {
+        const response = await Api.getOpportunitiesGroup();
+        if (response) {
+          dispatch(setOpportunityGroups(response));
+        }
+      })
+    );
+  };
+}
+
+export function getOpportunitiesList() {
+  return (dispatch: CallableFunction) => {
+    dispatch(
+      networkStateHandler(async () => {
+        const response = await Api.getOpportunitiesList();
+        if (response) {
+          dispatch(setOpportunitiesList(response));
+        }
+      })
+    );
+  };
+}
+
 export const StudyAreaProvider = {
   /** Get StudyAreas List */
   getStudyAreasList: (params: GetListParams): Promise<GetListResult> =>
@@ -145,6 +219,16 @@ export const StudyAreaProvider = {
               id,
               ...studyArea
             }
+          });
+        })
+        .catch((e) => reject(e));
+    }),
+  createStudyAreaOpportunity: (data: Opportunity): Promise<CreateResult> =>
+    new Promise((resolve, reject) => {
+      Api.createStudyAreaOpportunity(data)!
+        .then((opportunity) => {
+          resolve({
+            data: opportunity
           });
         })
         .catch((e) => reject(e));
