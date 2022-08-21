@@ -2,7 +2,6 @@ import { useEffect, useState } from "react";
 import { batch } from "react-redux";
 import { useParams } from "react-router-dom";
 import { useAppDispatch, useAppSelector } from "@hooks";
-import { getLayerGroups } from "@context/layers";
 import CloseIcon from "@mui/icons-material/Close";
 import { Alert, Box, Chip, CircularProgress, IconButton } from "@mui/material";
 import {
@@ -12,16 +11,21 @@ import {
   Toolbar,
   SaveButton,
   useEditController,
-  SelectInput
+  SelectInput,
+  useRefresh
 } from "react-admin";
 import {
   addGeoStoresConfig,
   deleteGeoStoresConfig,
   getGeoStoresConfig,
-  getLayerStudyAreasConfig
+  getLayerStudyAreasConfig,
+  getStudyAreasOpportunities
 } from "@context/studyareas";
-import { LayerPickerComponent } from "./LayerPicker.components";
-import { GeoStorePickerComponent } from "./GeoStorePicker.component";
+import { LayerPickerComponent } from "./components/LayerPicker.components";
+import { GeoStorePickerComponent } from "./components/GeoStorePicker.component";
+import { OpportunityCreatorComponent } from "./components/OpportunityCreator.component";
+import { OpportunityViewerComponent } from "./components/OpportunityViewer.component";
+import { Opportunity } from "@types";
 
 const displayStyle = { xs: "block", sm: "flex", width: "100%" };
 
@@ -37,6 +41,7 @@ const CustomToolbar = (props: any) => {
 };
 
 export default function StudyAreasEdit() {
+  const refresh = useRefresh();
   const dispatch = useAppDispatch();
   const { save } = useEditController();
   const redirect = useRedirect();
@@ -51,10 +56,13 @@ export default function StudyAreasEdit() {
   >(null);
   const [groupName, setGroupName] = useState<string>("");
   const [geoStoreId, setGeoStoreId] = useState<number | null>(null);
+  const [opportunityData, setOpportunityData] = useState<null | Opportunity>(
+    null
+  );
 
   useEffect(() => {
     return batch(() => {
-      dispatch(getLayerGroups());
+      dispatch(getStudyAreasOpportunities(parseFloat(id as string)));
       dispatch(getGeoStoresConfig(parseFloat(id as string)));
     });
   }, []);
@@ -98,17 +106,16 @@ export default function StudyAreasEdit() {
           />
         }
       >
-        <h1>
+        <p style={{ fontSize: 30, fontWeight: "bold" }}>
           Study Area: {id}
           <span style={{ paddingLeft: 20 }}>
             {loading && <CircularProgress />}
           </span>
-        </h1>
+        </p>
 
         <Box display={displayStyle} mt={5}>
           <Box flex={1}>
-            <h3>Layer Library</h3>
-            <p>Choose Group name to fetch its config</p>
+            <p style={{ fontSize: 20 }}>Layer Library</p>
             <br />
             <SelectInput
               source="layers group"
@@ -182,7 +189,7 @@ export default function StudyAreasEdit() {
 
         <Box display={displayStyle} mt={5}>
           <Box flex={1}>
-            <h3>GeoStores</h3>
+            <p style={{ fontSize: 20 }}>GeoStores</p>
             <br />
             {studyAreasConfig.geoStoresConfig.map((i) => (
               <Chip
@@ -208,6 +215,57 @@ export default function StudyAreasEdit() {
               <Alert severity="info">
                 GeoStore picked and will append after save!
               </Alert>
+            )}
+          </Box>
+        </Box>
+
+        <hr />
+
+        <Box display={displayStyle} mt={5}>
+          <Box flex={1}>
+            <p style={{ fontSize: 20 }}>
+              Opportunities
+              <span>
+                {!geoStoreId && (
+                  <OpportunityCreatorComponent
+                    studyAreaId={parseFloat(id as string)}
+                  />
+                )}
+              </span>
+            </p>
+            {studyAreasConfig.opportunities &&
+              studyAreasConfig.opportunities.map((i) => (
+                <Box
+                  sx={{
+                    width: "90%",
+                    color: "white",
+                    padding: 1,
+                    marginTop: 2,
+                    border: "1px solid black",
+                    borderRadius: 10
+                  }}
+                >
+                  <Chip label={"ID: " + i.id} sx={{ margin: 1 }} />
+                  <Chip
+                    label={"Opportunity: " + i.opportunity_group_id}
+                    sx={{ margin: 1 }}
+                  />
+                  <Chip label={"Category: " + i.category} sx={{ margin: 1 }} />
+                  <Chip
+                    label="View"
+                    color="secondary"
+                    onClick={() => setOpportunityData(i)}
+                  />
+                </Box>
+              ))}
+            {opportunityData && (
+              <OpportunityViewerComponent
+                opportunityData={opportunityData}
+                modalClosed={() => {
+                  setOpportunityData(null);
+                  window.location.reload();
+                }}
+              />
             )}
           </Box>
         </Box>

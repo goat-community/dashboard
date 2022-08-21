@@ -18,7 +18,7 @@ import { LayerProvider } from "@context/layers";
 import { ExtraLayerProvider } from "@context/extraLayers";
 import { GeoStoreProvider } from "@context/geostores";
 import { StudyAreaProvider } from "@context/studyareas";
-import type { GeoStore, Layer, LayerStyle, User } from "@types";
+import type { GeoStore, Layer, LayerStyle, Opportunity, User } from "@types";
 
 export const dataProvider: DataProvider = {
   getList: (resource, params): Promise<GetListResult> => {
@@ -91,6 +91,9 @@ export const dataProvider: DataProvider = {
     if (resource === "geostores") {
       return GeoStoreProvider.createGeoStore(params.data as GeoStore);
     }
+    if (resource === "studyareas") {
+      return StudyAreaProvider.createStudyAreaOpportunity(params.data as any);
+    }
     return UserProvider.createUser(params.data);
   },
   update: (resource, params): Promise<UpdateResult> => {
@@ -146,6 +149,9 @@ export const dataProvider: DataProvider = {
     }
     if (resource === "geostores") {
       return GeoStoreProvider.deleteGeoStore(params.id as number);
+    }
+    if (resource === "studyareas") {
+      return StudyAreaProvider.deleteStudyAreaOpportunity(params.id as number);
     }
     return UserProvider.deleteUser(params);
   },
