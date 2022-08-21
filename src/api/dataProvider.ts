@@ -18,7 +18,7 @@ import { LayerProvider } from "@context/layers";
 import { ExtraLayerProvider } from "@context/extraLayers";
 import { GeoStoreProvider } from "@context/geostores";
 import { StudyAreaProvider } from "@context/studyareas";
-import type { GeoStore, Layer, LayerStyle, User } from "@types";
+import type { GeoStore, Layer, LayerStyle, Opportunity, User } from "@types";
 
 export const dataProvider: DataProvider = {
   getList: (resource, params): Promise<GetListResult> => {

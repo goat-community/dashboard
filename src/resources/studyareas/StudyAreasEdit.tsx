@@ -2,7 +2,6 @@ import { useEffect, useState } from "react";
 import { batch } from "react-redux";
 import { useParams } from "react-router-dom";
 import { useAppDispatch, useAppSelector } from "@hooks";
-import { getLayerGroups } from "@context/layers";
 import CloseIcon from "@mui/icons-material/Close";
 import { Alert, Box, Chip, CircularProgress, IconButton } from "@mui/material";
 import {
@@ -12,7 +11,8 @@ import {
   Toolbar,
   SaveButton,
   useEditController,
-  SelectInput
+  SelectInput,
+  useRefresh
 } from "react-admin";
 import {
   addGeoStoresConfig,
@@ -41,6 +41,7 @@ const CustomToolbar = (props: any) => {
 };
 
 export default function StudyAreasEdit() {
+  const refresh = useRefresh();
   const dispatch = useAppDispatch();
   const { save } = useEditController();
   const redirect = useRedirect();
@@ -258,7 +259,13 @@ export default function StudyAreasEdit() {
                 </Box>
               ))}
             {opportunityData && (
-              <OpportunityViewerComponent opportunityData={opportunityData} />
+              <OpportunityViewerComponent
+                opportunityData={opportunityData}
+                modalClosed={() => {
+                  setOpportunityData(null);
+                  window.location.reload();
+                }}
+              />
             )}
           </Box>
         </Box>

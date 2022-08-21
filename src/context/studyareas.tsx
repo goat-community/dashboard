@@ -178,6 +178,16 @@ export function getOpportunitiesList() {
   };
 }
 
+export function updateStudyAreaOpportunity(data: Opportunity) {
+  return (dispatch: CallableFunction) => {
+    dispatch(
+      networkStateHandler(async () => {
+        await Api.updateStudyAreaOpportunity(data);
+      })
+    );
+  };
+}
+
 export const StudyAreaProvider = {
   /** Get StudyAreas List */
   getStudyAreasList: (params: GetListParams): Promise<GetListResult> =>
@@ -224,6 +234,7 @@ export const StudyAreaProvider = {
         })
         .catch((e) => reject(e));
     }),
+
   createStudyAreaOpportunity: (data: Opportunity): Promise<CreateResult> =>
     new Promise((resolve, reject) => {
       Api.createStudyAreaOpportunity(data)!

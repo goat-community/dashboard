@@ -10,16 +10,14 @@ import {
   SaveButton,
   SelectInput,
   SimpleForm,
-  TextInput,
   Toolbar,
-  useCreateController,
   useDelete,
-  useRecordContext,
   useRedirect
 } from "react-admin";
 import {
   getOpportunitiesGroup,
-  getOpportunitiesList
+  getOpportunitiesList,
+  updateStudyAreaOpportunity
 } from "@context/studyareas";
 import type { Opportunity } from "@types";
 
@@ -33,17 +31,20 @@ const DeleteButton = ({ id }: { id: number }) => {
       id: id
     },
     {
-      onSettled: (data, error) => {
+      onSettled: () => {
         redirect("/studyareas");
       }
     }
   );
+
   const handleClick = () => {
     deleteOne();
   };
+
   if (error) {
     return <p>ERROR</p>;
   }
+
   return (
     <>
       {isLoading && <LoadingIndicator />}
@@ -76,16 +77,25 @@ const CustomToolbar = (props: any) => {
 
 export function OpportunityViewerComponent(props: {
   opportunityData: Opportunity;
+  modalClosed: () => void;
 }) {
-  const { save, saving } = useCreateController({ resource: "studyareas" });
   const dispatch = useAppDispatch();
   const opps = useAppSelector((state) => state.studyareas.opportunitiesList);
   const groups = useAppSelector((state) => state.studyareas.opportunityGroups);
+  const loading = useAppSelector((state) => state.network.loading);
 
-  const [colors, setColors] = useState<[] | string[]>([]);
-  const [category, setCategory] = useState<string | null>(null);
   const [writeCategory, setWriteCategory] = useState<boolean | string>(false);
   const [dialogOpen, setDialogOpen] = useState<boolean>(true);
+  const [form, setForm] = useState({
+    id: props.opportunityData.id,
+    multiple_entrance: props.opportunityData.multiple_entrance,
+    opportunity_group_id: props.opportunityData.opportunity_group_id,
+    category: props.opportunityData.category,
+    icon: props.opportunityData.icon,
+    color: props.opportunityData.color,
+    study_area_id: props.opportunityData.study_area_id,
+    is_active: props.opportunityData.is_active
+  });
 
   useEffect(() => {
     batch(() => {
@@ -94,46 +104,41 @@ export function OpportunityViewerComponent(props: {
     });
   }, []);
 
-  const submit = (data: any) => {
-    const data_to_submit = {
-      multiple_entrance: data.multiple_entrance,
-      opportunity_group_id: data.group_id,
-      category: category,
-      icon: data.icon,
-      color: colors,
-      study_area_id: props.opportunityData.study_area_id,
-      is_active: data.is_active
-    };
-
-    if (!data.group_id) {
-      return false;
-    }
-    if (!data.icon) {
-      return false;
-    }
-    if (!category) {
-      return false;
-    }
-    if (!colors) {
-      return false;
-    }
-
-    save!(data_to_submit);
+  const closeModal = () => {
+    props.modalClosed();
     setDialogOpen(false);
+  };
+
+  const submit = () => {
+    if (!form.opportunity_group_id) {
+      return false;
+    }
+    if (!form.icon) {
+      return false;
+    }
+    if (!form.category) {
+      return false;
+    }
+    if (!form.color) {
+      return false;
+    }
+
+    dispatch(updateStudyAreaOpportunity(form as Opportunity));
+    closeModal();
   };
 
   const displayStyle = { xs: "block", sm: "flex", width: "100%" };
 
   return (
     <>
-      <Dialog open={dialogOpen} onClose={() => setDialogOpen(false)}>
+      <Dialog open={dialogOpen} onClose={closeModal}>
         <DialogContent className="d-flex px-2" sx={{ width: 400 }}>
           <p style={{ fontSize: 20 }}>
             Opportunitiy {props.opportunityData.id}
           </p>
           <SimpleForm
             toolbar={
-              <CustomToolbar loading={saving} id={props.opportunityData.id} />
+              <CustomToolbar loading={loading} id={props.opportunityData.id} />
             }
             onSubmit={submit}
             redirect="false"
@@ -146,7 +151,13 @@ export function OpportunityViewerComponent(props: {
                 fullWidth
                 isRequired
                 choices={[{ name: true }, { name: false }]}
-                defaultValue={props.opportunityData.multiple_entrance}
+                defaultValue={form.multiple_entrance}
+                onChange={(e) =>
+                  setForm({
+                    ...form,
+                    multiple_entrance: e.target.value
+                  })
+                }
                 optionValue="name"
               />
             </Box>
@@ -172,10 +183,13 @@ export function OpportunityViewerComponent(props: {
                   source="category"
                   emptyText={"Select a category"}
                   fullWidth
-                  value={props.opportunityData.category}
+                  defaultValue={form.category}
                   choices={opps}
                   onChange={(e) => {
-                    setCategory(e.target.value);
+                    setForm({
+                      ...form,
+                      category: e.target.value
+                    });
                   }}
                   variant="outlined"
                   optionText="category"
@@ -189,8 +203,14 @@ export function OpportunityViewerComponent(props: {
                   required
                   fullWidth
                   sx={{ marginBottom: 3 }}
-                  onChange={(e) => setCategory(e.target.value)}
-                  value={props.opportunityData.category}
+                  onChange={(e) =>
+                    setForm({
+                      ...form,
+                      category: e.target.value
+                    })
+                  }
+                  value={form.category}
+                  defaultValue={form.category}
                 />
               )}
             </Box>
@@ -200,7 +220,13 @@ export function OpportunityViewerComponent(props: {
                 emptyText={"Select a group"}
                 fullWidth
                 choices={groups}
-                value={props.opportunityData.opportunity_group_id}
+                defaultValue={form.opportunity_group_id}
+                onChange={(e) =>
+                  setForm({
+                    ...form,
+                    opportunity_group_id: e.target.value
+                  })
+                }
                 variant="outlined"
                 optionText="group"
                 optionValue="id"
@@ -209,9 +235,15 @@ export function OpportunityViewerComponent(props: {
             <Box flex={1} display={displayStyle}>
               <TextField
                 label="icon"
-                value={props.opportunityData.icon}
+                defaultValue={form.icon}
                 required
                 fullWidth
+                onChange={(e) =>
+                  setForm({
+                    ...form,
+                    icon: e.target.value
+                  })
+                }
                 variant="outlined"
               />
             </Box>
@@ -220,8 +252,13 @@ export function OpportunityViewerComponent(props: {
               <ChipInput
                 sx={{ width: "100%" }}
                 label="Colors"
-                onChange={(color) => setColors(color)}
-                defaultValue={props.opportunityData.color}
+                onChange={(color) =>
+                  setForm({
+                    ...form,
+                    color: color
+                  })
+                }
+                defaultValue={form.color}
               />
             </Box>
             <br />
@@ -232,8 +269,14 @@ export function OpportunityViewerComponent(props: {
                 emptyText="Choose is_active status please!"
                 fullWidth
                 isRequired
+                onChange={(e) =>
+                  setForm({
+                    ...form,
+                    is_active: e.target.value
+                  })
+                }
                 choices={[{ name: true }, { name: false }]}
-                defaultValue={props.opportunityData.is_active}
+                defaultValue={form.is_active}
                 optionValue="name"
               />
             </Box>

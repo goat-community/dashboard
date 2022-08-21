@@ -127,3 +127,17 @@ export function deleteStudyAreaOpportunity(
       throw err;
     });
 }
+
+export function updateStudyAreaOpportunity(
+  new_opportunity: Opportunity
+): RequestResult<Opportunity> {
+  return instance
+    .put(
+      `/config/opportunity-study-area/${new_opportunity.id}`,
+      new_opportunity
+    )
+    .then((response) => response.data)
+    .catch((err: AxiosError) => {
+      throw err;
+    });
+}
