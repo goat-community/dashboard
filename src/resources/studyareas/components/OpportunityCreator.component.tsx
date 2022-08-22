@@ -87,7 +87,7 @@ export function OpportunityCreatorComponent(props: { studyAreaId: number }) {
       <Chip
         label="Create Opportunity + "
         color="success"
-        sx={{ margin: 1 }}
+        sx={{ margin: 1, backgroundColor: "#2bb381" }}
         onClick={() => setDialogOpen(true)}
       />
 

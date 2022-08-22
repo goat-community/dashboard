@@ -29,7 +29,7 @@ export function GeoStorePickerComponent(props: {
       <Chip
         label="Add GeoStore + "
         color="success"
-        sx={{ margin: 1 }}
+        sx={{ margin: 1, backgroundColor: "#2bb381" }}
         onClick={() => setDialogOpen(true)}
       />
 
