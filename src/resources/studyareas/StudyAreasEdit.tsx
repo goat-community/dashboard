@@ -11,8 +11,7 @@ import {
   Toolbar,
   SaveButton,
   useEditController,
-  SelectInput,
-  useRefresh
+  SelectInput
 } from "react-admin";
 import {
   addGeoStoresConfig,
@@ -26,6 +25,7 @@ import { GeoStorePickerComponent } from "./components/GeoStorePicker.component";
 import { OpportunityCreatorComponent } from "./components/OpportunityCreator.component";
 import { OpportunityViewerComponent } from "./components/OpportunityViewer.component";
 import { Opportunity } from "@types";
+import { getLayerGroups } from "@context/layers";
 
 const displayStyle = { xs: "block", sm: "flex", width: "100%" };
 
@@ -41,7 +41,6 @@ const CustomToolbar = (props: any) => {
 };
 
 export default function StudyAreasEdit() {
-  const refresh = useRefresh();
   const dispatch = useAppDispatch();
   const { save } = useEditController();
   const redirect = useRedirect();
@@ -64,6 +63,7 @@ export default function StudyAreasEdit() {
     return batch(() => {
       dispatch(getStudyAreasOpportunities(parseFloat(id as string)));
       dispatch(getGeoStoresConfig(parseFloat(id as string)));
+      dispatch(getLayerGroups());
     });
   }, []);
 
@@ -255,6 +255,7 @@ export default function StudyAreasEdit() {
                     label="View"
                     color="secondary"
                     onClick={() => setOpportunityData(i)}
+                    sx={{ backgroundColor: "#2bb381" }}
                   />
                 </Box>
               ))}

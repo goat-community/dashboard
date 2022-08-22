@@ -29,7 +29,7 @@ export function LayerPickerComponent(props: {
       <Chip
         label="Add Layer + "
         color="success"
-        sx={{ margin: 1 }}
+        sx={{ margin: 1, backgroundColor: "#2bb381" }}
         onClick={() => setDialogOpen(true)}
       />
 
