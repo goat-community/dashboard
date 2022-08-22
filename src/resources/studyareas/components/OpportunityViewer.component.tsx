@@ -11,8 +11,7 @@ import {
   SelectInput,
   SimpleForm,
   Toolbar,
-  useDelete,
-  useRedirect
+  useDelete
 } from "react-admin";
 import {
   getOpportunitiesGroup,
@@ -24,7 +23,6 @@ import type { Opportunity } from "@types";
 const label = { inputProps: { "aria-label": "Switch demo" } };
 
 const DeleteButton = ({ id }: { id: number }) => {
-  const redirect = useRedirect();
   const [deleteOne, { isLoading, error }] = useDelete(
     "studyareas",
     {
@@ -32,7 +30,7 @@ const DeleteButton = ({ id }: { id: number }) => {
     },
     {
       onSettled: () => {
-        redirect("/studyareas");
+        location.reload();
       }
     }
   );

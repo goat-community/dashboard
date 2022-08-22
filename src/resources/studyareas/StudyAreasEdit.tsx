@@ -262,8 +262,7 @@ export default function StudyAreasEdit() {
               <OpportunityViewerComponent
                 opportunityData={opportunityData}
                 modalClosed={() => {
-                  setOpportunityData(null);
-                  window.location.reload();
+                  location.reload();
                 }}
               />
             )}
