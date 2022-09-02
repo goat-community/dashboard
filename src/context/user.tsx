@@ -1,5 +1,6 @@
 import type {
   CreateResult,
+  DeleteManyParams,
   DeleteManyResult,
   DeleteParams,
   DeleteResult,
@@ -179,9 +180,9 @@ export const UserProvider = {
     }),
 
   /** Delete many Users */
-  deleteUsers: (params: DeleteParams): Promise<DeleteManyResult> =>
+  deleteUsers: (params: DeleteManyParams): Promise<DeleteManyResult> =>
     new Promise((resolve, reject) => {
-      Api.deleteUsers(params as any)!
+      Api.deleteUsers(params)!
         .then(() => {
           resolve({ data: [] });
         })

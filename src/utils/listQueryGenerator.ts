@@ -1,11 +1,14 @@
-export function listQueryGenerator(queryList: (string | number)[]) {
+export function listQueryGenerator(
+  queryList: (string | number)[],
+  queryKey = "id"
+): string {
   return queryList
     .map((query, index) => {
       // first item doesn't need & at first
       if (index === 0) {
-        return "?id=" + query;
+        return `?${queryKey}=` + query;
       }
-      return "&id=" + query;
+      return `&${queryKey}=` + query;
     })
     .join("");
 }

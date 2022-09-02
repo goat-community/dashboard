@@ -1,4 +1,5 @@
 import type { AxiosError } from "axios";
+import type { DeleteManyParams } from "react-admin";
 import type {
   UserToken,
   User,
@@ -107,9 +108,9 @@ export function getUserStudyAreas(): RequestResult<StudyAreas[]> {
     });
 }
 
-export function deleteUsers(params: {
-  ids: number[];
-}): RequestResult<string | ErrorResponse> {
+export function deleteUsers(
+  params: DeleteManyParams
+): RequestResult<string | ErrorResponse> {
   return instance
     .delete(`/users/${listQueryGenerator(params.ids)}`)
     .then((response) => response.data)

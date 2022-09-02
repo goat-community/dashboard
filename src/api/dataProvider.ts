@@ -158,7 +158,10 @@ export const dataProvider: DataProvider = {
   },
   deleteMany: (resource, params): Promise<DeleteManyResult> => {
     if (resource === "users") {
-      return UserProvider.deleteUsers(params as { ids: number[]; id: any });
+      return UserProvider.deleteUsers(params);
+    }
+    if (resource === "styles") {
+      return LayerStylesProvider.deleteLayerStyles(params);
     }
     return UserProvider.deleteUsers(params as { ids: number[]; id: any });
   },

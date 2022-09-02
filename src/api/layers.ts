@@ -1,6 +1,7 @@
 import type { AxiosError } from "axios";
+import type { DeleteManyParams } from "react-admin";
 import type { RequestResult, Layer, LayerStyle, LayerTile } from "@types";
-import { instance } from "@utils";
+import { instance, listQueryGenerator } from "@utils";
 
 export function getLayersStyle(): RequestResult<LayerStyle[]> {
   return instance
@@ -117,6 +118,19 @@ export function getLayerGroupsEnum(): RequestResult<string[]> {
   return instance
     .get(`openapi.json`)
     .then((response) => response.data.components.schemas.LayerGroupsEnum.enum)
+    .catch((err: AxiosError) => {
+      throw err;
+    });
+}
+
+export function deleteLayerStyles(
+  params: DeleteManyParams
+): RequestResult<string> {
+  return instance
+    .delete(
+      `/config/layers/library/styles/${listQueryGenerator(params.ids, "name")}`
+    )
+    .then((response) => response.data)
     .catch((err: AxiosError) => {
       throw err;
     });
