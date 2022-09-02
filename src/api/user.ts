@@ -9,7 +9,7 @@ import type {
   CreateUserCreditionals,
   StudyAreas
 } from "@types";
-import { instance, objectToFormData } from "@utils";
+import { instance, listQueryGenerator, objectToFormData } from "@utils";
 
 export function getAccessToken(
   creditionals: UserCreditionals
@@ -101,6 +101,17 @@ export function updateUser(
 export function getUserStudyAreas(): RequestResult<StudyAreas[]> {
   return instance
     .get("/users/me/study-areas-list")
+    .then((response) => response.data)
+    .catch((err: AxiosError) => {
+      throw err;
+    });
+}
+
+export function deleteUsers(params: {
+  ids: number[];
+}): RequestResult<string | ErrorResponse> {
+  return instance
+    .delete(`/users/${listQueryGenerator(params.ids)}`)
     .then((response) => response.data)
     .catch((err: AxiosError) => {
       throw err;
