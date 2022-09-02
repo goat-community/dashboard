@@ -47,7 +47,7 @@ export function deleteLayerStyle(
   layer_name: string
 ): RequestResult<LayerStyle> {
   return instance
-    .delete(`/config/layers/library/styles/${layer_name}`)
+    .delete(`/config/layers/library/styles/?name=${layer_name}`)
     .then((response) => response.data)
     .catch((err: AxiosError) => {
       throw err;
