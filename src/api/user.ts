@@ -57,7 +57,7 @@ export function getUsers(): RequestResult<User[]> {
 
 export function deleteUser(id: number): RequestResult<User | ErrorResponse> {
   return instance
-    .delete(`/users/${id}`)
+    .delete(`/users/?id=${id}`)
     .then((response) => response.data)
     .catch((err: AxiosError) => {
       throw err;

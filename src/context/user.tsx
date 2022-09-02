@@ -102,7 +102,7 @@ export function getStudyAreas() {
   return (dispatch: CallableFunction) =>
     dispatch(
       networkStateHandler(async () => {
-        const response = await Api.getStudyAreas();
+        const response = await Api.getUserStudyAreas();
         if (response) {
           dispatch(setStudyAreas(response));
         }
