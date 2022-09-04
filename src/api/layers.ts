@@ -135,3 +135,12 @@ export function deleteLayerStyles(
       throw err;
     });
 }
+
+export function deleteLayers(params: DeleteManyParams): RequestResult<string> {
+  return instance
+    .delete(`/config/layers/library/${listQueryGenerator(params.ids, "name")}`)
+    .then((response) => response.data)
+    .catch((err: AxiosError) => {
+      throw err;
+    });
+}

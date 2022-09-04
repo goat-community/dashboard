@@ -163,6 +163,9 @@ export const dataProvider: DataProvider = {
     if (resource === "styles") {
       return LayerStylesProvider.deleteLayerStyles(params);
     }
+    if (resource === "layers") {
+      return LayerProvider.deleteLayers(params);
+    }
     return UserProvider.deleteUsers(params as { ids: number[]; id: any });
   },
 
