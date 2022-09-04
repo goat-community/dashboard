@@ -107,7 +107,7 @@ export function getLayerTile(layer_name: string): RequestResult<LayerTile> {
 
 export function deleteLayer(layer_name: string): RequestResult<Layer> {
   return instance
-    .delete(`/config/layers/library/${layer_name}`)
+    .delete(`/config/layers/library/?name=${layer_name}`)
     .then((response) => response.data)
     .catch((err: AxiosError) => {
       throw err;
