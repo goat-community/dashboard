@@ -169,6 +169,9 @@ export const dataProvider: DataProvider = {
     if (resource === "geostores") {
       return GeoStoreProvider.deleteGeoStores(params);
     }
+    if (resource === "upload") {
+      return ExtraLayerProvider.deleteExtraLayers(params);
+    }
     return UserProvider.deleteUsers(params as { ids: number[]; id: any });
   },
 
