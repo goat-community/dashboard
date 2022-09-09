@@ -1,4 +1,5 @@
 import type { AxiosError } from "axios";
+import type { DeleteManyParams } from "react-admin";
 import type {
   UserToken,
   User,
@@ -9,7 +10,7 @@ import type {
   CreateUserCreditionals,
   StudyAreas
 } from "@types";
-import { instance, objectToFormData } from "@utils";
+import { instance, listQueryGenerator, objectToFormData } from "@utils";
 
 export function getAccessToken(
   creditionals: UserCreditionals
@@ -57,7 +58,7 @@ export function getUsers(): RequestResult<User[]> {
 
 export function deleteUser(id: number): RequestResult<User | ErrorResponse> {
   return instance
-    .delete(`/users/${id}`)
+    .delete(`/users/?id=${id}`)
     .then((response) => response.data)
     .catch((err: AxiosError) => {
       throw err;
@@ -101,6 +102,17 @@ export function updateUser(
 export function getUserStudyAreas(): RequestResult<StudyAreas[]> {
   return instance
     .get("/users/me/study-areas-list")
+    .then((response) => response.data)
+    .catch((err: AxiosError) => {
+      throw err;
+    });
+}
+
+export function deleteUsers(
+  params: DeleteManyParams
+): RequestResult<string | ErrorResponse> {
+  return instance
+    .delete(`/users/${listQueryGenerator(params.ids)}`)
     .then((response) => response.data)
     .catch((err: AxiosError) => {
       throw err;

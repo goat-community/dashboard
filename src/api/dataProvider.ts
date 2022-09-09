@@ -7,6 +7,7 @@
 import type {
   CreateResult,
   DataProvider,
+  DeleteManyResult,
   DeleteResult,
   GetListResult,
   GetOneResult,
@@ -155,9 +156,23 @@ export const dataProvider: DataProvider = {
     }
     return UserProvider.deleteUser(params);
   },
+  deleteMany: (resource, params): Promise<DeleteManyResult> => {
+    if (resource === "users") {
+      return UserProvider.deleteUsers(params);
+    }
+    if (resource === "styles") {
+      return LayerStylesProvider.deleteLayerStyles(params);
+    }
+    if (resource === "layers") {
+      return LayerProvider.deleteLayers(params);
+    }
+    if (resource === "geostores") {
+      return GeoStoreProvider.deleteGeoStores(params);
+    }
+    return UserProvider.deleteUsers(params as { ids: number[]; id: any });
+  },
 
   getMany: (resource): any => true,
   getManyReference: (resource): any => true,
-  updateMany: (resource): any => true,
-  deleteMany: (resource): any => true
+  updateMany: (resource): any => true
 };

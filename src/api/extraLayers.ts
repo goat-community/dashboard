@@ -1,6 +1,7 @@
 import type { AxiosError } from "axios";
 import type { RequestResult, ExtraLayer } from "@types";
-import { instance, objectToFormData } from "@utils";
+import { instance, listQueryGenerator, objectToFormData } from "@utils";
+import { DeleteManyParams } from "react-admin";
 
 export function getExtraLayers(): RequestResult<ExtraLayer[]> {
   return instance
@@ -40,7 +41,7 @@ export function updateExtraLayer(
 
 export function deleteExtraLayer(layer_id: number): RequestResult<ExtraLayer> {
   return instance
-    .delete(`/config/layers/vector/static/${layer_id}`)
+    .delete(`/config/layers/vector/static/?id=${layer_id}`)
     .then((response) => response.data)
     .catch((err: AxiosError) => {
       throw err;
@@ -58,6 +59,17 @@ export function createExtraLayer(data: {
         "Content-Type": "multipart/form-data"
       }
     })
+    .then((response) => response.data)
+    .catch((err: AxiosError) => {
+      throw err;
+    });
+}
+
+export function deleteExtraLayers(
+  params: DeleteManyParams
+): RequestResult<string> {
+  return instance
+    .delete(`/config/layers/vector/static/${listQueryGenerator(params.ids)}`)
     .then((response) => response.data)
     .catch((err: AxiosError) => {
       throw err;

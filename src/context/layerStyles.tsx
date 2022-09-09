@@ -1,5 +1,7 @@
 import type {
   CreateResult,
+  DeleteManyParams,
+  DeleteManyResult,
   DeleteResult,
   GetListParams,
   GetListResult,
@@ -146,6 +148,18 @@ export const LayerStylesProvider = {
         .then((layerStyle) => {
           resolve({
             data: layerStyle
+          });
+        })
+        .catch((e) => reject(e));
+    }),
+
+  /** Delete list of layers */
+  deleteLayerStyles: (params: DeleteManyParams): Promise<DeleteManyResult> =>
+    new Promise((resolve, reject) => {
+      Api.deleteLayerStyles(params)!
+        .then(() => {
+          resolve({
+            data: []
           });
         })
         .catch((e) => reject(e));
