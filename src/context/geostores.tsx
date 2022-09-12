@@ -1,5 +1,7 @@
 import type {
   CreateResult,
+  DeleteManyParams,
+  DeleteManyResult,
   DeleteResult,
   GetListParams,
   GetListResult,
@@ -120,6 +122,18 @@ export const GeoStoreProvider = {
         .then((geostore) => {
           resolve({
             data: geostore
+          });
+        })
+        .catch((e) => reject(e));
+    }),
+
+  /** Delete a GeoStore */
+  deleteGeoStores: (params: DeleteManyParams): Promise<DeleteManyResult> =>
+    new Promise((resolve, reject) => {
+      Api.deleteGeoStores(params)!
+        .then(() => {
+          resolve({
+            data: []
           });
         })
         .catch((e) => reject(e));

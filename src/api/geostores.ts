@@ -1,6 +1,7 @@
 import type { AxiosError } from "axios";
 import type { RequestResult, GeoStore } from "@types";
-import { instance } from "@utils";
+import { instance, listQueryGenerator } from "@utils";
+import { DeleteManyParams } from "react-admin";
 
 export function getGeoStores(): RequestResult<GeoStore[]> {
   return instance
@@ -42,9 +43,20 @@ export function createGeoStore(data: GeoStore): RequestResult<GeoStore> {
     });
 }
 
-export function deleteGeoStore(geostore_id: number): RequestResult<GeoStore> {
+export function deleteGeoStore(geostore_id: number): RequestResult<string> {
   return instance
-    .delete(`/config/geostores/${geostore_id}`)
+    .delete(`/config/geostores/?id=${geostore_id}`)
+    .then((response) => response.data)
+    .catch((err: AxiosError) => {
+      throw err;
+    });
+}
+
+export function deleteGeoStores(
+  params: DeleteManyParams
+): RequestResult<string> {
+  return instance
+    .delete(`/config/geostores/${listQueryGenerator(params.ids)}`)
     .then((response) => response.data)
     .catch((err: AxiosError) => {
       throw err;

@@ -26,12 +26,7 @@ const ListPagination = () => (
 export default function GeoStoresList() {
   return (
     <List filters={usersFilters} pagination={<ListPagination />}>
-      <Datagrid
-        optimized
-        isRowSelectable={() => false}
-        header={<DatagridHeader />}
-        size="small"
-      >
+      <Datagrid optimized header={<DatagridHeader />} size="small">
         <TextField source="name" sortable={false} />
         <TextField source="type" sortable={false} />
         <TextField source="attribution" sortable={false} />

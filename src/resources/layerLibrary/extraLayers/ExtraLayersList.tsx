@@ -26,12 +26,7 @@ const LayersPagination = () => (
 export default function LayersList() {
   return (
     <List filters={layersFilters} pagination={<LayersPagination />}>
-      <Datagrid
-        header={<DatagridHeader />}
-        optimized
-        isRowSelectable={() => false}
-        size="small"
-      >
+      <Datagrid header={<DatagridHeader />} optimized size="small">
         <TextField source="id" sortable={false} />
         <TextField source="table_name" sortable={false} />
         <TextField source="creation_date" sortable={false} />
