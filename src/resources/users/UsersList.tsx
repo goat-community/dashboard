@@ -27,12 +27,7 @@ const UsersPagination = () => (
 export default function UsersList() {
   return (
     <List filters={usersFilters} pagination={<UsersPagination />}>
-      <Datagrid
-        optimized
-        isRowSelectable={() => false}
-        header={<DatagridHeader />}
-        size="small"
-      >
+      <Datagrid optimized header={<DatagridHeader />} size="small">
         <TextField source="name" sortable={false} />
         <TextField source="surname" sortable={false} />
         <TextField source="email" sortable={false} />

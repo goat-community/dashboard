@@ -1,5 +1,7 @@
 import type {
   CreateResult,
+  DeleteManyParams,
+  DeleteManyResult,
   DeleteParams,
   DeleteResult,
   GetListParams,
@@ -102,7 +104,7 @@ export function getStudyAreas() {
   return (dispatch: CallableFunction) =>
     dispatch(
       networkStateHandler(async () => {
-        const response = await Api.getStudyAreas();
+        const response = await Api.getUserStudyAreas();
         if (response) {
           dispatch(setStudyAreas(response));
         }
@@ -174,6 +176,16 @@ export const UserProvider = {
     new Promise((resolve, reject) => {
       Api.updateUser(user_id, user_data)!
         .then((user) => resolve({ data: user }))
+        .catch((e) => reject(e));
+    }),
+
+  /** Delete many Users */
+  deleteUsers: (params: DeleteManyParams): Promise<DeleteManyResult> =>
+    new Promise((resolve, reject) => {
+      Api.deleteUsers(params)!
+        .then(() => {
+          resolve({ data: [] });
+        })
         .catch((e) => reject(e));
     })
 };

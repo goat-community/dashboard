@@ -1,5 +1,7 @@
 import type {
   CreateResult,
+  DeleteManyParams,
+  DeleteManyResult,
   DeleteResult,
   GetListParams,
   GetListResult,
@@ -171,6 +173,18 @@ export const LayerProvider = {
         .then((layer) => {
           resolve({
             data: layer
+          });
+        })
+        .catch((e) => reject(e));
+    }),
+
+  /** Delete layers */
+  deleteLayers: (params: DeleteManyParams): Promise<DeleteManyResult> =>
+    new Promise((resolve, reject) => {
+      Api.deleteLayers(params)!
+        .then(() => {
+          resolve({
+            data: []
           });
         })
         .catch((e) => reject(e));
