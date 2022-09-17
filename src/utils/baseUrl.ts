@@ -1,9 +1,4 @@
 export function baseUrl(): string {
-  if (!process.env.NODE_ENV || process.env.NODE_ENV === "development") {
-    // dev code
-    return "http://localhost:3000/api";
-  } else {
-    // production code
-    return "https://goat-dev.plan4better.de/api/v1/";
-  }
+  const base_url: string = import.meta.env.VITE_BASE_URL;
+  return base_url;
 }
