@@ -49,7 +49,7 @@ export function recoverPassword(
 
 export function getUsers(): RequestResult<User[]> {
   return instance
-    .get(`/users`)
+    .get(`/users?limit=1000`)
     .then((response) => response.data)
     .catch((err: AxiosError) => {
       throw err;
