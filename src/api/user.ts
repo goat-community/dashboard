@@ -1,5 +1,5 @@
 import type { AxiosError } from "axios";
-import type { DeleteManyParams } from "react-admin";
+import type { DeleteManyParams, GetListParams } from "react-admin";
 import type {
   UserToken,
   User,
@@ -47,10 +47,19 @@ export function recoverPassword(
     });
 }
 
-export function getUsers(): RequestResult<User[]> {
+export function getUsers(
+  params: GetListParams
+): RequestResult<{ data: User[]; total: number }> {
   return instance
-    .get(`/users?limit=1000`)
-    .then((response) => response.data)
+    .get(
+      `/users?limit=${params.pagination.perPage}&skip=${
+        (params.pagination.page - 1) * params.pagination.perPage
+      }`
+    )
+    .then((response: any) => ({
+      data: response.data,
+      total: response.headers["x-total-count"]
+    }))
     .catch((err: AxiosError) => {
       throw err;
     });

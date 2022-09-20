@@ -116,26 +116,20 @@ export const UserProvider = {
   /** Get Users List */
   getUsersList: (params: GetListParams): Promise<GetListResult> =>
     new Promise((resolve, reject) => {
-      Api.getUsers()!
-        .then((users) => {
-          let filtered_data;
-          // handle pagination
-          filtered_data = pagination({
-            data: [...users],
-            page: params.pagination.page,
-            perPage: params.pagination.perPage
-          });
+      Api.getUsers(params)!
+        .then((response) => {
+          let filtered_data = response.data;
           // handle search
           if (params.filter.q) {
             filtered_data = search({
-              data: filtered_data,
+              data: response.data,
               q: params.filter.q
             });
           }
 
           resolve({
             data: filtered_data,
-            total: users?.length
+            total: response.total
           });
         })
         .catch((e) => reject(e));
