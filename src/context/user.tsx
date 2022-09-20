@@ -127,8 +127,6 @@ export const UserProvider = {
             });
           }
 
-          console.log(response);
-
           resolve({
             data: filtered_data,
             total: response.total
