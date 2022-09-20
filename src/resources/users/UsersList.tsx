@@ -4,8 +4,12 @@ import {
   List,
   EditButton,
   TextInput,
-  Pagination
+  Pagination,
+  useListContext,
+  Toolbar
 } from "react-admin";
+import { Button } from "@mui/material";
+import { ChevronLeft, ChevronRight } from "@mui/icons-material";
 import { Stack } from "@mui/material";
 import { DeleteButton } from "./DeleteButton";
 import { DatagridHeader } from "@common";
@@ -20,9 +24,43 @@ const usersFilters = [
   />
 ];
 
-const UsersPagination = () => (
-  <Pagination rowsPerPageOptions={[10, 25, 50, 100]} defaultValue={10} />
-);
+const UsersPagination = (): JSX.Element => {
+  const { page, perPage, total, setPage } = useListContext();
+  const nbPages = Math.ceil(total / perPage) || 1;
+  return (
+    <>
+      {nbPages > 1 && (
+        <Toolbar>
+          {page > 1 && (
+            <Button
+              color="primary"
+              key="prev"
+              onClick={() => setPage(page - 1)}
+            >
+              <ChevronLeft />
+              Prev
+            </Button>
+          )}
+          {page !== nbPages && (
+            <Button
+              color="primary"
+              key="next"
+              onClick={() => setPage(page + 1)}
+            >
+              Next
+              <ChevronRight />
+            </Button>
+          )}
+          <p>Total: {total}</p>
+        </Toolbar>
+      )}
+    </>
+  );
+};
+
+// const UsersPagination = () => (
+//   <Pagination rowsPerPageOptions={[10, 25, 50, 100]} defaultValue={10} />
+// );
 
 export default function UsersList() {
   return (
