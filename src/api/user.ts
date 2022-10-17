@@ -8,7 +8,8 @@ import type {
   RecoverPassCreditionals,
   ErrorResponse,
   CreateUserCreditionals,
-  StudyAreas
+  StudyAreas,
+  UserRoles
 } from "@types";
 import { instance, listQueryGenerator, objectToFormData } from "@utils";
 
@@ -113,6 +114,15 @@ export function deleteUsers(
 ): RequestResult<string | ErrorResponse> {
   return instance
     .delete(`/users/${listQueryGenerator(params.ids)}`)
+    .then((response) => response.data)
+    .catch((err: AxiosError) => {
+      throw err;
+    });
+}
+
+export function getUserRules(): RequestResult<UserRoles[]> {
+  return instance
+    .get("/roles")
     .then((response) => response.data)
     .catch((err: AxiosError) => {
       throw err;

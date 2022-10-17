@@ -11,7 +11,7 @@ import {
 import { Box, IconButton } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
 import { getOrganizations } from "@context/organizations";
-import { getStudyAreas } from "@context/user";
+import { getAllUserRoles, getStudyAreas } from "@context/user";
 import { useAppDispatch, useAppSelector } from "@hooks/context";
 
 export const validateForm = (v: Record<string, any>): Record<string, any> => {
@@ -50,12 +50,14 @@ export default function UsersEdit() {
   const loading = useAppSelector((state) => state.network.loading);
   const organizations = useAppSelector((state) => state.organizations.organs);
   const studyAreas = useAppSelector((state) => state.user.studyAreas);
+  const globalUserRoles = useAppSelector((state) => state.user.globalUserRoles);
 
   // fetch organizations and study areas
   useEffect(() => {
     batch(() => {
       dispatch(getOrganizations());
       dispatch(getStudyAreas());
+      dispatch(getAllUserRoles());
     });
   }, []);
 
@@ -110,10 +112,10 @@ export default function UsersEdit() {
             <SelectArrayInput
               label="Roles"
               source="roles"
-              choices={[
-                { id: "user", name: "user" },
-                { id: "admin", name: "admin" }
-              ]}
+              choices={
+                loading ? [{ name: "Loading user roles..." }] : globalUserRoles
+              }
+              optionValue="name"
               variant="outlined"
               sx={{ width: "100%" }}
             />
