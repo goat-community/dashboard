@@ -9,7 +9,7 @@ import {
 } from "react-admin";
 import { Box, Typography } from "@mui/material";
 import { getOrganizations } from "@context/organizations";
-import { getStudyAreas } from "@context/user";
+import { getAllUserRoles, getStudyAreas } from "@context/user";
 import { useAppDispatch, useAppSelector } from "@hooks";
 import UserCreateToolbar from "./UserCreateToolbar";
 
@@ -48,12 +48,14 @@ export default function UsersCreate() {
   const loading = useAppSelector((state) => state.network.loading);
   const organizations = useAppSelector((state) => state.organizations.organs);
   const studyAreas = useAppSelector((state) => state.user.studyAreas);
+  const globalUserRoles = useAppSelector((state) => state.user.globalUserRoles);
 
   // fetch organizations and study areas
   useEffect(() => {
     batch(() => {
       dispatch(getOrganizations());
       dispatch(getStudyAreas());
+      dispatch(getAllUserRoles());
     });
   }, []);
 
@@ -129,7 +131,10 @@ export default function UsersCreate() {
             <SelectArrayInput
               label="Roles"
               source="roles"
-              choices={[{ id: "user", name: "user" }]}
+              choices={
+                loading ? [{ name: "Loading user roles..." }] : globalUserRoles
+              }
+              optionValue="name"
               variant="outlined"
               sx={{ width: "100%" }}
             />

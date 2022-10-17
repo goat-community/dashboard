@@ -15,7 +15,8 @@ import type {
   RecoverPassCreditionals,
   StudyAreas,
   User,
-  UserCreditionals
+  UserCreditionals,
+  UserRoles
 } from "@types";
 import * as Api from "@api/user";
 import { networkStateHandler } from "./network";
@@ -25,7 +26,8 @@ import { pagination, search } from "@utils";
 /** Reducer */
 const initialState = {
   user: {} as User,
-  studyAreas: [] as StudyAreas[]
+  studyAreas: [] as StudyAreas[],
+  globalUserRoles: [] as UserRoles[]
 };
 
 export const user = createSlice({
@@ -40,11 +42,17 @@ export const user = createSlice({
       action: PayloadAction<StudyAreas[]>
     ) => {
       state.studyAreas = action.payload;
+    },
+    setUserRoles: (
+      state: typeof initialState,
+      action: PayloadAction<UserRoles[]>
+    ) => {
+      state.globalUserRoles = action.payload;
     }
   }
 });
 
-export const { setUser, setStudyAreas } = user.actions;
+export const { setUser, setStudyAreas, setUserRoles } = user.actions;
 export default user.reducer;
 
 /** Actions  */
@@ -112,30 +120,36 @@ export function getStudyAreas() {
     );
 }
 
+export function getAllUserRoles() {
+  return (dispatch: CallableFunction) =>
+    dispatch(
+      networkStateHandler(async () => {
+        const response = await Api.getUserRules();
+        if (response) {
+          dispatch(setUserRoles(response));
+        }
+      })
+    );
+}
+
 export const UserProvider = {
   /** Get Users List */
   getUsersList: (params: GetListParams): Promise<GetListResult> =>
     new Promise((resolve, reject) => {
-      Api.getUsers()!
-        .then((users) => {
-          let filtered_data;
-          // handle pagination
-          filtered_data = pagination({
-            data: [...users],
-            page: params.pagination.page,
-            perPage: params.pagination.perPage
-          });
+      Api.getUsers(params)!
+        .then((response) => {
+          let filtered_data = response.data;
           // handle search
           if (params.filter.q) {
             filtered_data = search({
-              data: filtered_data,
+              data: response.data,
               q: params.filter.q
             });
           }
 
           resolve({
             data: filtered_data,
-            total: users?.length
+            total: response.total
           });
         })
         .catch((e) => reject(e));

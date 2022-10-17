@@ -1,5 +1,5 @@
 import type { AxiosError } from "axios";
-import type { DeleteManyParams } from "react-admin";
+import type { DeleteManyParams, GetListParams } from "react-admin";
 import type {
   UserToken,
   User,
@@ -8,7 +8,8 @@ import type {
   RecoverPassCreditionals,
   ErrorResponse,
   CreateUserCreditionals,
-  StudyAreas
+  StudyAreas,
+  UserRoles
 } from "@types";
 import { instance, listQueryGenerator, objectToFormData } from "@utils";
 
@@ -47,10 +48,19 @@ export function recoverPassword(
     });
 }
 
-export function getUsers(): RequestResult<User[]> {
+export function getUsers(
+  params: GetListParams
+): RequestResult<{ data: User[]; total: number }> {
   return instance
-    .get(`/users`)
-    .then((response) => response.data)
+    .get(
+      `/users?limit=${params.pagination.perPage}&skip=${
+        (params.pagination.page - 1) * params.pagination.perPage
+      }`
+    )
+    .then((response: any) => ({
+      data: response.data,
+      total: response.headers["x-total-count"]
+    }))
     .catch((err: AxiosError) => {
       throw err;
     });
@@ -113,6 +123,15 @@ export function deleteUsers(
 ): RequestResult<string | ErrorResponse> {
   return instance
     .delete(`/users/${listQueryGenerator(params.ids)}`)
+    .then((response) => response.data)
+    .catch((err: AxiosError) => {
+      throw err;
+    });
+}
+
+export function getUserRules(): RequestResult<UserRoles[]> {
+  return instance
+    .get("/roles")
     .then((response) => response.data)
     .catch((err: AxiosError) => {
       throw err;

@@ -22,3 +22,8 @@ export interface StudyAreas {
   id: number;
   name: string;
 }
+
+export interface UserRoles {
+  id: number;
+  name: string;
+}
