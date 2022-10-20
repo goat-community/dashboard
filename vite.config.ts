@@ -90,5 +90,8 @@ export default defineConfig({
         replacement: path.resolve(__dirname, "src/resources")
       }
     ]
+  },
+  define: {
+    "process.env": process.env
   }
 });
