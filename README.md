@@ -8,6 +8,7 @@ The GOAT management dashboard is created for configuring GOAT. It mostly allows 
 ```bash
 git clone https://github.com/goat-community/dashboard/
 ```
+----
 
 2. install `pnpm` or `yarn`, then you can run the below command to install all dependencies needed before the run
 ```bash
@@ -15,7 +16,15 @@ pnpm install
 ```
 How to install pnpm? https://pnpm.io/installation
 
-3. Run the project with the `pnpm dev` command
+----
+
+3. Add `VITE_BASE_URL` to the system env variables.
+
+----
+
+4. Run the project with the `pnpm dev` command
+
+----
 
 ## Structure Overview
 
