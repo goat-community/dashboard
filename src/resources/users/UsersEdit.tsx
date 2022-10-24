@@ -25,6 +25,9 @@ export const validateForm = (v: Record<string, any>): Record<string, any> => {
   if (!v.email) {
     errors.email = "Email required";
   }
+  if (!v.roles) {
+    errors.roles = "roles required";
+  }
   if (!v.organization_id) {
     errors.organization_id = "organization id is required";
   }
@@ -33,9 +36,6 @@ export const validateForm = (v: Record<string, any>): Record<string, any> => {
   }
   if (!v.storage) {
     errors.storage = "storage is required";
-  }
-  if (!v.active_study_area_id) {
-    errors.active_study_area_id = "active study area id is required";
   }
   if (!v.limit_scenarios) {
     errors.limit_scenarios = "limit scenarios is required";
@@ -96,14 +96,6 @@ export default function UsersEdit() {
         <Box display={displayStyle}>
           <Box flex={1} mr={mrStyle}>
             <TextInput source="email" isRequired fullWidth variant="outlined" />
-          </Box>
-          <Box flex={1} ml={mlStyle}>
-            <TextInput
-              source="password"
-              isRequired
-              fullWidth
-              variant="outlined"
-            />
           </Box>
         </Box>
 
