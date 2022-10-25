@@ -5,11 +5,8 @@ import {
   EditButton,
   TextInput,
   Pagination,
-  useListContext,
-  Toolbar
+  useListContext
 } from "react-admin";
-import { Button } from "@mui/material";
-import { ChevronLeft, ChevronRight } from "@mui/icons-material";
 import { Stack } from "@mui/material";
 import { DeleteButton } from "./DeleteButton";
 import { DatagridHeader } from "@common";
@@ -29,9 +26,15 @@ const UsersPagination = () => (
 );
 
 export default function UsersList() {
+  const { sort, setSort } = useListContext();
+
   return (
     <List filters={usersFilters} pagination={<UsersPagination />}>
-      <Datagrid optimized header={<DatagridHeader />} size="small">
+      <Datagrid
+        optimized
+        header={<DatagridHeader setSort={setSort} sort={sort} sortActive />}
+        size="small"
+      >
         <TextField source="name" sortable={false} />
         <TextField source="surname" sortable={false} />
         <TextField source="email" sortable={false} />
