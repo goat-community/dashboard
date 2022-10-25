@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { batch } from "react-redux";
 import {
   SimpleForm,
@@ -13,6 +13,8 @@ import CloseIcon from "@mui/icons-material/Close";
 import { getOrganizations } from "@context/organizations";
 import { getAllUserRoles, getStudyAreas } from "@context/user";
 import { useAppDispatch, useAppSelector } from "@hooks/context";
+
+import { StudyAreaPickerComponent } from "./components/study-area-selector";
 
 export const validateForm = (v: Record<string, any>): Record<string, any> => {
   const errors = {} as any;
@@ -32,6 +34,7 @@ export const validateForm = (v: Record<string, any>): Record<string, any> => {
     errors.organization_id = "organization id is required";
   }
   if (!v.active_study_area_id) {
+    alert("active_study_area_id is required");
     errors.active_study_area_id = "active_study_area_id is required";
   }
   if (!v.storage) {
@@ -51,6 +54,10 @@ export default function UsersEdit() {
   const organizations = useAppSelector((state) => state.organizations.organs);
   const studyAreas = useAppSelector((state) => state.user.studyAreas);
   const globalUserRoles = useAppSelector((state) => state.user.globalUserRoles);
+  const [pickedStudyAreas, setPickedStudyAreas] = useState<{
+    activeStudyArea: number;
+    pickedStudyAreas: number[];
+  } | null>(null);
 
   // fetch organizations and study areas
   useEffect(() => {
@@ -105,7 +112,12 @@ export default function UsersEdit() {
               label="Roles"
               source="roles"
               choices={
-                loading ? [{ name: "Loading user roles..." }] : globalUserRoles
+                loading
+                  ? [
+                      { name: "superuser", id: 19 },
+                      { name: "user", id: 20 }
+                    ]
+                  : globalUserRoles
               }
               optionValue="name"
               variant="outlined"
@@ -113,15 +125,14 @@ export default function UsersEdit() {
             />
           </Box>
           <Box flex={1} ml={mlStyle}>
-            <SelectInput
-              source="active_study_area_id"
-              emptyText={"Please select a study area"}
-              isRequired
-              fullWidth
-              choices={
-                loading ? [{ name: "Loading study areas..." }] : studyAreas
+            <StudyAreaPickerComponent
+              editMode
+              sumbittedStudyAreas={(activeStudyArea, pickedStudyAreas) =>
+                setPickedStudyAreas({
+                  activeStudyArea: activeStudyArea,
+                  pickedStudyAreas: pickedStudyAreas
+                })
               }
-              variant="outlined"
             />
           </Box>
         </Box>
