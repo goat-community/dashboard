@@ -138,17 +138,8 @@ export const UserProvider = {
     new Promise((resolve, reject) => {
       Api.getUsers(params)!
         .then((response) => {
-          let filtered_data = response.data;
-          // handle search
-          if (params.filter.q) {
-            filtered_data = search({
-              data: response.data,
-              q: params.filter.q
-            });
-          }
-
           resolve({
-            data: filtered_data,
+            data: response.data,
             total: response.total
           });
         })
