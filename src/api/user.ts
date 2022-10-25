@@ -51,12 +51,18 @@ export function recoverPassword(
 export function getUsers(
   params: GetListParams
 ): RequestResult<{ data: User[]; total: number }> {
+  // parameters and filters
+  const limit = `limit=${params.pagination.perPage}`;
+  const query = params.filter.q !== undefined ? `&q=${params.filter.q}` : "";
+  const sort = `&ordering=${
+    params.sort.order === "DESC" ? params.sort.field : "-" + params.sort.field
+  }`;
+  const skip = `skip=${
+    (params.pagination.page - 1) * params.pagination.perPage
+  }`;
+
   return instance
-    .get(
-      `/users?limit=${params.pagination.perPage}&skip=${
-        (params.pagination.page - 1) * params.pagination.perPage
-      }`
-    )
+    .get(`/users?${limit}&${skip + query + sort}`)
     .then((response: any) => ({
       data: response.data,
       total: response.headers["x-total-count"]
