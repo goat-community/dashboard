@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react";
-import { SelectInput, useRecordContext } from "react-admin";
+import { useRecordContext } from "react-admin";
 import {
-  Box,
   Chip,
   Dialog,
   DialogContent,
@@ -9,13 +8,14 @@ import {
   FormControlLabel,
   FormLabel,
   IconButton,
-  Radio,
-  RadioGroup
+  Checkbox,
+  FormGroup
 } from "@mui/material";
-import DeleteIcon from "@mui/icons-material/Delete";
+import RadioButtonUncheckedIcon from "@mui/icons-material/RadioButtonUnchecked";
+import RadioButtonCheckedIcon from "@mui/icons-material/RadioButtonChecked";
 import { PButton } from "@common";
 import { useAppDispatch, useAppSelector } from "@hooks";
-import { getStudyAreas } from "@context/user";
+import { getStudyAreasList } from "@context/studyareas";
 
 export function StudyAreaPickerComponent(props: {
   editMode?: boolean;
@@ -26,8 +26,7 @@ export function StudyAreaPickerComponent(props: {
 }) {
   const record = useRecordContext();
   const dispatch = useAppDispatch();
-
-  const studyAreas = useAppSelector((state) => state.user.studyAreas);
+  const studyAreas = useAppSelector((state) => state.studyareas.studyAreas);
 
   const [dialogOpen, setDialogOpen] = useState(false);
   const [activeStudyArea, setActiveStudyArea] = useState<number | null>(() =>
@@ -37,13 +36,18 @@ export function StudyAreaPickerComponent(props: {
         : null
       : null
   );
-  const [pickedStudyAreas, setPickedStudyAreas] = useState<number[] | []>(() =>
-    props.editMode ? (record.study_areas ? record.study_areas : []) : []
-  );
+  const [pickedStudyAreas, setPickedStudyAreas] = useState<number[] | []>([]);
 
   useEffect(() => {
-    dispatch(getStudyAreas());
+    dispatch(getStudyAreasList());
   }, []);
+
+  // copy from record roles on component mount
+  useEffect(() => {
+    if (record?.study_areas && props.editMode) {
+      setPickedStudyAreas(record.study_areas);
+    }
+  }, [record?.study_areas, props.editMode]);
 
   const submit = () => {
     setDialogOpen(false);
@@ -75,72 +79,85 @@ export function StudyAreaPickerComponent(props: {
       </div>
 
       <Dialog open={dialogOpen} onClose={() => setDialogOpen(false)}>
-        <DialogContent className="d-flex px-2" sx={{ width: 400 }}>
-          <Box
-            style={{
-              display: "flex",
-              justifyContent: "space-between",
-              marginTop: 13
-            }}
-          >
-            <SelectInput
-              source="Append study area"
-              emptyText={"Append studyarea..."}
-              fullWidth
-              choices={studyAreas}
-              onChange={(e) => {
-                setPickedStudyAreas(
-                  Array.from(new Set([...pickedStudyAreas, e.target.value]))
-                );
-              }}
-              variant="outlined"
-              optionText="name"
-              optionValue="id"
-            />
-          </Box>
-
-          {/** Picked study areas */}
-          {pickedStudyAreas?.length ? (
+        <DialogContent className="d-flex px-2" sx={{ width: 400, height: 500 }}>
+          {studyAreas?.length ? (
             <FormControl>
               <FormLabel id="study-areas-group-radio">
                 Study Areas <br />
                 You can select the active one by checking it
+                <div>
+                  <PButton
+                    text="Check all!"
+                    colors="primary"
+                    onClick={() => {
+                      setPickedStudyAreas(studyAreas.map((i) => i.id));
+                    }}
+                    size="small"
+                  />
+                  <PButton
+                    text="Uncheck all!"
+                    colors="error"
+                    onClick={() => {
+                      setPickedStudyAreas([]);
+                      setActiveStudyArea(null);
+                    }}
+                    size="small"
+                    style={{ marginLeft: 1 }}
+                  />
+                </div>
               </FormLabel>
-              <RadioGroup
-                aria-labelledby="study-areas-group-radio"
-                value={activeStudyArea}
-                onChange={(e) => setActiveStudyArea(parseInt(e.target.value))}
-                name="radio-buttons-group"
-              >
-                {pickedStudyAreas.map((studyarea) => (
+              <br />
+              <FormGroup>
+                {studyAreas.map((studyarea) => (
                   <div className="d-flex px-2">
                     <FormControlLabel
-                      value={studyarea}
-                      control={<Radio />}
-                      label={studyAreas.find((i) => i.id == studyarea)?.name}
-                    />
-                    <IconButton
-                      sx={{
-                        border: "1px solid red",
-                        color: "red"
-                      }}
-                      onClick={() => {
-                        // delete from picked areas
-                        setPickedStudyAreas(
-                          pickedStudyAreas.filter((i) => i !== studyarea)
-                        );
-                        // delete it from active study area
-                        // if choice is same
-                        if (activeStudyArea === studyarea) {
-                          setActiveStudyArea(null);
+                      /** @ts-ignore */
+                      checked={pickedStudyAreas.includes(studyarea?.id)}
+                      control={<Checkbox name={studyarea.name} />}
+                      label={studyarea.name}
+                      onChange={() => {
+                        // @ts-ignore
+                        if (pickedStudyAreas.includes(studyarea.id)) {
+                          // remove it from the list
+                          setPickedStudyAreas(
+                            pickedStudyAreas.filter((i) => i !== studyarea.id)
+                          );
+                          // remove the active if it's this one
+                          if (activeStudyArea === studyarea.id) {
+                            setActiveStudyArea(null);
+                          }
+                        } else {
+                          setPickedStudyAreas(
+                            Array.from(
+                              new Set([...pickedStudyAreas, studyarea.id])
+                            )
+                          );
                         }
                       }}
-                    >
-                      <DeleteIcon sx={{ fontSize: 15 }} />
-                    </IconButton>
+                    />
+                    {/** @ts-ignore */}
+                    {pickedStudyAreas.includes(studyarea?.id) && (
+                      <IconButton
+                        onClick={() => {
+                          // delete it from active study area
+                          // if choice is same
+                          if (activeStudyArea === studyarea.id) {
+                            setActiveStudyArea(null);
+                          } else {
+                            setActiveStudyArea(studyarea.id);
+                          }
+                        }}
+                      >
+                        {activeStudyArea === studyarea.id ? (
+                          <RadioButtonCheckedIcon color="success" />
+                        ) : (
+                          <RadioButtonUncheckedIcon color="success" />
+                        )}
+                      </IconButton>
+                    )}
                   </div>
                 ))}
-              </RadioGroup>
+              </FormGroup>
             </FormControl>
           ) : (
             <p>Please pick studyarea...</p>

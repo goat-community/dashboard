@@ -9,7 +9,7 @@ import * as Api from "@api/studyareas";
 import { pagination, search } from "@utils";
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { networkStateHandler } from "./network";
-import { GeoStore, Opportunity, OpportunityGroup } from "@types";
+import { GeoStore, Opportunity, OpportunityGroup, StudyAreas } from "@types";
 
 /** Reducer */
 const initialState = {
@@ -17,7 +17,8 @@ const initialState = {
   geoStoresConfig: [] as GeoStore[],
   opportunities: [] as Opportunity[],
   opportunityGroups: [] as OpportunityGroup[],
-  opportunitiesList: [] as Opportunity[]
+  opportunitiesList: [] as Opportunity[],
+  studyAreas: [] as StudyAreas[]
 };
 
 export const studyareas = createSlice({
@@ -53,6 +54,12 @@ export const studyareas = createSlice({
       action: PayloadAction<Opportunity[]>
     ) => {
       state.opportunitiesList = action.payload;
+    },
+    setStudyAreasList: (
+      state: typeof initialState,
+      action: PayloadAction<StudyAreas[]>
+    ) => {
+      state.studyAreas = action.payload;
     }
   }
 });
@@ -62,7 +69,8 @@ export const {
   setGeoStoresConfig,
   setOpportunityGroups,
   setOpportunities,
-  setOpportunitiesList
+  setOpportunitiesList,
+  setStudyAreasList
 } = studyareas.actions;
 export default studyareas.reducer;
 
@@ -183,6 +191,19 @@ export function updateStudyAreaOpportunity(data: Opportunity) {
     dispatch(
       networkStateHandler(async () => {
         await Api.updateStudyAreaOpportunity(data);
+      })
+    );
+  };
+}
+
+export function getStudyAreasList() {
+  return (dispatch: CallableFunction) => {
+    dispatch(
+      networkStateHandler(async () => {
+        const response = await Api.getStudyAreas();
+        if (response) {
+          dispatch(setStudyAreasList(response));
+        }
       })
     );
   };
