@@ -167,7 +167,6 @@ export default function LayersEdit() {
       redirect="list"
     >
       <SimpleForm
-        noValidate
         sx={{ width: 900 }}
         warnWhenUnsavedChanges
         toolbar={<CustomToolbar loading={saving} />}

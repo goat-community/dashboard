@@ -1,3 +1,4 @@
+import { useParams } from "react-router-dom";
 import {
   SimpleForm,
   TextInput,
@@ -7,14 +8,11 @@ import {
   SaveButton,
   DeleteButton,
   useEditController,
-  useResourceContext,
-  useEditContext,
   FileInput,
   FileField
 } from "react-admin";
-import { Box, IconButton, Typography } from "@mui/material";
+import { Box, IconButton } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
-import { useParams } from "react-router-dom";
 
 export const validateForm = (v: Record<string, any>): Record<string, any> => {
   const errors = {} as any;
@@ -39,7 +37,6 @@ const CustomToolbar = (props: any) => {
 
 export default function LayersEdit() {
   const { save } = useEditController();
-  const { id } = useParams();
   const redirect = useRedirect();
 
   const postSave = (data: any) => {

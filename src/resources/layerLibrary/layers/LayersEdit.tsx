@@ -1,4 +1,4 @@
-import { ChangeEvent, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import {
   SimpleForm,
   TextInput,
@@ -11,13 +11,13 @@ import {
   useRecordContext,
   SelectInput
 } from "react-admin";
+import { batch } from "react-redux";
 import { Box, IconButton } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
 import { getLayersStyles } from "@context/layerStyles";
 import { MapViewer, JSONEditor, ChipInput } from "@common";
 import { useAppDispatch, useAppSelector } from "@hooks";
 import type { LayerStyle } from "@types";
-import { batch } from "react-redux";
 import { getExtraLayers } from "@context/extraLayers";
 
 const mlStyle = { xs: 0, sm: "0.5em" };
@@ -122,8 +122,8 @@ const LegendsInput = (props: any) => {
 };
 
 export default function LayersEdit() {
-  const dispatch = useAppDispatch();
   const { save } = useEditController();
+  const dispatch = useAppDispatch();
   const redirect = useRedirect();
   const layerStyles = useAppSelector((state) => state.layerStyles.layerStyles);
   const extraLayers = useAppSelector((state) => state.extraLayers.extraLayers);
