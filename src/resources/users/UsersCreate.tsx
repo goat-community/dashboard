@@ -5,18 +5,19 @@ import {
   SimpleForm,
   TextInput,
   SelectInput,
-  SelectArrayInput,
   useCreateController,
   Toolbar,
   LoadingIndicator,
-  SaveButton
+  SaveButton,
+  useNotify
 } from "react-admin";
 import { Box, Typography } from "@mui/material";
 import { getOrganizations } from "@context/organizations";
-import { getAllUserRoles, getStudyAreas } from "@context/user";
+import { getStudyAreas } from "@context/user";
 import { useAppDispatch, useAppSelector } from "@hooks";
 
 import { StudyAreaPickerComponent } from "./components/study-area-selector";
+import { UserRolesPicker } from "./components/user-roles";
 
 const validateForm = (v: Record<string, any>): Record<string, any> => {
   const errors = {} as any;
@@ -59,11 +60,15 @@ const CustomToolbar = (props: any) => {
 
 export default function UsersCreate() {
   const { save, saving } = useCreateController({ resource: "users" });
+  const notify = useNotify();
   const dispatch = useAppDispatch();
+
   const loading = useAppSelector((state) => state.network.loading);
   const organizations = useAppSelector((state) => state.organizations.organs);
-  const globalUserRoles = useAppSelector((state) => state.user.globalUserRoles);
 
+  const [pickedRoles, setPickedRoles] = useState<
+    { name: string; id: number }[] | []
+  >([]);
   const [pickedStudyAreas, setPickedStudyAreas] = useState<{
     activeStudyArea: number;
     pickedStudyAreas: number[];
@@ -74,19 +79,29 @@ export default function UsersCreate() {
     batch(() => {
       dispatch(getOrganizations());
       dispatch(getStudyAreas());
-      dispatch(getAllUserRoles());
     });
   }, []);
 
   const postSave = (data: any) => {
     if (!pickedStudyAreas) {
+      notify("Please pick study areas", {
+        type: "error"
+      });
+      return false;
+    }
+
+    if (!pickedRoles.length) {
+      notify("Roles are required!", {
+        type: "error"
+      });
       return false;
     }
 
     let mixedData = {
       ...data,
       active_study_area_id: pickedStudyAreas.activeStudyArea,
-      study_areas: pickedStudyAreas.pickedStudyAreas
+      study_areas: pickedStudyAreas.pickedStudyAreas,
+      roles: pickedRoles.map((i) => i.name)
     };
 
     save!(mixedData);
@@ -155,31 +170,6 @@ export default function UsersCreate() {
               isRequired
               fullWidth
               variant="outlined"
-            />
-          </Box>
-        </Box>
-
-        <Box display={displayStyle}>
-          <Box flex={1} mr={mrStyle}>
-            <SelectArrayInput
-              label="Roles"
-              source="roles"
-              choices={
-                loading ? [{ name: "Loading user roles..." }] : globalUserRoles
-              }
-              optionValue="name"
-              variant="outlined"
-              sx={{ width: "100%" }}
-            />
-          </Box>
-          <Box flex={1} ml={mlStyle}>
-            <StudyAreaPickerComponent
-              sumbittedStudyAreas={(activeStudyArea, pickedStudyAreas) =>
-                setPickedStudyAreas({
-                  activeStudyArea: activeStudyArea,
-                  pickedStudyAreas: pickedStudyAreas
-                })
-              }
             />
           </Box>
         </Box>
@@ -262,6 +252,24 @@ export default function UsersCreate() {
                 { id: "de", name: "de" }
               ]}
               variant="outlined"
+            />
+          </Box>
+        </Box>
+
+        <Box display={displayStyle}>
+          <Box flex={1} mr={mrStyle} mb={3}>
+            <UserRolesPicker
+              onPickRole={(roles) => setPickedRoles(roles as any)}
+            />
+          </Box>
+          <Box flex={1} ml={mlStyle}>
+            <StudyAreaPickerComponent
+              sumbittedStudyAreas={(activeStudyArea, pickedStudyAreas) =>
+                setPickedStudyAreas({
+                  activeStudyArea: activeStudyArea,
+                  pickedStudyAreas: pickedStudyAreas
+                })
+              }
             />
           </Box>
         </Box>
