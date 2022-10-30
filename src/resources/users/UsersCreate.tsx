@@ -1,17 +1,23 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { batch } from "react-redux";
 import {
   Create,
   SimpleForm,
   TextInput,
   SelectInput,
-  SelectArrayInput
+  useCreateController,
+  Toolbar,
+  LoadingIndicator,
+  SaveButton,
+  useNotify
 } from "react-admin";
 import { Box, Typography } from "@mui/material";
 import { getOrganizations } from "@context/organizations";
-import { getAllUserRoles, getStudyAreas } from "@context/user";
+import { getStudyAreas } from "@context/user";
 import { useAppDispatch, useAppSelector } from "@hooks";
-import UserCreateToolbar from "./UserCreateToolbar";
+
+import { StudyAreaPickerComponent } from "./components/study-area-selector";
+import { UserRolesPicker } from "./components/user-roles";
 
 const validateForm = (v: Record<string, any>): Record<string, any> => {
   const errors = {} as any;
@@ -30,9 +36,6 @@ const validateForm = (v: Record<string, any>): Record<string, any> => {
   if (!v.organization_id) {
     errors.organization_id = "organization id is required";
   }
-  if (!v.active_study_area_id) {
-    errors.active_study_area_id = "active_study_area_id is required";
-  }
   if (!v.storage) {
     errors.storage = "storage is required";
   }
@@ -43,21 +46,66 @@ const validateForm = (v: Record<string, any>): Record<string, any> => {
   return errors;
 };
 
+const CustomToolbar = (props: any) => {
+  return (
+    <Toolbar
+      {...props}
+      sx={{ display: "flex", justifyContent: "space-between" }}
+    >
+      {props.loading && <LoadingIndicator />}
+      {!props.loading && <SaveButton />}
+    </Toolbar>
+  );
+};
+
 export default function UsersCreate() {
+  const { save, saving } = useCreateController({ resource: "users" });
+  const notify = useNotify();
   const dispatch = useAppDispatch();
+
   const loading = useAppSelector((state) => state.network.loading);
   const organizations = useAppSelector((state) => state.organizations.organs);
-  const studyAreas = useAppSelector((state) => state.user.studyAreas);
-  const globalUserRoles = useAppSelector((state) => state.user.globalUserRoles);
+
+  const [pickedRoles, setPickedRoles] = useState<
+    { name: string; id: number }[] | []
+  >([]);
+  const [pickedStudyAreas, setPickedStudyAreas] = useState<{
+    activeStudyArea: number;
+    pickedStudyAreas: number[];
+  } | null>(null);
 
   // fetch organizations and study areas
   useEffect(() => {
     batch(() => {
       dispatch(getOrganizations());
       dispatch(getStudyAreas());
-      dispatch(getAllUserRoles());
     });
   }, []);
+
+  const postSave = (data: any) => {
+    if (!pickedStudyAreas) {
+      notify("Please pick study areas", {
+        type: "error"
+      });
+      return false;
+    }
+
+    if (!pickedRoles.length) {
+      notify("Roles are required!", {
+        type: "error"
+      });
+      return false;
+    }
+
+    let mixedData = {
+      ...data,
+      active_study_area_id: pickedStudyAreas.activeStudyArea,
+      study_areas: pickedStudyAreas.pickedStudyAreas,
+      roles: pickedRoles.map((i) => i.name)
+    };
+
+    save!(mixedData);
+  };
 
   const mlStyle = { xs: 0, sm: "0.5em" };
   const mrStyle = { xs: 0, sm: "0.5em" };
@@ -74,7 +122,9 @@ export default function UsersCreate() {
       <SimpleForm
         sx={{ width: 900 }}
         warnWhenUnsavedChanges
-        toolbar={<UserCreateToolbar />}
+        onSubmit={postSave}
+        toolbar={<CustomToolbar loading={saving} />}
+        validate={validateForm}
         defaultValues={{
           name: "",
           surname: "",
@@ -82,7 +132,6 @@ export default function UsersCreate() {
           password: "",
           roles: null,
           organization_id: null,
-          active_study_area_id: null,
           storage: 512000,
           limit_scenarios: 50,
           is_active: true,
@@ -92,7 +141,6 @@ export default function UsersCreate() {
           language_preference: "de",
           active_data_upload_ids: []
         }}
-        validate={validateForm}
       >
         <Typography variant="h6" gutterBottom>
           Creating new user
@@ -121,33 +169,6 @@ export default function UsersCreate() {
               source="password"
               isRequired
               fullWidth
-              variant="outlined"
-            />
-          </Box>
-        </Box>
-
-        <Box display={displayStyle}>
-          <Box flex={1} mr={mrStyle}>
-            <SelectArrayInput
-              label="Roles"
-              source="roles"
-              choices={
-                loading ? [{ name: "Loading user roles..." }] : globalUserRoles
-              }
-              optionValue="name"
-              variant="outlined"
-              sx={{ width: "100%" }}
-            />
-          </Box>
-          <Box flex={1} ml={mlStyle}>
-            <SelectInput
-              source="active_study_area_id"
-              emptyText={"Please select a study area"}
-              isRequired
-              fullWidth
-              choices={
-                loading ? [{ name: "Loading study areas..." }] : studyAreas
-              }
               variant="outlined"
             />
           </Box>
@@ -231,6 +252,24 @@ export default function UsersCreate() {
                 { id: "de", name: "de" }
               ]}
               variant="outlined"
+            />
+          </Box>
+        </Box>
+
+        <Box display={displayStyle}>
+          <Box flex={1} mr={mrStyle} mb={3}>
+            <UserRolesPicker
+              onPickRole={(roles) => setPickedRoles(roles as any)}
+            />
+          </Box>
+          <Box flex={1} ml={mlStyle}>
+            <StudyAreaPickerComponent
+              sumbittedStudyAreas={(activeStudyArea, pickedStudyAreas) =>
+                setPickedStudyAreas({
+                  activeStudyArea: activeStudyArea,
+                  pickedStudyAreas: pickedStudyAreas
+                })
+              }
             />
           </Box>
         </Box>
