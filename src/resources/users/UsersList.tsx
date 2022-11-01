@@ -10,6 +10,7 @@ import {
 import { Stack } from "@mui/material";
 import { DeleteButton } from "./DeleteButton";
 import { DatagridHeader } from "@common";
+import { BulkDelete } from "./components/bulk-delete";
 
 const usersFilters = [
   <TextInput
@@ -34,6 +35,7 @@ export default function UsersList() {
         optimized
         header={<DatagridHeader setSort={setSort} sort={sort} sortActive />}
         size="small"
+        bulkActionButtons={<BulkDelete />}
       >
         <TextField source="name" sortable={false} />
         <TextField source="surname" sortable={false} />
