@@ -16,7 +16,9 @@ export function updateAppStatus(
   status: AppStatus
 ): RequestResult<AppStatus | ErrorResponse> {
   return instance
-    .put("/status", status)
+    .put("/status", {
+      status: status
+    })
     .then((response) => response.data)
     .catch((err: AxiosError) => {
       throw err;
