@@ -26,14 +26,13 @@ const styles = {
 
 export default function StatusChanger() {
   const dispatch = useAppDispatch();
-  const loading = useAppSelector((state) => state.network.loading);
   const appStatus = useAppSelector((state) => state.appstatus.status);
 
   const [changeStatusModalOpen, setChangeStatusModalOpen] =
     useState<boolean>(false);
 
   useEffect(() => {
-    return () => dispatch(getAppStatus());
+    dispatch(getAppStatus());
   }, []);
 
   function changeStatus() {
