@@ -37,7 +37,7 @@ export default function StatusChanger() {
 
   function changeStatus() {
     if (appStatus === "running") {
-      setChangeStatusModalOpen(true);
+      return setChangeStatusModalOpen(true);
     }
 
     dispatch(updateAppStatus("running"));
