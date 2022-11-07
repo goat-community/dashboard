@@ -12,6 +12,7 @@ import TableChartIcon from "@mui/icons-material/TableChart";
 import GoatLogo from "@assets/images/logo_green.webp";
 import { logout } from "@context/user";
 import { useAppDispatch } from "@hooks";
+import StatusChanger from "./StatusChanger";
 
 const paths = [
   { name: "Users", link: "/users", icon: <PeopleIcon /> },
@@ -31,7 +32,7 @@ const paths = [
 ];
 
 export function Sidebar() {
-  let location = useLocation();
+  const location = useLocation();
   const translate = useTranslate();
   const dispatch = useAppDispatch();
 
@@ -39,6 +40,8 @@ export function Sidebar() {
     <aside className="sidebar-container">
       <img src={GoatLogo} alt="GOAT logo" width={160} height={40} />
       <h5>{translate("ra.page.dashboard")}</h5>
+
+      <StatusChanger />
 
       <ul className="sidebar-menu">
         {paths.map((path) => (

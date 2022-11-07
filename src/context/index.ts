@@ -8,6 +8,7 @@ import extraLayersReducer from "./extraLayers";
 import layerReducer from "./layers";
 import studyareasReducer from "./studyareas";
 import geostoresReducer from "./geostores";
+import appstatusReducer from "./appstatus";
 
 export const store = configureStore({
   reducer: {
@@ -19,7 +20,8 @@ export const store = configureStore({
     extraLayers: extraLayersReducer,
     layers: layerReducer,
     studyareas: studyareasReducer,
-    geostores: geostoresReducer
+    geostores: geostoresReducer,
+    appstatus: appstatusReducer
   }
 });
 

@@ -7,3 +7,4 @@ export * from "./geostores";
 export * from "./studyareas";
 export * from "./opportunities";
 export * from "./ctables";
+export * from "./status";
