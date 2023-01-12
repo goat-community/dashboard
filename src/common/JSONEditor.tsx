@@ -6,12 +6,18 @@ import "ace-builds/src-noconflict/ext-language_tools";
 
 interface JSONEditorProps {
   defaultValue?: string;
-  height?: string;
   onChange: (value: string, event?: any) => void;
 }
 
 export function JSONEditor(props: JSONEditorProps) {
-  const { defaultValue, height = "300px", onChange } = props;
+  const { defaultValue = "", onChange } = props;
+
+  // function default_height_of_editor(content_length: number) {
+  //   if (content_length >= 800) {
+  //     return "550px";
+  //   }
+  //   return `${content_length + 120 / 2 }px`;
+  // }
 
   return (
     <div style={{ width: "100%" }}>
@@ -21,12 +27,14 @@ export function JSONEditor(props: JSONEditorProps) {
         theme="dracula"
         name="editor"
         width="100%"
-        height={height}
+        // height={default_height_of_editor(defaultValue.length)}
+        maxLines={Infinity}
         editorProps={{ $blockScrolling: true }}
         setOptions={{
           useWorker: false,
           enableBasicAutocompletion: true,
-          enableLiveAutocompletion: true
+          enableLiveAutocompletion: true,
+          hScrollBarAlwaysVisible: true,
         }}
         onChange={onChange}
         style={{ borderRadius: 10 }}
