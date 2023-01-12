@@ -1,19 +1,20 @@
-import { Admin, Resource } from "react-admin";
+import {Admin, Resource} from 'react-admin';
 /** Pages */
-import LoginPage from "@pages/login/Login";
+import LoginPage from '@pages/login/Login';
 /** Resources */
 import {
   UsersResource,
   LayerLibraryResources as LLR,
   GeoStoresResource,
-  StudyAreasResource
-} from "@resources";
+  StudyAreasResource,
+  CTablesResource,
+} from '@resources';
 /** Providers */
-import { theme } from "@styles/theme";
-import { dataProvider } from "@api";
-import { PLayout } from "@common";
-import { useAuth } from "@hooks/auth";
-import { i18nProvider } from "@utils/i18n";
+import {theme} from '@styles/theme';
+import {dataProvider} from '@api';
+import {PLayout} from '@common';
+import {useAuth} from '@hooks/auth';
+import {i18nProvider} from '@utils/i18n';
 
 export default function AppRouter() {
   const auth = useAuth();
@@ -32,6 +33,7 @@ export default function AppRouter() {
         <Resource name="upload" {...LLR.ExtraLayersResource} />
         <Resource name="geostores" {...GeoStoresResource} />
         <Resource name="studyareas" {...StudyAreasResource} />
+        <Resource name="ctables" {...CTablesResource} />;
       </Admin>
     );
   } else {

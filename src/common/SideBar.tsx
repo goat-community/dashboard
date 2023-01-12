@@ -8,12 +8,31 @@ import StorageIcon from "@mui/icons-material/Storage";
 import SignpostIcon from "@mui/icons-material/Signpost";
 import ListIcon from "@mui/icons-material/List";
 import LibraryBooksIcon from "@mui/icons-material/LibraryBooks";
+import TableChartIcon from "@mui/icons-material/TableChart";
 import GoatLogo from "@assets/images/logo_green.webp";
 import { logout } from "@context/user";
 import { useAppDispatch } from "@hooks";
+import StatusChanger from "./StatusChanger";
+
+const paths = [
+  { name: "Users", link: "/users", icon: <PeopleIcon /> },
+  {
+    name: "Layer Library",
+    link: "/layers",
+    icon: <LibraryBooksIcon />,
+    subpaths: [
+      { link: "/layers", name: "Layers", icon: <LayersIcon /> },
+      { link: "/styles", name: "Styles", icon: <ListIcon /> },
+      { link: "/upload", name: "Extra layers", icon: <UploadIcon /> }
+    ]
+  },
+  { name: "Geostores", link: "/geostores", icon: <StorageIcon /> },
+  { name: "Studyareas", link: "/studyareas", icon: <SignpostIcon /> },
+  { name: "Customiztion tables", link: "/ctables", icon: <TableChartIcon /> }
+];
 
 export function Sidebar() {
-  let location = useLocation();
+  const location = useLocation();
   const translate = useTranslate();
   const dispatch = useAppDispatch();
 
@@ -21,61 +40,43 @@ export function Sidebar() {
     <aside className="sidebar-container">
       <img src={GoatLogo} alt="GOAT logo" width={160} height={40} />
       <h5>{translate("ra.page.dashboard")}</h5>
+
+      <StatusChanger />
+
       <ul className="sidebar-menu">
-        <Link to={"/users"}>
-          <li className={location.pathname.includes("/users") ? "active" : ""}>
-            <PeopleIcon />
-            Users
-          </li>
-        </Link>
-
-        {/**  Layer Library */}
-        <Link to="layers">
-          <li>
-            <LibraryBooksIcon />
-            Layer Library
-          </li>
-        </Link>
-        {["/layers", "/styles", "/upload"].includes(location.pathname) && (
-          <div className="collapsed-menu">
-            {[
-              { path: "/layers", name: "Layers", icon: <LayersIcon /> },
-              { path: "/styles", name: "Styles", icon: <ListIcon /> },
-              { path: "/upload", name: "Extra layers", icon: <UploadIcon /> }
-            ].map((item) => (
-              <Link to={item.path} key={item.path}>
-                <li
-                  className={
-                    location.pathname.includes(item.path) ? "active" : ""
-                  }
-                >
-                  {item.icon}
-                  {item.name}
-                </li>
-              </Link>
-            ))}
-          </div>
-        )}
-
-        <Link to={"/geostores"}>
-          <li
-            className={location.pathname.includes("/geostores") ? "active" : ""}
-          >
-            <StorageIcon />
-            Geostores
-          </li>
-        </Link>
-
-        <Link to={"/studyareas"}>
-          <li
-            className={
-              location.pathname.includes("/studyareas") ? "active" : ""
-            }
-          >
-            <SignpostIcon />
-            Studyareas
-          </li>
-        </Link>
+        {paths.map((path) => (
+          <>
+            <Link to={path.link}>
+              <li
+                className={
+                  location.pathname.includes(path.link) ? "active" : ""
+                }
+              >
+                {path.icon}
+                {path.name}
+              </li>
+            </Link>
+            {path.subpaths?.length &&
+              path.subpaths.map((i) => i.link).includes(location.pathname) && (
+                <div className="collapsed-menu">
+                  {path.subpaths.map((subpath) => (
+                    <Link to={subpath.link} key={subpath.link}>
+                      <li
+                        className={
+                          location.pathname.includes(subpath.link)
+                            ? "active"
+                            : ""
+                        }
+                      >
+                        {subpath.icon}
+                        {subpath.name}
+                      </li>
+                    </Link>
+                  ))}
+                </div>
+              )}
+          </>
+        ))}
 
         <li className="logout" onClick={() => dispatch(logout())}>
           <LogoutIcon />

@@ -16,10 +16,11 @@ import type {
 import { UserProvider } from "@context/user";
 import { LayerStylesProvider } from "@context/layerStyles";
 import { LayerProvider } from "@context/layers";
+import { CTablesProvider } from "@context/ctables";
 import { ExtraLayerProvider } from "@context/extraLayers";
 import { GeoStoreProvider } from "@context/geostores";
 import { StudyAreaProvider } from "@context/studyareas";
-import type { GeoStore, Layer, LayerStyle, Opportunity, User } from "@types";
+import type { CTable, GeoStore, Layer, LayerStyle, User } from "@types";
 
 export const dataProvider: DataProvider = {
   getList: (resource, params): Promise<GetListResult> => {
@@ -41,6 +42,9 @@ export const dataProvider: DataProvider = {
     }
     if (resource === "studyareas") {
       return StudyAreaProvider.getStudyAreasList(params);
+    }
+    if (resource === "ctables") {
+      return CTablesProvider.getCTablesList(params);
     }
     return UserProvider.getUsersList(params);
   },
@@ -71,6 +75,9 @@ export const dataProvider: DataProvider = {
         })
       );
     }
+    if (resource === "ctables") {
+      return CTablesProvider.getCTable(params.id);
+    }
     return UserProvider.getUser(params.id);
   },
   create: (resource, params): Promise<CreateResult> => {
@@ -94,6 +101,9 @@ export const dataProvider: DataProvider = {
     }
     if (resource === "studyareas") {
       return StudyAreaProvider.createStudyAreaOpportunity(params.data as any);
+    }
+    if (resource === "ctables") {
+      return CTablesProvider.createCTable(params.data as CTable);
     }
     return UserProvider.createUser(params.data);
   },
@@ -132,6 +142,12 @@ export const dataProvider: DataProvider = {
         params.data as any
       );
     }
+    if (resource === "ctables") {
+      return CTablesProvider.updateCTable(
+        params.id as string,
+        params.data as CTable
+      );
+    }
     return UserProvider.updateUser(params.id as number, params.data as User);
   },
   delete: (resource, params): Promise<DeleteResult> => {
@@ -153,6 +169,9 @@ export const dataProvider: DataProvider = {
     }
     if (resource === "studyareas") {
       return StudyAreaProvider.deleteStudyAreaOpportunity(params.id as number);
+    }
+    if (resource === "ctables") {
+      return CTablesProvider.deleteCTable(params.id as string);
     }
     return UserProvider.deleteUser(params);
   },
