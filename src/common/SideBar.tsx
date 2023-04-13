@@ -28,7 +28,7 @@ const paths = [
   },
   { name: "Geostores", link: "/geostores", icon: <StorageIcon /> },
   { name: "Studyareas", link: "/studyareas", icon: <SignpostIcon /> },
-  { name: "Customiztion tables", link: "/ctables", icon: <TableChartIcon /> }
+  { name: "Customization tables", link: "/ctables", icon: <TableChartIcon /> }
 ];
 
 export function Sidebar() {
