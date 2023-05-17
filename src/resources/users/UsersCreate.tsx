@@ -18,6 +18,7 @@ import { useAppDispatch, useAppSelector } from "@hooks";
 
 import { StudyAreaPickerComponent } from "./components/study-area-selector";
 import { UserRolesPicker } from "./components/user-roles";
+import { removeEmptyProperties } from "@utils";
 
 const validateForm = (v: Record<string, any>): Record<string, any> => {
   const errors = {} as any;
@@ -104,7 +105,7 @@ export default function UsersCreate() {
       roles: pickedRoles.map((i) => i.name)
     };
 
-    save!(mixedData);
+    save!(removeEmptyProperties(mixedData));
   };
 
   const mlStyle = { xs: 0, sm: "0.5em" };

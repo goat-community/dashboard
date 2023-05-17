@@ -10,6 +10,7 @@ import {
 } from "react-admin";
 import { Box, Typography } from "@mui/material";
 import { JSONEditor } from "@common";
+import { removeEmptyProperties } from "@utils";
 
 export const validateForm = (v: Record<string, any>): Record<string, any> => {
   const errors = {} as any;
@@ -39,12 +40,12 @@ export default function CTablesCreate() {
 
   const createLayer = (data: any) => {
     const mixedData = {
-      ...data,
+      ...removeEmptyProperties(data),
       setting: settings ? JSON.parse(settings) : {}
     };
 
     save!({
-      ...mixedData
+      ...removeEmptyProperties(mixedData)
     });
   };
 

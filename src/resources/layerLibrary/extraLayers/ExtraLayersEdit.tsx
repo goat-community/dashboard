@@ -1,4 +1,3 @@
-import { useParams } from "react-router-dom";
 import {
   SimpleForm,
   TextInput,
@@ -13,6 +12,7 @@ import {
 } from "react-admin";
 import { Box, IconButton } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
+import { removeEmptyProperties } from "@utils";
 
 export const validateForm = (v: Record<string, any>): Record<string, any> => {
   const errors = {} as any;
@@ -45,7 +45,7 @@ export default function LayersEdit() {
     };
 
     save!({
-      ...mixedData
+      ...removeEmptyProperties(mixedData)
     });
   };
 
