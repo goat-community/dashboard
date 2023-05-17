@@ -26,6 +26,7 @@ import { OpportunityCreatorComponent } from "./components/OpportunityCreator.com
 import { OpportunityViewerComponent } from "./components/OpportunityViewer.component";
 import { Opportunity } from "@types";
 import { getLayerGroups } from "@context/layers";
+import { removeEmptyProperties } from "@utils";
 
 const displayStyle = { xs: "block", sm: "flex", width: "100%" };
 
@@ -80,7 +81,7 @@ export default function StudyAreasEdit() {
 
     save!({
       group_name: groupName,
-      layer_configs: layerStudyAreasConfig
+      layer_configs: removeEmptyProperties(layerStudyAreasConfig)
     });
   };
 

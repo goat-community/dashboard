@@ -20,6 +20,7 @@ import { useAppDispatch, useAppSelector } from "@hooks/context";
 
 import { StudyAreaPickerComponent } from "./components/study-area-selector";
 import { UserRolesPicker } from "./components/user-roles";
+import { removeEmptyProperties } from "@utils";
 
 export const validateForm = (v: Record<string, any>): Record<string, any> => {
   const errors = {} as any;
@@ -120,7 +121,7 @@ export default function UsersEdit() {
     };
 
     save!({
-      ...mixedData
+      ...removeEmptyProperties(mixedData)
     });
   };
 

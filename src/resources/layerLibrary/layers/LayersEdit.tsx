@@ -19,6 +19,7 @@ import { MapViewer, JSONEditor, ChipInput } from "@common";
 import { useAppDispatch, useAppSelector } from "@hooks";
 import type { LayerStyle } from "@types";
 import { getExtraLayers } from "@context/extraLayers";
+import { removeEmptyProperties } from "@utils";
 
 const mlStyle = { xs: 0, sm: "0.5em" };
 const mrStyle = { xs: 0, sm: "0.5em" };
@@ -56,7 +57,6 @@ const JSONViewer = (props: { jsonResource: string; onChange: any }) => {
     <JSONEditor
       defaultValue={JSON.stringify(record[jsonResource], null, 2)}
       onChange={onChange}
-      height="60px"
     />
   );
 };
@@ -183,7 +183,7 @@ export default function LayersEdit() {
     }
 
     save!({
-      ...mixedData
+      ...removeEmptyProperties(mixedData)
     });
   };
 

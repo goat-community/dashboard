@@ -16,6 +16,7 @@ import { useAppDispatch, useAppSelector } from "@hooks";
 import { LayerStyle } from "@types";
 import { batch } from "react-redux";
 import { getExtraLayers } from "@context/extraLayers";
+import { removeEmptyProperties } from "@utils";
 
 const mlStyle = { xs: 0, sm: "0.5em" };
 const mrStyle = { xs: 0, sm: "0.5em" };
@@ -153,7 +154,7 @@ export default function LayersEdit() {
     }
 
     save!({
-      ...mixedData
+      ...removeEmptyProperties(mixedData)
     });
   };
 
@@ -318,7 +319,6 @@ export default function LayersEdit() {
               onChange={(special_attributes: string) => {
                 setSpecialAttribute(special_attributes);
               }}
-              height="60px"
             />
           </Box>
         </Box>

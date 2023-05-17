@@ -9,8 +9,7 @@ import {
   SimpleForm,
   TextInput,
   Toolbar,
-  useCreateController,
-  useRedirect
+  useCreateController
 } from "react-admin";
 import {
   getOpportunitiesGroup,
@@ -18,6 +17,7 @@ import {
 } from "@context/studyareas";
 import { batch } from "react-redux";
 import Switch from "@mui/material/Switch";
+import { removeEmptyProperties } from "@utils";
 
 const label = { inputProps: { "aria-label": "Switch demo" } };
 
@@ -35,7 +35,6 @@ const CustomToolbar = (props: any) => {
 
 export function OpportunityCreatorComponent(props: { studyAreaId: number }) {
   const { save, saving } = useCreateController({ resource: "studyareas" });
-  const redirect = useRedirect();
   const dispatch = useAppDispatch();
   const opps = useAppSelector((state) => state.studyareas.opportunitiesList);
   const groups = useAppSelector((state) => state.studyareas.opportunityGroups);
@@ -76,7 +75,7 @@ export function OpportunityCreatorComponent(props: { studyAreaId: number }) {
       return false;
     }
 
-    save!(data_to_submit);
+    save!(removeEmptyProperties(data_to_submit));
     setDialogOpen(false);
   };
 

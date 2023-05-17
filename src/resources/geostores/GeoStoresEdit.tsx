@@ -15,6 +15,7 @@ import {
 import { Box, IconButton, Typography, TextField } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
 import type { GeoStore } from "@types";
+import { removeEmptyProperties } from "@utils";
 
 export const validateForm = (v: Record<string, any>): Record<string, any> => {
   const errors = {} as any;
@@ -119,8 +120,8 @@ export default function GeoStoresEdit() {
     ].map((i: any) => (new_configuration[i] = configuration[i] || ""));
 
     save!({
-      ...data,
-      configuration: { ...new_configuration }
+      ...removeEmptyProperties(data),
+      configuration: { ...removeEmptyProperties(new_configuration) }
     });
   };
 

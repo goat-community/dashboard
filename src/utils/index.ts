@@ -8,3 +8,4 @@ export * from "./search";
 export * from "./oLStyler";
 export * from "./vectorStyler";
 export * from "./listQueryGenerator";
+export * from "./removeEmptyProperties";

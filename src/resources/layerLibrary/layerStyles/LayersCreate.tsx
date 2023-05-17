@@ -10,6 +10,7 @@ import {
 } from "react-admin";
 import { Box, Typography } from "@mui/material";
 import { JSONEditor } from "@common";
+import { removeEmptyProperties } from "@utils";
 
 export const validateForm = (v: Record<string, any>): Record<string, any> => {
   const errors = {} as any;
@@ -46,7 +47,7 @@ export default function LayersCreate() {
     };
 
     save!({
-      ...mixedData
+      ...removeEmptyProperties(mixedData)
     });
   };
 
